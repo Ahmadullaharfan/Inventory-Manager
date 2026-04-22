@@ -1,0 +1,13 @@
+<header
+  class="flex items-center shrink-0 h-[70px] lg:h-[80px] transition-all duration-200"
+  [ngClass]="{
+    'fixed z-10 top-0 shadow-xs backdrop-blur-md bg-white/70': headerSticky
+  }"
+>
+<div class="container mx-auto px-4 flex justify-between items-center lg:gap-4">
+    <app-header-logo></app-header-logo>
+
+    <app-header-topbar></app-header-topbar>
+
+  </div>
+</header>

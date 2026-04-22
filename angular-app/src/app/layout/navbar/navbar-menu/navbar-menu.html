@@ -1,0 +1,49 @@
+<div class="grid">
+  <div class="kt-scrollable-x-auto">
+    <div class="flex items-stretch border-none bg-transparent p-0 h-auto">
+
+      <ng-container *ngFor="let item of menu">
+
+        <!-- WITH CHILDREN -->
+        <div class="relative group" *ngIf="item.children; else single">
+          
+          <button
+            class="flex items-center gap-1.5 px-3 py-3.5 text-sm text-secondary-foreground text-nowrap
+                   border-b-2 border-transparent bg-transparent hover:text-mono"
+          >
+            {{ item.title }}
+            ▼
+          </button>
+
+          <!-- DROPDOWN -->
+          <div class="absolute hidden group-hover:block bg-white shadow min-w-[175px]">
+
+            <ng-container *ngFor="let sub of item.children">
+              <a
+                *ngIf="!sub.children"
+                [routerLink]="sub.path"
+                class="block px-4 py-2 hover:bg-gray-100"
+              >
+                {{ sub.title }}
+              </a>
+            </ng-container>
+
+          </div>
+        </div>
+
+        <!-- WITHOUT CHILDREN -->
+        <ng-template #single>
+          <a
+            [routerLink]="item.path"
+            class="flex items-center py-3.5 text-sm text-secondary-foreground px-3 text-nowrap
+                   border-b-2 border-transparent hover:text-mono"
+          >
+            {{ item.title }}
+          </a>
+        </ng-template>
+
+      </ng-container>
+
+    </div>
+  </div>
+</div>
