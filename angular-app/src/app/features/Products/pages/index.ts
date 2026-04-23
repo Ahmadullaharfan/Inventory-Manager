@@ -1,31 +1,34 @@
+// Simplified Index component
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router'; // Add this
 import { ProductService } from '../../Products/services/product.service';
 import { Product } from '../models/product';
+import { DataTableComponent } from '../../../shared/components/data-table/data-table.component';
+import type { ColumnConfig } from '../../../shared/components/data-table/data-table.types';
 
 @Component({
   selector: 'app-index',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, DataTableComponent], // Remove ReactiveFormsModule
   templateUrl: './index.html',
   styleUrl: './index.css',
 })
 export class Index implements OnInit {
   productService = inject(ProductService);
-  fb = inject(FormBuilder);
+  router = inject(Router); // Add this
   
   products = signal<Product[]>([]);
-  showForm = signal(false);
-  selectedId: number | null = null;
-  productForm!: FormGroup;
+
+  columns: ColumnConfig[] = [
+    { key: 'id', label: 'ID' },
+    { key: 'name', label: 'Name' },
+    { key: 'price', label: 'Price' },
+    { key: 'description', label: 'Description' },
+    { key: 'actions', label: 'Actions' }
+  ];
 
   ngOnInit() {
     this.loadProducts();
-    this.productForm = this.fb.group({
-      name: ['', Validators.required],
-      price: ['', [Validators.required, Validators.min(0)]],
-      description: ['']
-    });
   }
 
   loadProducts() {
@@ -35,54 +38,22 @@ export class Index implements OnInit {
     });
   }
 
-  toggleForm(productId?: number) {
-    this.showForm.update(show => !show);
-    if (productId) {
-      this.selectedId = productId;
-      this.productService.getProduct(productId).subscribe((product: Product) => {
-        this.productForm.patchValue(product);
-      });
-    } else {
-      this.selectedId = null;
-      this.productForm.reset();
-    }
+  onRowEdit(product: Product) {
+    this.router.navigate([`/products/edit/${product.id}`]);
   }
 
-  onSubmit() {
-    if (this.productForm.valid) {
-      const productData = this.productForm.value;
-      if (this.selectedId) {
-        this.productService.updateProduct(this.selectedId, productData).subscribe({
-          next: () => {
-            this.loadProducts();
-            this.resetForm();
-          },
-          error: (err: any) => console.error('Update error', err)
-        });
-      } else {
-        this.productService.createProduct(productData).subscribe({
-          next: () => {
-            this.loadProducts();
-            this.resetForm();
-          },
-          error: (err: any) => console.error('Create error', err)
-        });
-      }
-    }
-  }
-
-  onDelete(id: number) {
+  onRowDelete(product: Product) {
     if (confirm('Are you sure?')) {
-      this.productService.deleteProduct(id).subscribe({
+          console.log('onRowDelete Delete Function', product);
+
+      this.productService.deleteProduct(product.id!).subscribe({
         next: () => this.loadProducts(),
         error: (err: any) => console.error('Delete error', err)
-        });
+      });
     }
   }
 
-  resetForm() {
-    this.showForm.set(false);
-    this.selectedId = null;
-    this.productForm.reset();
+  navigateToCreate() {
+    this.router.navigate(['/products/create']);
   }
 }
