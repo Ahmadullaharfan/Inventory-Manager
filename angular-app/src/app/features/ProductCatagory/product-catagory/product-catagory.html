@@ -1,0 +1,17 @@
+<div class="container pl-4 pr-4 mx-auto flex justify-between items-center"> 
+    <h1 class="text-2xl text-gray-900 mb-8">Producct Category</h1>
+    <button (click)="navigateToCreate()" class="text-black px-4 py-2 rounded-lg shadow-md transition duration-200 mb-8">Add Product Category</button>
+</div>
+
+<div class="conatiner pl-4 pr-4 mx-auto">
+    <app-data-table 
+        #dataTable
+        [data]="productCategory()"
+        [columns]="columns"
+        [loading]="isLoading()"
+        loadingLabel="Loading product categories..."
+        (rowEdit)="onRowEdit($event)"
+        (rowDelete)="onRowDelete($event)"
+    ></app-data-table>
+
+</div>

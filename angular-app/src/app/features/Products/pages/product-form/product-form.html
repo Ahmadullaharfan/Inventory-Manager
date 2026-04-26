@@ -20,10 +20,24 @@
           [class.border-red-500]="productForm.get('name')?.invalid && productForm.get('name')?.touched"
           placeholder="Enter product name"
         >
-        <div *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched" class="mt-1 text-sm text-red-600">
-          <span *ngIf="productForm.get('name')?.errors?.['required']">Name is required</span>
-        </div>
-      </div>
+    @if(productForm.get('name')?.errors && productForm.get('name')?.touched) {
+  <div class="mt-1 text-sm text-red-600">
+
+    @if(productForm.get('name')?.errors?.['required']) {
+      <span>Name is required</span>
+    }
+
+    @else if(productForm.get('name')?.errors?.['minlength']) {
+      <span>Name must be at least 3 characters</span>
+    }
+
+    @else if(productForm.get('name')?.errors?.['serverError']) {
+      <span>{{ productForm.get('name')?.errors?.['serverError'] }}</span>
+    }
+
+  </div>
+}
+      </div>    
 
       <!-- Price Field -->
       <div class="mb-6">
@@ -39,10 +53,23 @@
           [class.border-red-500]="productForm.get('price')?.invalid && productForm.get('price')?.touched"
           placeholder="Enter product price"
         >
-        <div *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched" class="mt-1 text-sm text-red-600">
-          <span *ngIf="productForm.get('price')?.errors?.['required']">Price is required</span>
-          <span *ngIf="productForm.get('price')?.errors?.['min']">Price must be greater than 0</span>
-        </div>
+        @if(productForm.get('price')?.errors && productForm.get('price')?.touched) {
+            <div class="mt-1 text-sm text-red-600">
+
+              @if(productForm.get('price')?.errors?.['required']) {
+                <span>Price is required</span>
+              }
+
+              @else if(productForm.get('price')?.errors?.['min']) {
+                <span>Price must be greater than 0</span>
+              }
+
+              @else if(productForm.get('price')?.errors?.['serverError']) {
+                <span>{{ productForm.get('price')?.errors?.['serverError'] }}</span>
+              }
+
+            </div>
+          }
       </div>
 
       <!-- Description Field -->

@@ -1,15 +1,17 @@
 <div class="container pl-4 pr-4 mx-auto flex justify-between items-center">
-  <h1 class="text-3xl text-gray-900 mb-8">Products Management</h1>
+  <h1 class="text-3xl text-gray-900 mb-8">Products</h1>
   <button (click)="navigateToCreate()" class="text-black px-4 py-2 rounded-lg shadow-md transition duration-200 mb-8">
     Add New Product
   </button>
 </div>
 <div class="container pl-4 pr-4 mx-auto">
-  <app-data-table 
-    [data]="products()" 
-    [columns]="columns"
-    (rowEdit)="onRowEdit($event)"
-    (rowDelete)="onRowDelete($event)">
-  </app-data-table>
+<app-data-table
+  #dataTable
+  [data]="products()"
+  [columns]="columns"
+  [loading]="isLoading()"
+  loadingLabel="Loading products..."
+  (rowEdit)="onRowEdit($event)"
+  (rowDelete)="onRowDelete($event)"
+></app-data-table>
 </div>
-<!-- Remove all modal HTML code -->

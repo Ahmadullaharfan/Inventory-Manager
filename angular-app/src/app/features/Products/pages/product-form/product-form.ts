@@ -23,7 +23,7 @@ export class ProductFormComponent implements OnInit {
 
   ngOnInit() {
     this.productForm = this.fb.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required, Validators.minLength(3)]],
       price: ['', [Validators.required, Validators.min(0)]],
       description: ['']
     });
@@ -43,25 +43,40 @@ export class ProductFormComponent implements OnInit {
     });
   }
 
-  onSubmit() {
-    if (this.productForm.invalid) {
-      this.productForm.markAllAsTouched();
-      return;
-    }
-
-    const productData = this.productForm.value;
-    console.log('Submitting product data:', productData);
-
-    if (this.isEditMode) {
-      this.productService.updateProduct(this.productId!, productData).subscribe({
-        next: () => this.router.navigate(['/products'])
-      });
-    } else {
-      this.productService.createProduct(productData).subscribe({
-        next: () => this.router.navigate(['/products'])
-      });
-    }
+onSubmit() {
+  if (this.productForm.invalid) {
+    this.productForm.markAllAsTouched();
+    return;
   }
+
+  const productData = this.productForm.value;
+
+  const request = this.isEditMode
+    ? this.productService.updateProduct(this.productId!, productData)
+    : this.productService.createProduct(productData);
+
+  request.subscribe({
+    next: () => this.router.navigate(['/products']),
+
+    error: (err) => {
+      // 🔥 Handle server validation errors
+      if (err.error?.errors) {
+        const errors = err.error.errors;
+
+        Object.keys(errors).forEach(field => {
+          const control = this.productForm.get(field);
+
+          if (control) {
+            control.setErrors({
+              ...control.errors,
+              serverError: errors[field][0] // take first error
+            });
+          }
+        });
+      }
+    }
+  });
+}
 
   cancel() {
     this.router.navigate(['/products']);

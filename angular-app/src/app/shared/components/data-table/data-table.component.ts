@@ -11,9 +11,14 @@ import type { ColumnConfig } from './data-table.types';
 })
 export class DataTableComponent {
   @Input() data: any[] = [];
-@Input() columns: ColumnConfig[] | ReadonlyArray<ColumnConfig> = [];
+  @Input() columns: ColumnConfig[] | ReadonlyArray<ColumnConfig> = [];
+  @Input() loading = false;
+  @Input() loadingLabel = 'Loading...';
   @Output() rowEdit = new EventEmitter<any>();
   @Output() rowDelete = new EventEmitter<any>();
+
+  // Add refresh animation trigger
+  isRefreshing = signal(false);
 
   formatPrice(value: number): string {
     return `$${value}`;
@@ -26,5 +31,12 @@ export class DataTableComponent {
   onDelete(row: any) {
     this.rowDelete.emit(row);
   }
-}
 
+  // Method to trigger refresh animation from parent
+  triggerRefreshAnimation() {
+    this.isRefreshing.set(true);
+    setTimeout(() => {
+      this.isRefreshing.set(false);
+    }, 600);
+  }
+}

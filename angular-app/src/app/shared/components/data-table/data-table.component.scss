@@ -3,3 +3,109 @@
   display: block;
 }
 
+// ============================================
+// PROFESSIONAL TABLE ANIMATIONS
+// ============================================
+
+/* 1. Table Container Fade-in Animation */
+.table-container {
+  animation: tableFadeIn 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+@keyframes tableFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 2. Staggered Row Animation */
+.table-row {
+  animation: rowSlideIn 0.7s ease-out backwards;
+}
+
+@keyframes rowSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 3. Row Hover Effect (Professional touch) */
+.table-row:hover {
+  background-color: rgba(59, 130, 246, 0.04);
+  transition: background-color 0.2s ease;
+}
+
+/* 4. Cell Animation for data changes */
+.table-cell {
+  transition: all 0.2s ease;
+}
+
+/* 5. Subtle pulse on data refresh (optional) */
+@keyframes gentlePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.2);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(59, 130, 246, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+}
+
+.table-refreshing {
+  animation: gentlePulse 0.6s ease-out;
+}
+
+
+/* Global animation utilities */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.duration-300 {
+  animation-duration: 300ms;
+}
+
+/* Smooth transitions for buttons */
+button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0px);
+}

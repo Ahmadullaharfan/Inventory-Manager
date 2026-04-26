@@ -1,7 +1,7 @@
 // Simplified Index component
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router'; // Add this
+import { Router } from '@angular/router'; 
 import { ProductService } from '../../Products/services/product.service';
 import { Product } from '../models/product';
 import { DataTableComponent } from '../../../shared/components/data-table/data-table.component';
@@ -9,15 +9,19 @@ import type { ColumnConfig } from '../../../shared/components/data-table/data-ta
 
 @Component({
   selector: 'app-index',
-  imports: [CommonModule, DataTableComponent], // Remove ReactiveFormsModule
+  imports: [CommonModule, DataTableComponent], 
   templateUrl: './index.html',
   styleUrl: './index.css',
 })
 export class Index implements OnInit {
   productService = inject(ProductService);
-  router = inject(Router); // Add this
+  router = inject(Router);
+  
+  // Add ViewChild to access table component
+  @ViewChild(DataTableComponent) dataTable!: DataTableComponent;
   
   products = signal<Product[]>([]);
+  isLoading = signal<boolean>(true);
 
   columns: ColumnConfig[] = [
     { key: 'id', label: 'ID' },
@@ -32,9 +36,23 @@ export class Index implements OnInit {
   }
 
   loadProducts() {
+    this.isLoading.set(true);
     this.productService.getProducts().subscribe({
-      next: (products: Product[]) => this.products.set(products),
-      error: (err: any) => console.error('Error loading products', err)
+      next: (products: Product[]) => {
+        this.products.set(products);
+        this.isLoading.set(false);
+        
+        // Trigger refresh animation after data loads
+        setTimeout(() => {
+          if (this.dataTable) {
+            this.dataTable.triggerRefreshAnimation();
+          }
+        }, 100);
+      },
+      error: (err: any) => {
+        console.error('Error loading products', err);
+        this.isLoading.set(false);
+      }
     });
   }
 
@@ -44,11 +62,16 @@ export class Index implements OnInit {
 
   onRowDelete(product: Product) {
     if (confirm('Are you sure?')) {
-          console.log('onRowDelete Delete Function', product);
-
+      console.log('onRowDelete Delete Function', product);
+      this.isLoading.set(true);
       this.productService.deleteProduct(product.id!).subscribe({
-        next: () => this.loadProducts(),
-        error: (err: any) => console.error('Delete error', err)
+        next: () => {
+          this.loadProducts();
+        },
+        error: (err: any) => {
+          console.error('Delete error', err);
+          this.isLoading.set(false);
+        }
       });
     }
   }
