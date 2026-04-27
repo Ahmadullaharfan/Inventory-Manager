@@ -13,7 +13,7 @@ import type { ColumnConfig } from '../../../shared/components/data-table/data-ta
   templateUrl: './product-catagory.html',
   styleUrl: './product-catagory.css',
 })
-export class ProductCatagory {
+export class ProductCategoryListComponent implements OnInit {
   productCategoryService = inject(ProductCategoryService);
   router = inject(Router);
   
@@ -56,22 +56,23 @@ export class ProductCatagory {
     this.router.navigate(['/productcategories/edit', category.id]);
   }
 
-  onRowDelete(category: ProductCategory){
-    if(confirm(`Are you sure you want to delete category ` + category.name + `?`)){
+  onRowDelete(category: ProductCategory) {
+    if (confirm('Are you sure you want to delete category ' + category.name + '?')) {
       console.log('Deleting Category', category);
       this.isLoading.set(true);
       this.productCategoryService.deleteCategory(category.id!).subscribe({
-        next: ()=>{
+        next: () => {
           this.loadCategories();
         },
-        error: (err:any)=>{
+        error: (err: any) => {
           console.error('Error Deleting Category', err);
           this.isLoading.set(false);
         }
       });
-  } }
+    }
+  }
 
-  navigateToCreate(){
+  navigateToCreate() {
     this.router.navigate(['/productCategories/create']);
   }
 
