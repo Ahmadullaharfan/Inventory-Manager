@@ -5,6 +5,8 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { InputComponent } from '../../../../shared/components/ui/input/input';
+import { ProductCategoryService } from '../../../ProductCatagory/services/product-category';
+import { ProductCategory } from '../../../ProductCatagory/models/product-category.model';
 
 // Remove this line - no animations import needed
 // import { trigger, transition, style, animate, state, query, stagger, animateChild } from '@angular/animations';
@@ -18,6 +20,7 @@ import { InputComponent } from '../../../../shared/components/ui/input/input';
 })
 export class ProductFormComponent implements OnInit {
   productService = inject(ProductService);
+  productCategoryService = inject(ProductCategoryService);
   fb = inject(FormBuilder);
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -25,13 +28,18 @@ export class ProductFormComponent implements OnInit {
   productForm!: FormGroup;
   isEditMode = false;
   productId: number | null = null;
+  categories: ProductCategory[] = [];
 
   ngOnInit() {
     this.productForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
+      product_category_id: [null],
       price: ['', [Validators.required, Validators.min(0)]],
+      stock: [0, [Validators.required, Validators.min(0)]],
       description: ['']
     });
+
+    this.loadCategories();
 
     this.route.params.subscribe(params => {
       if (params['id']) {
@@ -48,13 +56,31 @@ export class ProductFormComponent implements OnInit {
     });
   }
 
+  loadCategories() {
+    this.productCategoryService.getAllCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+      },
+      error: (err) => {
+        console.error('Error loading categories', err);
+      }
+    });
+  }
+
   onSubmit() {
     if (this.productForm.invalid) {
       this.productForm.markAllAsTouched();
       return;
     }
 
-    const productData = this.productForm.value;
+    const productData = {
+      ...this.productForm.value,
+      product_category_id: this.productForm.value.product_category_id
+        ? Number(this.productForm.value.product_category_id)
+        : null,
+      price: Number(this.productForm.value.price),
+      stock: Number(this.productForm.value.stock),
+    };
 
     const request = this.isEditMode
       ? this.productService.updateProduct(this.productId!, productData)

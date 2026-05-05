@@ -53,7 +53,7 @@ export class ProductCategoryListComponent implements OnInit {
   }
   
   onRowEdit(category: ProductCategory){
-    this.router.navigate(['/productcategories/edit', category.id]);
+    this.router.navigate(['/productCategories/edit', category.id]);
   }
 
   onRowDelete(category: ProductCategory) {

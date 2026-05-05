@@ -36,6 +36,26 @@
       }
     </div>
 
+    <!-- Category Field -->
+    <div class="animate-field flex flex-col gap-1 w-full">
+      <label class="text-sm font-medium text-gray-700">Category</label>
+      <select
+        formControlName="product_category_id"
+        class="w-full px-3 py-2 border rounded-lg focus:outline-none transition-all duration-200"
+      >
+        <option [ngValue]="null">No category</option>
+        @for (category of categories; track category.id) {
+          <option [ngValue]="category.id">{{ category.name }}</option>
+        }
+      </select>
+
+      @if (productForm.get('product_category_id')?.errors?.['serverError']) {
+        <div class="text-red-500 text-sm font-medium mt-1">
+          <span>{{ productForm.get('product_category_id')?.errors?.['serverError'] }}</span>
+        </div>
+      }
+    </div>
+
     <!-- Price Field -->
     <div class="animate-field">
       <app-input
@@ -56,6 +76,30 @@
           }
           @if (productForm.get('price')?.errors?.['serverError']) {
             <span>{{ productForm.get('price')?.errors?.['serverError'] }}</span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Stock Field -->
+    <div class="animate-field">
+      <app-input
+        type="number"
+        label="Stock"
+        placeholder="Enter available stock"
+        formControlName="stock"
+      ></app-input>
+
+      @if (productForm.get('stock')?.errors && productForm.get('stock')?.touched) {
+        <div class="text-red-500 text-sm font-medium mt-1">
+          @if (productForm.get('stock')?.errors?.['required']) {
+            <span>Stock is required</span>
+          }
+          @if (productForm.get('stock')?.errors?.['min']) {
+            <span>Stock must be greater than or equal to 0</span>
+          }
+          @if (productForm.get('stock')?.errors?.['serverError']) {
+            <span>{{ productForm.get('stock')?.errors?.['serverError'] }}</span>
           }
         </div>
       }

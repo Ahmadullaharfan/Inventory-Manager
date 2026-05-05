@@ -26,7 +26,9 @@ export class Index implements OnInit {
   columns: ColumnConfig[] = [
     { key: 'id', label: 'ID' },
     { key: 'name', label: 'Name' },
+    { key: 'category_name', label: 'Category' },
     { key: 'price', label: 'Price' },
+    { key: 'stock', label: 'Stock' },
     { key: 'description', label: 'Description' },
     { key: 'actions', label: 'Actions' }
   ];
