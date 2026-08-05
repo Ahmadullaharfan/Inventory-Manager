@@ -46,10 +46,10 @@
                         : (row[column.key] || '-') }}
                   } @else {
                     <div class="space-x-2">
-                      <button (click)="onEdit(row)" class="text-blue-500 px-4 py-1 text-xs transition-all hover:scale-110">
+                      <button (click)="onEdit(row)" type="button" aria-label="Edit" title="Edit" class="text-blue-500 px-4 py-1 text-xs transition-all hover:scale-110">
                         <i class="fa-solid fa-pen-to-square"></i>
                       </button>
-                      <button (click)="onDelete(row.id)" class="text-red-500 px-4 py-1 text-xs transition-all hover:scale-110">
+                      <button (click)="onDelete(row.id)" type="button" aria-label="Edit" title="Edit" class="text-red-500 px-4 py-1 text-xs transition-all hover:scale-110">
                         <i class="fa-solid fa-trash"></i>
                       </button>
                     </div>

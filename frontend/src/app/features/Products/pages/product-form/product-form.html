@@ -51,8 +51,9 @@
 
     <!-- Category Field -->
     <div class="animate-field flex flex-col gap-1 w-full">
-      <label class="text-sm font-medium text-gray-700">Category</label>
+      <label for="product_category_id" class="text-sm font-medium text-gray-700">Category</label>
       <select
+        id="product_category_id"
         formControlName="product_category_id"
         class="w-full px-3 py-2 border rounded-lg focus:outline-none transition-all duration-200"
         [class.border-red-500]="productForm.get('product_category_id')?.errors?.['serverError']"
@@ -72,8 +73,9 @@
 
     <!-- Supplier Field -->
     <div class="animate-field flex flex-col gap-1 w-full">
-      <label class="text-sm font-medium text-gray-700">Supplier</label>
+      <label for="supplier_id" class="text-sm font-medium text-gray-700">Supplier</label>
       <select
+        id="supplier_id"
         formControlName="supplier_id"
         class="w-full px-3 py-2 border rounded-lg focus:outline-none transition-all duration-200"
         [class.border-red-500]="productForm.get('supplier_id')?.errors?.['serverError']"
@@ -200,7 +202,11 @@
 
       <!-- File Input -->
       <div class="flex items-center gap-3">
+        <label for="ProductImage">
+          Product image
+        </label>
         <input
+          id="ProductImage"
           type="file"
           (change)="onImageSelected($event)"
           accept="image/*"
