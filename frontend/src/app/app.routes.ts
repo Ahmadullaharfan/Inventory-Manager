@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
 import { Index } from './features/Products/pages/index';
+import { SupplersList } from './features/Suppliers/pages/index'
 import { ProductFormComponent } from './features/Products/pages/product-form/product-form';
 import { ProductCategoryListComponent } from './features/ProductCatagory/product-catagory/product-catagory';
 import { ProductCategoryFormComponent } from './features/ProductCatagory/product-catagory/product-category-form/product-category-form';
+import { SupplierForm } from './features/Suppliers/pages/supplier-form/supplier-form';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'products', pathMatch: 'full' },
@@ -12,5 +14,10 @@ export const routes: Routes = [
 
   { path: 'productCategories', component: ProductCategoryListComponent },
   { path: 'productCategories/create', component: ProductCategoryFormComponent },
-  { path: 'productCategories/edit/:id', component: ProductCategoryFormComponent }
+  { path: 'productCategories/edit/:id', component: ProductCategoryFormComponent },
+
+  { path: 'suppliers', component: SupplersList },
+  { path: 'suppliers/create', component: SupplierForm },
+
+
 ];

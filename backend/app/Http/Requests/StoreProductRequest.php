@@ -23,11 +23,17 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'product_category_id' => 'nullable|exists:product_categories,id',
+            'supplier_id' => 'nullable|exists:suppliers,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'product_category_id' => 'nullable|exists:product_categories,id',
+            'brand' => 'nullable|string|max:255',
+            'cost_price' => 'required|numeric|min:0',
+            'unit_of_measure' => 'required|string|max:50',
+            'units_per_package' => 'required|integer|min:1',
+            'location' => 'nullable|string|max:255',
+            'is_active' => 'boolean',
+            'image' => 'nullable|image|max:2048', // Max 2MB
         ];
     }
 }

@@ -11,11 +11,17 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
+        'product_category_id',
+        'supplier_id', 
         'name',
         'description',
-        'price',
-        'stock',
-        'product_category_id',
+        'brand',
+        'cost_price',
+        'unit_of_measure',
+        'units_per_package',
+        'location',
+        'is_active',
+        'image',
     ];
 
     protected $casts = [
@@ -26,6 +32,11 @@ class Product extends Model
     protected $appends = [
         'category_name',
     ];
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class, 'supplier_id');
+    }
 
     public function category()
     {

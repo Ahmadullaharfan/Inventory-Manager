@@ -5,14 +5,14 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateProductRequest extends FormRequest
+class UpdateSupplierRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,7 +22,7 @@ class UpdateProductRequest extends FormRequest
      */
     public function rules(): array
     {
-         return [
+      return [
             'product_category_id' => 'nullable|exists:product_categories,id',
             'supplier_id' => 'nullable|exists:suppliers,id',
             'name' => 'required|string|max:255',

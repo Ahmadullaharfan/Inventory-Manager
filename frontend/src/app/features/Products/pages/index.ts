@@ -62,11 +62,11 @@ export class Index implements OnInit {
     this.router.navigate([`/products/edit/${product.id}`]);
   }
 
-  onRowDelete(product: Product) {
+  onRowDelete(productId: number) {
     if (confirm('Are you sure?')) {
-      console.log('onRowDelete Delete Function', product);
+      console.log('onRowDelete Delete Function', productId);
       this.isLoading.set(true);
-      this.productService.deleteProduct(product.id!).subscribe({
+      this.productService.deleteProduct(productId!).subscribe({
         next: () => {
           this.loadProducts();
         },

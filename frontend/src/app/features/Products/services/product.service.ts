@@ -22,6 +22,7 @@ export class ProductService {
       .pipe(catchError(this.handleError));
   }
 
+  // For JSON requests (without file upload)
   createProduct(product: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/products`, product)
       .pipe(catchError(this.handleError));
@@ -30,6 +31,22 @@ export class ProductService {
   updateProduct(id: number, product: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/products/${id}`, product)
       .pipe(catchError(this.handleError));
+  }
+
+  // For FormData requests (WITH file upload)
+  createProductWithFormData(formData: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/products`, formData)
+      .pipe(catchError(this.handleError));
+  }
+
+  updateProductWithFormData(id: number, formData: FormData): Observable<any> {
+    // Laravel requires _method=PUT when using POST with FormData
+    return this.http.post(`${this.apiUrl}/products/${id}?_method=PUT`, formData)
+      .pipe(catchError(this.handleError));
+    
+    // Alternative: If your API supports PUT with FormData directly
+    // return this.http.put(`${this.apiUrl}/products/${id}`, formData)
+    //   .pipe(catchError(this.handleError));
   }
 
   deleteProduct(id: number): Observable<any> {

@@ -12,14 +12,28 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_category_id')->nullable()->constrained()->nullOnDelete();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->decimal('price', 10, 2);
-            $table->unsignedInteger('stock')->default(0);
-            $table->timestamps();
-        });
+        $table->id();
+        $table->foreignId('product_category_id')->nullable()->constrained()->nullOnDelete();
+        $table->foreignId('supplier_id')->nullable()->constrained()->nullOnDelete();
+        
+        $table->string('name');
+        $table->text('description')->nullable();
+        $table->string('brand')->nullable();
+        // Financials
+        $table->decimal('cost_price', 10, 2);        
+        // Inventory Units
+        $table->string('unit_of_measure'); // 'Piece', 'Kg', 'Liter'
+        $table->integer('units_per_package')->default(1); // Retail math!
+        
+        // Identifiers
+        $table->string('location')->nullable(); // 'Aisle 3, Shelf 2'
+        
+        // Status
+        $table->boolean('is_active')->default(true);
+        $table->string('image')->nullable();
+        
+        $table->timestamps();
+    });
     }
 
     /**

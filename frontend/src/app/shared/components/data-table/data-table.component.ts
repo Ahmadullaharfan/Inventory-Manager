@@ -28,8 +28,8 @@ export class DataTableComponent {
     this.rowEdit.emit(row);
   }
 
-  onDelete(row: any) {
-    this.rowDelete.emit(row);
+  onDelete(ProductId: any) {
+    this.rowDelete.emit(ProductId);
   }
 
   // Method to trigger refresh animation from parent
