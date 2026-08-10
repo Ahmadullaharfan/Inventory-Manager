@@ -1,8 +1,9 @@
+// product.service.ts
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Product } from '../models/product';
+import { Product } from '../models/product.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,9 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.apiUrl}/products`)
+  // Simplified version - let the component handle the response
+  getProducts(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/products`)
       .pipe(catchError(this.handleError));
   }
 
@@ -22,7 +24,6 @@ export class ProductService {
       .pipe(catchError(this.handleError));
   }
 
-  // For JSON requests (without file upload)
   createProduct(product: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/products`, product)
       .pipe(catchError(this.handleError));
@@ -33,20 +34,14 @@ export class ProductService {
       .pipe(catchError(this.handleError));
   }
 
-  // For FormData requests (WITH file upload)
   createProductWithFormData(formData: FormData): Observable<any> {
     return this.http.post(`${this.apiUrl}/products`, formData)
       .pipe(catchError(this.handleError));
   }
 
   updateProductWithFormData(id: number, formData: FormData): Observable<any> {
-    // Laravel requires _method=PUT when using POST with FormData
     return this.http.post(`${this.apiUrl}/products/${id}?_method=PUT`, formData)
       .pipe(catchError(this.handleError));
-    
-    // Alternative: If your API supports PUT with FormData directly
-    // return this.http.put(`${this.apiUrl}/products/${id}`, formData)
-    //   .pipe(catchError(this.handleError));
   }
 
   deleteProduct(id: number): Observable<any> {
@@ -58,10 +53,8 @@ export class ProductService {
     let errorMessage = 'An error occurred';
     
     if (error.error instanceof ErrorEvent) {
-      // Client-side error
       errorMessage = error.error.message;
     } else {
-      // Server-side error
       errorMessage = `Server returned code ${error.status}: ${error.message}`;
       if (error.error && typeof error.error === 'object') {
         console.error('Server error details:', error.error);

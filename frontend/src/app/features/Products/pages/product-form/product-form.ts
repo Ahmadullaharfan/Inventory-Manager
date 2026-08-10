@@ -5,7 +5,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { InputComponent } from '../../../../shared/components/ui/input/input';
-import { ProductCategoryService } from '../../../ProductCatagory/services/product-category';
+import { ProductCategoryService } from '../../../ProductCatagory/services/product-category.service';
 import { ProductCategory } from '../../../ProductCatagory/models/product-category.model';
 import { ProductSuppliers } from '../../../Suppliers/models/product-supplier.model';
 import { SupplierService } from '../../../Suppliers/services/suppliers.service';
@@ -64,38 +64,37 @@ export class ProductFormComponent implements OnInit {
     });
   }
 
-  loadProduct() {
-    this.productService.getProduct(this.productId!).subscribe({
-      next: (product) => {
-        // Patch all form values - use the correct property name from your API
-        this.productForm.patchValue({
-          name: product.name,
-          product_category_id: product.product_category_id,
-          supplier_id: product.supplier_id, // Make sure this matches your API response
-          description: product.description,
-          brand: product.brand,
-          cost_price: product.cost_price,
-          unit_of_measure: product.unit_of_measure,
-          units_per_package: product.units_per_package,
-          location: product.location,
-          image: product.image,
-          is_active: product.is_active === 1 || product.is_active === '1' || product.is_active === true
-        });
-        
-        // Set image preview if image URL exists
-        if (product.image) {
-          this.imagePreview = product.image;
-          this.imageUrl = product.image;
-          this.isImageFromUrl = true;
-          this.imageFileName = product.image.split('/').pop() || 'Image';
-        }
-      },
-      error: (err) => {
-        console.error('Error loading product', err);
+loadProduct() {
+  this.productService.getProduct(this.productId!).subscribe({
+    next: (product) => {
+      // Patch all form values
+      this.productForm.patchValue({
+        name: product.name || '',
+        product_category_id: product.product_category_id || null,
+        supplier_id: product.supplier_id || null,
+        description: product.description || '',
+        brand: product.brand || '',
+        cost_price: product.cost_price || 0,
+        unit_of_measure: product.unit_of_measure || '',
+        units_per_package: product.units_per_package || 1,
+        location: product.location || '',
+        image: product.image_url || '', // Use image_url instead of image
+        is_active: product.is_active === true // Already boolean from API
+      });
+      
+      // Set image preview if image URL exists
+      if (product.image_url) {
+        this.imagePreview = product.image_url;
+        this.imageUrl = product.image_url;
+        this.isImageFromUrl = true;
+        this.imageFileName = product.image_url.split('/').pop() || 'Image';
       }
-    });
-  }
-
+    },
+    error: (err) => {
+      console.error('Error loading product', err);
+    }
+  });
+}
   loadCategories() {
     this.productCategoryService.getAllCategories().subscribe({
       next: (categories) => {
@@ -190,91 +189,88 @@ export class ProductFormComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.productForm.invalid) {
-      this.productForm.markAllAsTouched();
-      return;
-    }
-
-    // Check if we have a file or URL for image
-    const hasImage = this.selectedImageFile || this.imageUrl;
-
-    if (hasImage) {
-      // Use FormData for file upload
-      const formData = new FormData();
-      
-      // Add all form fields
-      formData.append('name', this.productForm.get('name')?.value || '');
-      formData.append('description', this.productForm.get('description')?.value || '');
-      formData.append('brand', this.productForm.get('brand')?.value || '');
-      formData.append('cost_price', String(this.productForm.get('cost_price')?.value || 0));
-      formData.append('unit_of_measure', this.productForm.get('unit_of_measure')?.value || '');
-      formData.append('units_per_package', String(this.productForm.get('units_per_package')?.value || 1));
-      formData.append('location', this.productForm.get('location')?.value || '');
-      
-      // FIX: Send is_active as string '1' or '0'
-      const isActive = this.productForm.get('is_active')?.value;
-      formData.append('is_active', isActive ? '1' : '0');
-      
-      // Add category and supplier (handle null values)
-      const categoryId = this.productForm.get('product_category_id')?.value;
-      if (categoryId) {
-        formData.append('product_category_id', String(categoryId));
-      }
-      
-      const supplierId = this.productForm.get('supplier_id')?.value;
-      if (supplierId) {
-        formData.append('supplier_id', String(supplierId));
-      }
-
-      // Handle image - either file or URL
-      if (this.selectedImageFile) {
-        // If file is selected, append the file
-        formData.append('image', this.selectedImageFile, this.selectedImageFile.name);
-      } else if (this.imageUrl) {
-        // If URL is provided, append as string
-        formData.append('image', this.imageUrl);
-      }
-
-      // Send with FormData
-      const request = this.isEditMode
-        ? this.productService.updateProductWithFormData(this.productId!, formData)
-        : this.productService.createProductWithFormData(formData);
-
-      request.subscribe({
-        next: () => this.router.navigate(['/products']),
-        error: (err) => this.handleError(err)
-      });
-    } else {
-      // No image - use regular JSON
-      const productData = {
-        name: this.productForm.get('name')?.value || '',
-        description: this.productForm.get('description')?.value || '',
-        brand: this.productForm.get('brand')?.value || '',
-        cost_price: Number(this.productForm.get('cost_price')?.value || 0),
-        unit_of_measure: this.productForm.get('unit_of_measure')?.value || '',
-        units_per_package: Number(this.productForm.get('units_per_package')?.value || 1),
-        location: this.productForm.get('location')?.value || '',
-        // FIX: Send is_active as boolean or 1/0 based on your API expectations
-        is_active: this.productForm.get('is_active')?.value ? true : false,
-        product_category_id: this.productForm.get('product_category_id')?.value 
-            ? Number(this.productForm.get('product_category_id')?.value) 
-            : null,
-        supplier_id: this.productForm.get('supplier_id')?.value 
-            ? Number(this.productForm.get('supplier_id')?.value) 
-            : null,
-        image: this.productForm.get('image')?.value || ''
-      };
-
-      const request = this.isEditMode
-        ? this.productService.updateProduct(this.productId!, productData)
-        : this.productService.createProduct(productData);
-
-      request.subscribe({
-        next: () => this.router.navigate(['/products']),
-        error: (err) => this.handleError(err)
-      });
-    }
+  if (this.productForm.invalid) {
+    this.productForm.markAllAsTouched();
+    return;
   }
+
+  // Get is_active as boolean
+  const isActive = this.productForm.get('is_active')?.value === true;
+
+  // Check if we have a file or URL for image
+  const hasImage = this.selectedImageFile || this.imageUrl;
+
+  if (hasImage) {
+    // Use FormData for file upload
+    const formData = new FormData();
+    
+    // Add all form fields
+    formData.append('name', this.productForm.get('name')?.value || '');
+    formData.append('description', this.productForm.get('description')?.value || '');
+    formData.append('brand', this.productForm.get('brand')?.value || '');
+    formData.append('cost_price', String(this.productForm.get('cost_price')?.value || 0));
+    formData.append('unit_of_measure', this.productForm.get('unit_of_measure')?.value || '');
+    formData.append('units_per_package', String(this.productForm.get('units_per_package')?.value || 1));
+    formData.append('location', this.productForm.get('location')?.value || '');
+    formData.append('is_active', isActive ? '1' : '0');
+    
+    // Add category and supplier (handle null values)
+    const categoryId = this.productForm.get('product_category_id')?.value;
+    if (categoryId) {
+      formData.append('product_category_id', String(categoryId));
+    }
+    
+    const supplierId = this.productForm.get('supplier_id')?.value;
+    if (supplierId) {
+      formData.append('supplier_id', String(supplierId));
+    }
+
+    // Handle image - either file or URL
+    if (this.selectedImageFile) {
+      formData.append('image', this.selectedImageFile, this.selectedImageFile.name);
+    } else if (this.imageUrl) {
+      formData.append('image', this.imageUrl);
+    }
+
+    // Send with FormData
+    const request = this.isEditMode
+      ? this.productService.updateProductWithFormData(this.productId!, formData)
+      : this.productService.createProductWithFormData(formData);
+
+    request.subscribe({
+      next: () => this.router.navigate(['/products']),
+      error: (err) => this.handleError(err)
+    });
+  } else {
+    // No image - use regular JSON
+    const productData = {
+      name: this.productForm.get('name')?.value || '',
+      description: this.productForm.get('description')?.value || '',
+      brand: this.productForm.get('brand')?.value || '',
+      cost_price: Number(this.productForm.get('cost_price')?.value || 0),
+      unit_of_measure: this.productForm.get('unit_of_measure')?.value || '',
+      units_per_package: Number(this.productForm.get('units_per_package')?.value || 1),
+      location: this.productForm.get('location')?.value || '',
+      is_active: isActive, // Send as boolean
+      product_category_id: this.productForm.get('product_category_id')?.value 
+          ? Number(this.productForm.get('product_category_id')?.value) 
+          : null,
+      supplier_id: this.productForm.get('supplier_id')?.value 
+          ? Number(this.productForm.get('supplier_id')?.value) 
+          : null,
+      image: this.productForm.get('image')?.value || ''
+    };
+
+    const request = this.isEditMode
+      ? this.productService.updateProduct(this.productId!, productData)
+      : this.productService.createProduct(productData);
+
+    request.subscribe({
+      next: () => this.router.navigate(['/products']),
+      error: (err) => this.handleError(err)
+    });
+  }
+}
 
   private handleError(err: any): void {
     if (err.error?.errors) {

@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductCategoryService } from '../../services/product-category';
+import { ProductCategoryService } from '../../services/product-category.service';
 import { InputComponent } from '../../../../shared/components/ui/input/input';
 
 @Component({

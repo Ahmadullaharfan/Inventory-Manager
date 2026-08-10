@@ -5,65 +5,73 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Http\Resources\ProductResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the products.
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
-        return Product::with('category')->latest()->get();
+        $products = Product::with(['category', 'supplier'])
+            ->latest()
+            ->paginate(15);
+
+        return ProductResource::collection($products);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Store a newly created product.
      */
-    public function create()
+    public function store(StoreProductRequest $request): JsonResponse
     {
-        //
+        $validated = $request->validated();
+
+        $product = Product::create($validated);
+
+        $product->load(['category', 'supplier']);
+
+        return (new ProductResource($product))
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Display the specified product.
      */
-    public function store(StoreProductRequest $request)
+    public function show(Product $product): ProductResource
     {
-        $product = Product::create($request->validated());
+        $product->load(['category', 'supplier']);
 
-        return response()->json($product->load('category'), 201);
+        return new ProductResource($product);
     }
 
     /**
-     * Display the specified resource.
+     * Update the specified product.
      */
-    public function show(Product $product)
-    {
-        return $product->load('category');
+    public function update(
+        UpdateProductRequest $request,
+        Product $product
+    ): JsonResponse {
+        $validated = $request->validated();
+
+        $product->update($validated);
+
+        $product->load(['category', 'supplier']);
+
+        return (new ProductResource($product))
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Remove the specified product.
      */
-    public function edit(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateProductRequest $request, Product $product)
-    {
-        $product->update($request->validated());
-
-        return response()->json($product->load('category'));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Product $product)
+    public function destroy(Product $product): Response
     {
         $product->delete();
 

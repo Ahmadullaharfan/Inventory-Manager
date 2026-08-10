@@ -5,6 +5,8 @@ import { ProductFormComponent } from './features/Products/pages/product-form/pro
 import { ProductCategoryListComponent } from './features/ProductCatagory/product-catagory/product-catagory';
 import { ProductCategoryFormComponent } from './features/ProductCatagory/product-catagory/product-category-form/product-category-form';
 import { SupplierForm } from './features/Suppliers/pages/supplier-form/supplier-form';
+import { CustomerPages } from './features/customer/customer-pages/customer-pages';
+import { CustomerFormComponent } from './features/customer/customer-pages/customer-form/customer-form';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'products', pathMatch: 'full' },
@@ -18,6 +20,9 @@ export const routes: Routes = [
 
   { path: 'suppliers', component: SupplersList },
   { path: 'suppliers/create', component: SupplierForm },
+
+  { path: 'Customers', component: CustomerPages },
+  { path: 'Customers/create', component: CustomerFormComponent },
 
 
 ];

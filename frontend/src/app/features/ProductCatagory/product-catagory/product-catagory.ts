@@ -1,7 +1,7 @@
 import { Component, inject, signal, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router'; 
-import { ProductCategoryService } from '../services/product-category';
+import { ProductCategoryService } from '../services/product-category.service';
 import { ProductCategory } from '../models/product-category.model';
 import { DataTableComponent } from '../../../shared/components/data-table/data-table.component';
 import type { ColumnConfig } from '../../../shared/components/data-table/data-table.types';

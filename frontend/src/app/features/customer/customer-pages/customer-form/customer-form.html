@@ -1,0 +1,80 @@
+<div class="container mx-auto">
+  <h2 
+    class="text-2xl text-gray-900 mb-6 flex justify-center items-center animate-field"
+  >
+    <!-- Note: Changed 'Product' to 'Customer' to match your form context -->
+    {{ isEditMode ? 'Edit Customer' : 'Add New Customer' }}
+  </h2>
+
+  <form 
+    [formGroup]="customerForm"
+    (ngSubmit)="onSubmit()"
+    class="space-y-4 max-w-lg max-h-full justify-center items-center mx-auto"
+  > 
+    <!-- 1. Customer Name -->
+    <div class="animate-field">
+      <app-input 
+        label="Customer Name"
+        placeholder="Enter Customer Name"
+        formControlName="customer_name"
+      ></app-input>
+    </div>
+
+    <!-- 2. Father's Name -->
+    <div class="animate-field">
+      <app-input 
+        label="Father's Name"
+        placeholder="Enter Father's Name"
+        formControlName="father_name"
+      ></app-input>
+    </div>
+
+    <!-- 3. Phone Number -->
+    <div class="animate-field">
+      <app-input 
+        label="Phone Number"
+        placeholder="Enter Phone Number"
+        formControlName="phone_number"
+      ></app-input>
+    </div>
+
+    <!-- 4. Email -->
+    <div class="animate-field">
+      <app-input 
+        label="Email Address"
+        placeholder="Enter Email Address"
+        formControlName="email"
+      ></app-input>
+    </div>
+
+    <!-- 5. Location -->
+    <div class="animate-field">
+      <app-input 
+        label="Location"
+        placeholder="Enter Location"
+        formControlName="location"
+      ></app-input>
+    </div>
+
+    <!-- 6. Attachment -->
+    <div class="animate-field">
+      <app-input 
+        label="Attachment"
+        placeholder="Enter Attachment URL or Path"
+        formControlName="attachment"
+      ></app-input>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="animate-field pt-4">
+      <button 
+        type="submit" 
+        [disabled]="customerForm.invalid"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded transition duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
+      >
+        {{ isEditMode ? 'Update Customer' : 'Save Customer' }}
+      </button>
+    </div>
+
+  </form>
+</div>

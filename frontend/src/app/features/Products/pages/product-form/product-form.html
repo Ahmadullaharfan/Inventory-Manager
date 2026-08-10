@@ -178,125 +178,128 @@
       }
     </div>
 
-  <!-- Image Upload Section -->
-    <div class="animate-field flex flex-col gap-1 w-full">
-      <label class="text-sm font-medium text-gray-700">Product Image</label>
-      
-      <!-- Image Preview -->
-      @if (imagePreview) {
-        <div class="relative w-32 h-32 mb-2">
-          <img 
-            [src]="imagePreview" 
-            alt="Product preview"
-            class="w-full h-full object-cover rounded-lg border border-gray-200"
-          />
-          <button
-            type="button"
-            (click)="removeImage()"
-            class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
-          >
-            ×
-          </button>
-        </div>
-      }
+  <!-- Your existing form fields remain the same until the Image section -->
 
-      <!-- File Input -->
-      <div class="flex items-center gap-3">
-        <label for="ProductImage">
-          Product image
-        </label>
-        <input
-          id="ProductImage"
-          type="file"
-          (change)="onImageSelected($event)"
-          accept="image/*"
-          class="hidden"
-          #fileInput
-        />
-        <button
-          type="button"
-          (click)="fileInput.click()"
-          class="px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg hover:border-black transition-colors duration-200 flex items-center gap-2"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          Choose Image
-        </button>
-        <span class="text-sm text-gray-500">{{ imageFileName || 'No file chosen' }}</span>
-      </div>
-
-      <!-- Image URL Input (alternative) -->
-      <div class="mt-2">
-        <app-input
-          label="Or enter image URL"
-          placeholder="https://example.com/image.jpg"
-          formControlName="image"
-          (input)="onImageUrlInput($event)"
-        ></app-input>
-      </div>
-      
-      @if (productForm.get('image')?.errors?.['serverError']) {
-        <div class="text-red-500 text-sm font-medium mt-1">
-          <span>{{ productForm.get('image')?.errors?.['serverError'] }}</span>
-        </div>
-      }
-    </div>
-
-    <!-- Description Field -->
-    <div class="animate-field flex flex-col gap-1 w-full">
-      <label class="text-sm font-medium text-gray-700">Description</label>
-      <textarea
-        formControlName="description"
-        rows="5"
-        class="w-full px-3 py-2 border rounded-lg focus:outline-none transition-all duration-200"
-        [class.border-red-500]="productForm.get('description')?.invalid && productForm.get('description')?.touched"
-        placeholder="Enter product description"
-      ></textarea>
-      
-      @if (productForm.get('description')?.errors?.['serverError']) {
-        <div class="text-red-500 text-sm font-medium mt-1">
-          <span>{{ productForm.get('description')?.errors?.['serverError'] }}</span>
-        </div>
-      }
-    </div>
-
-    <!-- Active Status -->
-    <div class="animate-field flex items-center gap-3">
-      <input
-        type="checkbox"
-        formControlName="is_active"
-        id="is_active"
-        class="w-4 h-4 text-black border-gray-300 rounded focus:ring-black"
+<!-- Image Field - Updated Version -->
+<div class="animate-field flex flex-col gap-1 w-full">
+  <label class="text-sm font-medium text-gray-700">Product Image</label>
+  
+  <!-- Image Preview -->
+  @if (imagePreview) {
+    <div class="relative w-32 h-32 mb-2">
+      <img 
+        [src]="imagePreview" 
+        alt="Product preview"
+        class="w-full h-full object-cover rounded-lg border border-gray-200"
       />
-      <label for="is_active" class="text-sm font-medium text-gray-700">Active</label>
-      
-      @if (productForm.get('is_active')?.errors?.['serverError']) {
-        <div class="text-red-500 text-sm font-medium">
-          <span>{{ productForm.get('is_active')?.errors?.['serverError'] }}</span>
-        </div>
-      }
-    </div>
-
-    <!-- Actions -->
-    <div class="flex justify-between items-center animate-field">
-      <button
-        type="submit"
-        class="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-all duration-200 transform hover:scale-105 active:scale-95"
-        [disabled]="productForm.invalid"
-        [class.opacity-50]="productForm.invalid"
-        [class.cursor-not-allowed]="productForm.invalid"
-      >
-        {{ isEditMode ? 'Update' : 'Save' }}
-      </button>
-      
       <button
         type="button"
-        class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-all duration-200 transform hover:scale-105 active:scale-95"
-        (click)="cancel()"
+        (click)="removeImage()"
+        class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
       >
-        Cancel
+        ×
       </button>
     </div>
+  }
+
+  <!-- File Input -->
+  <div class="flex items-center gap-3">
+    <label for="ProductImage" class="text-sm font-medium text-gray-700">
+      Product image
+    </label>
+    <input
+      id="ProductImage"
+      type="file"
+      (change)="onImageSelected($event)"
+      accept="image/*"
+      class="hidden"
+      #fileInput
+    />
+    <button
+      type="button"
+      (click)="fileInput.click()"
+      class="px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg hover:border-black transition-colors duration-200 flex items-center gap-2"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+      Choose Image
+    </button>
+    <span class="text-sm text-gray-500">{{ imageFileName || 'No file chosen' }}</span>
+  </div>
+
+  <!-- Image URL Input (alternative) -->
+  <div class="mt-2">
+    <app-input
+      label="Or enter image URL"
+      placeholder="https://example.com/image.jpg"
+      formControlName="image"
+      (input)="onImageUrlInput($event)"
+    ></app-input>
+  </div>
+  
+  @if (productForm.get('image')?.errors?.['serverError']) {
+    <div class="text-red-500 text-sm font-medium mt-1">
+      <span>{{ productForm.get('image')?.errors?.['serverError'] }}</span>
+    </div>
+  }
+</div>
+
+<!-- The rest of your form remains the same -->
+<!-- Description Field -->
+<div class="animate-field flex flex-col gap-1 w-full">
+  <label class="text-sm font-medium text-gray-700">Description</label>
+  <textarea
+    formControlName="description"
+    rows="5"
+    class="w-full px-3 py-2 border rounded-lg focus:outline-none transition-all duration-200"
+    [class.border-red-500]="productForm.get('description')?.invalid && productForm.get('description')?.touched"
+    placeholder="Enter product description"
+  ></textarea>
+  
+  @if (productForm.get('description')?.errors?.['serverError']) {
+    <div class="text-red-500 text-sm font-medium mt-1">
+      <span>{{ productForm.get('description')?.errors?.['serverError'] }}</span>
+    </div>
+  }
+</div>
+
+<!-- Active Status - Updated Version -->
+<div class="animate-field flex items-center gap-3">
+  <input
+    type="checkbox"
+    formControlName="is_active"
+    id="is_active"
+    class="w-4 h-4 text-black border-gray-300 rounded focus:ring-black"
+  />
+  <label for="is_active" class="text-sm font-medium text-gray-700">Active</label>
+  
+  @if (productForm.get('is_active')?.errors?.['serverError']) {
+    <div class="text-red-500 text-sm font-medium">
+      <span>{{ productForm.get('is_active')?.errors?.['serverError'] }}</span>
+    </div>
+  }
+</div>
+
+<!-- Actions -->
+<div class="flex justify-between items-center animate-field">
+  <button
+    type="submit"
+    class="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-all duration-200 transform hover:scale-105 active:scale-95"
+    [disabled]="productForm.invalid"
+    [class.opacity-50]="productForm.invalid"
+    [class.cursor-not-allowed]="productForm.invalid"
+  >
+    {{ isEditMode ? 'Update' : 'Save' }}
+  </button>
+  
+  <button
+    type="button"
+    class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-all duration-200 transform hover:scale-105 active:scale-95"
+    (click)="cancel()"
+  >
+    Cancel
+  </button>
+</div>
   </form>
 </div>
