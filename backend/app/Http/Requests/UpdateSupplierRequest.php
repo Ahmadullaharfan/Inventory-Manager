@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateSupplierRequest extends FormRequest
 {
@@ -12,7 +13,8 @@ class UpdateSupplierRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        // 1. CHANGED TO TRUE: Allows the request to proceed to validation
+        return true; 
     }
 
     /**
@@ -22,18 +24,32 @@ class UpdateSupplierRequest extends FormRequest
      */
     public function rules(): array
     {
-      return [
-            'product_category_id' => 'nullable|exists:product_categories,id',
-            'supplier_id' => 'nullable|exists:suppliers,id',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'brand' => 'nullable|string|max:255',
-            'cost_price' => 'required|numeric|min:0',
-            'unit_of_measure' => 'required|string|max:50',
-            'units_per_package' => 'required|integer|min:1',
-            'location' => 'nullable|string|max:255',
-            'is_active' => 'boolean',
-            'image' => 'nullable|image|max:2048', // Max 2MB
+        // 2. Fetch the current supplier ID from the route parameter
+        // Assumes your route looks like: api/suppliers/{supplier}
+        $supplierId = $this->route('supplier');
+
+        return [
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('suppliers', 'name')->ignore($supplierId), // Ignores current supplier
+            ],
+            'contact_person' => 'nullable|string|max:255',
+            'phone' => [
+                'required',
+                'string',
+                'max:20',
+                Rule::unique('suppliers', 'phone')->ignore($supplierId), // Ignores current supplier
+            ],
+            'email' => [
+                'nullable',
+                'email',
+                'max:255',
+                Rule::unique('suppliers', 'email')->ignore($supplierId), // Ignores current supplier
+            ],
+            'address' => 'nullable|string',
+            'country' => 'nullable|string|max:255',
         ];
     }
 }

@@ -1,9 +1,9 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { CustomerService } from '../customer-services/customer.service';
 import { Customer } from '../customer-models/customer.model';
 import { DataTableComponent } from '../../../shared/components/data-table/data-table.component';
+import { CustomerService } from '../customer-services/customer.service';
 
 @Component({
   selector: 'app-customer-pages',
@@ -29,7 +29,8 @@ export class CustomerPages implements OnInit {
     { key: 'phone_number', label: 'Phone Number' },
     { key: 'email', label: 'Email' },
     { key: 'location', label: 'Location' },
-    { key: 'attachment', label: 'Attachment' }
+    { key: 'attachment', label: 'Attachment' },
+    { key: 'actions', label: 'Action'}
   ];
 
   ngOnInit(): void {
@@ -40,8 +41,16 @@ export class CustomerPages implements OnInit {
   loadCustomers(): void {
     this.isLoading.set(true);
     this.customerService.getCustomers().subscribe({
-      next: (data) => {
-        this.customers.set(data);
+      next: (response: any) => {
+        // Check if response has a 'data' property (pagination)
+        if (response && response.data) {
+          this.customers.set(response.data);  // Extract the data array
+        } else if (Array.isArray(response)) {
+          // Fallback for non-paginated response
+          this.customers.set(response);
+        } else {
+          this.customers.set([]);
+        }
         this.isLoading.set(false);
       },
       error: (err) => {
@@ -53,7 +62,7 @@ export class CustomerPages implements OnInit {
 
   // Action: Navigate to the creation form
   navigateToCreate(): void {
-    this.router.navigate(['/Customers/create']);
+    this.router.navigate(['/customers/create']);
   }
 
   // Action: Triggered when editing a row
@@ -64,18 +73,19 @@ export class CustomerPages implements OnInit {
   }
 
   // Action: Triggered when deleting a row
-  onRowDelete(customer: Customer): void {
-    if (!customer.id) return;
-
-    const confirmDelete = confirm(`Are you sure you want to delete ${customer.customer_name}?`);
-    if (confirmDelete) {
-      this.customerService.deleteCustomer(customer.id).subscribe({
+    onRowDelete(customerId: number) {
+    if (confirm('Are you sure?')) {
+      this.isLoading.set(true);
+      this.customerService.deleteCustomer(customerId!).subscribe({
         next: () => {
-          // Reactively remove the item from your Signal state array
-          this.customers.update((prev) => prev.filter((c) => c.id !== customer.id));
+          this.loadCustomers();
         },
-        error: (err) => console.error('Failed to delete customer:', err)
+        error: (err: any) => {
+          console.error('Delete error', err);
+          this.isLoading.set(false);
+        }
       });
     }
   }
+
 }

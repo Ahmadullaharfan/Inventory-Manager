@@ -14,9 +14,6 @@ class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * 
-     * Laravel 12 Best Practice: Always paginate API collections and wrap 
-     * them in an API Resource to avoid exposing raw DB structures.
      */
     public function index(): AnonymousResourceCollection
     {
@@ -27,14 +24,11 @@ class CustomerController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * 
-     * Laravel 12 Best Practice: Use ->secureValidate() on the request to enable 
-     * advanced request filtering, and respond with an exact 201 Created resource.
      */
     public function store(StoreCustomerRequest $request): JsonResponse
     {
-        // Laravel 12 advanced secure validation handler
-        $validated = $request->secureValidate();
+        // ✅ FIXED: Replaced secureValidate() with validated() to prevent the 500 server crash
+        $validated = $request->validated();
 
         // Handle file upload safely to the public disk
         if ($request->hasFile('attachment')) {
@@ -50,9 +44,6 @@ class CustomerController extends Controller
 
     /**
      * Display the specified resource.
-     * 
-     * Laravel 12 Best Practice: Use implicit Route Model Binding combined 
-     * with an explicit API Resource wrapper.
      */
     public function show(Customer $customer): CustomerResource
     {
@@ -61,19 +52,16 @@ class CustomerController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * 
-     * Laravel 12 Best Practice: Return a 200 OK with the updated resource resource,
-     * utilizing type-safe model updates.
      */
     public function update(UpdateCustomerRequest $request, Customer $customer): JsonResponse
     {
-        $validated = $request->secureValidate();
+        // ✅ FIXED: Replaced secureValidate() with validated() to prevent the 500 server crash
+        $validated = $request->validated();
 
         if ($request->hasFile('attachment')) {
             $validated['attachment'] = $request->file('attachment')->store('attachments', 'public');
         }
 
-        // Fixed the ->updated() bug from earlier code to the correct ->update()
         $customer->update($validated); 
         
         return (new CustomerResource($customer))

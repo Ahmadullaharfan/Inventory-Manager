@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateCustomerRequest extends FormRequest
 {
@@ -12,7 +13,7 @@ class UpdateCustomerRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,8 +26,19 @@ class UpdateCustomerRequest extends FormRequest
         return [
             'customer_name' => 'required|string|max:30',
             'father_name'   => 'required|string|max:30',
-            'phone_number'  => 'nullable|string|regex:/^\+?[1-9]\d{1,14}$/|max:20|unique:customers,phone_number',
-            'email'         => 'required|email|max:40',
+            'phone_number'  => [
+                'nullable',
+                'string',
+                'regex:/^\+?[1-9]\d{6,14}$/', // Aligned with frontend minimum lengths
+                'max:20',
+                Rule::unique('customers', 'phone_number')->ignore($this->route('customer')), // Ignores current record
+            ],
+            'email' => [
+                'required',
+                'email',
+                'max:40',
+                Rule::unique('customers', 'email')->ignore($this->route('customer')),
+            ],
             'location'      => 'nullable|string|max:255',
             'attachment'    => 'nullable|file|mimes:jpg,png,pdf,doc,docx|max:5120', 
         ];

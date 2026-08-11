@@ -8,31 +8,27 @@ import { Customer } from '../customer-models/customer.model';
 })
 export class CustomerService {
   // Replace with your actual Laravel API base URL
-  private apiUrl = 'http://localhost:8000/api/customers'; 
+  private apiUrl = 'http://localhost:8000/api'; 
 
   constructor(private http: HttpClient) {}
 
   // GET /api/customers (Index)
   getCustomers(): Observable<Customer[]> {
-    return this.http.get<Customer[]>(this.apiUrl);
+    return this.http.get<Customer[]>(`${this.apiUrl}/customers`);
   }
 
-  // GET /api/customers/{id} (Show)
-  getCustomer(id: number): Observable<Customer> {
-    return this.http.get<Customer>(`${this.apiUrl}/${id}`);
+ getCustomer(id: number): Observable<Customer> {
+  return this.http.get<Customer>(`${this.apiUrl}/customers/${id}`);
   }
 
-  // POST /api/customers (Store)
-  createCustomer(customer: Customer): Observable<Customer> {
-    return this.http.post<Customer>(this.apiUrl, customer);
+  createCustomer(data: any): Observable<Customer> {
+   return this.http.post<Customer>(`${this.apiUrl}/customers`, data);
   }
 
-  // PUT /api/customers/{id} (Update)
-  updateCustomer(id: number, customer: Customer): Observable<Customer> {
-    return this.http.put<Customer>(`${this.apiUrl}/${id}`, customer);
+  updateCustomer(id: number, data: any): Observable<Customer> {
+    return this.http.put<Customer>(`${this.apiUrl}/customers/${id}`, data);
   }
 
-  // DELETE /api/customers/{id} (Destroy)
   deleteCustomer(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }

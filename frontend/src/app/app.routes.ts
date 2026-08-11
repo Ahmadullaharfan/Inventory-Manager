@@ -20,9 +20,11 @@ export const routes: Routes = [
 
   { path: 'suppliers', component: SupplersList },
   { path: 'suppliers/create', component: SupplierForm },
+  { path: 'suppliers/edit/:id', component: SupplierForm },
 
-  { path: 'Customers', component: CustomerPages },
-  { path: 'Customers/create', component: CustomerFormComponent },
 
+  { path: 'customers', component: CustomerPages },
+  { path: 'customers/create', component: CustomerFormComponent },
+  { path: 'customers/edit/:id', component: CustomerFormComponent },
 
 ];

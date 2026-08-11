@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomerService } from '../../customer-services/customer.service';
@@ -12,74 +12,114 @@ import { InputComponent } from '../../../../shared/components/ui/input/input';
   styleUrls: ['./customer-form.css']
 })
 export class CustomerFormComponent implements OnInit {
-  customerForm!: FormGroup;
-  isEditMode: boolean = false;
-  customerId: number | null = null;
+  // ✅ Modern Angular Way: Clean inline Dependency Injection (No constructor needed)
+  private fb = inject(FormBuilder);
+  private customerService = inject(CustomerService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
-  constructor(
-    private fb: FormBuilder,
-    private customerService: CustomerService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+  customerForm!: FormGroup;
+  isEditMode = false;
+  customerId: number | null = null;
+  selectedFile: File | null = null; // Tracks the chosen file stream safely
 
   ngOnInit(): void {
     this.initForm();
     this.checkForEditMode();
   }
 
-  // Build the form controls with validation rules
   private initForm(): void {
     this.customerForm = this.fb.group({
       customer_name: ['', [Validators.required, Validators.minLength(3)]],
       father_name: ['', Validators.required],
-      phone_number: ['', [Validators.required, Validators.pattern(/^[0-9+\s-]{7,15}$/)]],
+      phone_number: ['', [Validators.required, Validators.pattern(/^\+?[1-9]\d{6,14}$/)]],
       email: ['', [Validators.required, Validators.email]],
       location: ['', Validators.required],
-      attachment: [''] // Optional field
+      attachment: [null] 
     });
   }
 
-  // Checks the active route to see if an ID is provided for editing
-  private checkForEditMode(): void {
-    const idParam = this.route.snapshot.paramMap.get('id');
-    if (idParam) {
-      this.isEditMode = true;
-      this.customerId = +idParam;
-      
-      // Fetch user data from Laravel backend and patch it into the form
-      this.customerService.getCustomer(this.customerId).subscribe({
-        next: (customer) => this.customerForm.patchValue(customer),
-        error: (err) => console.error('Error fetching customer data:', err)
-      });
+  // Intercepts file selection with strict type safety checking
+  onFileSelected(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    if (inputElement.files && inputElement.files.length > 0) {
+      this.selectedFile = inputElement.files[0];
     }
   }
 
-  // Handles form submission
+  cancel(): void {
+    this.router.navigate(['/customers']);
+  }
+
+  // ✅ Modern Angular Way: Use an active route observable stream instead of a static one-time snapshot
+  private checkForEditMode(): void {
+    this.route.params.subscribe(params => {
+      if (params['id']) {
+        this.isEditMode = true;
+        this.customerId = +params['id'];
+        this.loadCustomerData();
+      }
+    });
+  }
+
+  private loadCustomerData(): void {
+    this.customerService.getCustomer(this.customerId!).subscribe({
+      next: (res: any) => this.customerForm.patchValue(res.data),
+      error: (err) => console.error('Error fetching customer data:', err)
+    });
+  }
+
   onSubmit(): void {
     if (this.customerForm.invalid) {
+      this.customerForm.markAllAsTouched();
       return;
     }
 
-    const payload = this.customerForm.value;
-
-    if (this.isEditMode && this.customerId) {
-      // Calls PUT /api/customers/{id}
-      this.customerService.updateCustomer(this.customerId, payload).subscribe({
-        next: () => this.handleSuccess(),
-        error: (err) => console.error('Error updating customer:', err)
-      });
-    } else {
-      // Calls POST /api/customers
-      this.customerService.createCustomer(payload).subscribe({
-        next: () => this.handleSuccess(),
-        error: (err) => console.error('Error creating customer:', err)
-      });
+    // Build the Multi-part Form Data envelope to support file transfers
+    const formData = new FormData();
+    formData.append('customer_name', this.customerForm.get('customer_name')?.value);
+    formData.append('father_name', this.customerForm.get('father_name')?.value);
+    formData.append('phone_number', this.customerForm.get('phone_number')?.value);
+    formData.append('email', this.customerForm.get('email')?.value);
+    formData.append('location', this.customerForm.get('location')?.value);
+    
+    if (this.selectedFile) {
+      formData.append('attachment', this.selectedFile, this.selectedFile.name);
     }
-  }
 
-  private handleSuccess(): void {
-    alert(this.isEditMode ? 'Customer updated successfully!' : 'Customer created successfully!');
-    this.router.navigate(['/customers']); // Redirect to the customer list page
+    // Determine request stream trajectory
+    if (this.isEditMode && this.customerId) {
+      formData.append('_method', 'PUT'); // Laravel method override for file streaming support
+    }
+
+    const request$ = this.isEditMode && this.customerId
+      ? this.customerService.updateCustomer(this.customerId, formData)
+      : this.customerService.createCustomer(formData);
+
+    request$.subscribe({
+      next: () => {
+        this.router.navigate(['/customers']),
+        this.cancel(); 
+      },
+      error: (err) => {
+        if (err.error?.errors) {
+          const validationErrors = err.error.errors;
+
+          Object.keys(validationErrors).forEach(field => {
+            const control = this.customerForm.get(field);
+
+            if (control) {
+              control.setErrors({
+                ...control.errors,
+                serverError: validationErrors[field][0]
+              });
+            }
+          });
+        } else {
+          console.error('An unexpected transmission error occurred:', err);
+        }
+      }
+    });
+
   }
 }
