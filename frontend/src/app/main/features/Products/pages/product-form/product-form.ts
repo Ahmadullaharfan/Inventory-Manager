@@ -14,6 +14,7 @@ import { SupplierService } from '../../../Suppliers/services/suppliers.service';
   selector: 'app-product-form',
   imports: [CommonModule, ReactiveFormsModule, InputComponent],
   templateUrl: './product-form.html',
+  standalone: true,
   styleUrls: ['./product-form.css']
 })
 export class ProductFormComponent implements OnInit {

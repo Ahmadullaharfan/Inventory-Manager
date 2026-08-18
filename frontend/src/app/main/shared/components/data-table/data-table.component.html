@@ -3,10 +3,10 @@
   <!-- Loading overlay -->
   <div *ngIf="loading" class="absolute inset-0 z-10 flex items-center justify-center bg-white/70 backdrop-blur-[2px] transition-opacity">
     <div class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white/95 px-4 py-3 shadow-lg shadow-slate-200/60">
-      <div class="relative flex h-10 w-10 items-center justify-center rounded-full bg-sky-50">
+        <div class="relative flex h-10 w-10 items-center justify-center rounded-full bg-sky-50">
         <span class="absolute inset-0 rounded-full border border-sky-200/80"></span>
         <span class="absolute inset-1 rounded-full border-2 border-sky-100 border-t-sky-500 animate-spin"></span>
-        <i class="fa-solid fa-spinner text-sky-600"></i>
+        <i class="fa fa-spinner text-sky-600"></i>
       </div>
       <div class="space-y-1 text-right">
         <p class="text-sm font-semibold text-slate-800">{{ loadingLabel }}</p>
@@ -18,9 +18,9 @@
   <!-- Table with animation container -->
   <div *ngIf="data && data.length > 0; else emptyState" class="table-container" [class.table-refreshing]="isRefreshing">
     <table class="min-w-full border border-gray-200 rounded-lg">
-      <thead class="bg-gray-50">
+      <thead class="bg-gray-100">
         <tr>
-          <th *ngFor="let column of columns" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          <th *ngFor="let column of columns" class="px-2 py-2 text-left text-xs font-medium text-black text-center uppercase tracking-wider">
             {{ column.label }}
           </th>
         </tr>
@@ -28,17 +28,17 @@
 
       <tbody class="divide-y divide-gray-200">
         <tr *ngFor="let row of data; let i = index" class="table-row hover:bg-gray-50" [style.animationDelay]="(i * 0.03) + 's'">
-          <td *ngFor="let column of columns" class="table-cell px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-900" [ngClass]="{'max-w-md truncate': column.key === 'description'}">
+          <td *ngFor="let column of columns" class="table-cell text-center px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-900" [ngClass]="{'max-w-md truncate': column.key === 'description'}">
             <ng-container *ngIf="column.key !== 'actions'; else actionsTpl">
               {{ column.key === 'price' ? formatPrice(row[column.key]) : (row[column.key] || '-') }}
             </ng-container>
             <ng-template #actionsTpl>
               <div class="space-x-2">
                 <button (click)="onEdit(row)" type="button" aria-label="Edit" title="Edit" class="text-blue-500 px-4 py-1 text-xs transition-all hover:scale-110">
-                  <i class="fa-solid fa-pen-to-square"></i>
+                  <i class="fa fa-pencil-square-o"></i>
                 </button>
                 <button (click)="onDelete(row.id)" type="button" aria-label="Delete" title="Delete" class="text-red-500 px-4 py-1 text-xs transition-all hover:scale-110">
-                  <i class="fa-solid fa-trash"></i>
+                  <i class="fa fa-trash-o"></i>
                 </button>
               </div>
             </ng-template>

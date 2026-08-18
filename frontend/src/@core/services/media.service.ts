@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 
 import { BehaviorSubject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -11,30 +11,19 @@ export class CoreMediaService {
   currentMediaQuery: string;
   onMediaUpdate: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-  /**
-   * Constructor
-   *
-   * @param {MediaObserver} _mediaObserver
-   */
   constructor(private _mediaObserver: MediaObserver) {
-    // Set the defaults
     this.currentMediaQuery = '';
-
-    // Initialize
     this._init();
   }
 
-  // @ Private methods
-  // -----------------------------------------------------------------------------------------------------
-
-  /**
-   * Initialize
-   *
-   * @private
-   */
   private _init(): void {
-    this._mediaObserver.media$.pipe(debounceTime(500), distinctUntilChanged()).subscribe((change: MediaChange) => {
-      // console.log('subscription: ', change);
+    // ✅ FIX: Use asObservable() and map to get the first item from the array
+    this._mediaObserver.asObservable().pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      // Extract the first MediaChange from the array
+      map((changes: MediaChange[]) => changes[0])
+    ).subscribe((change: MediaChange) => {
       if (this.currentMediaQuery !== change.mqAlias) {
         this.currentMediaQuery = change.mqAlias;
         this.onMediaUpdate.next(change.mqAlias);
