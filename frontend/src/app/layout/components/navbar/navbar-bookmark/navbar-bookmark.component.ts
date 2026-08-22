@@ -4,8 +4,9 @@ import { Component, ElementRef, HostListener, Inject, OnInit, ViewChild } from '
 import { SearchService } from 'app/layout/components/navbar/navbar-search/search.service';
 
 @Component({
-  selector: 'app-navbar-bookmark',
-  templateUrl: './navbar-bookmark.component.html'
+    selector: 'app-navbar-bookmark',
+    templateUrl: './navbar-bookmark.component.html',
+    standalone: false
 })
 export class NavbarBookmarkComponent implements OnInit {
   // Public

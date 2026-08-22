@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import type { ColumnConfig } from './data-table.types';
 
 @Component({
-  selector: 'app-data-table',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './data-table.component.html',
-  styleUrls: ['./data-table.component.scss']
+    selector: 'app-data-table',
+    imports: [CommonModule],
+    templateUrl: './data-table.component.html',
+    styleUrls: ['./data-table.component.scss']
 })
 export class DataTableComponent {
   @Input() data: any[] = [];

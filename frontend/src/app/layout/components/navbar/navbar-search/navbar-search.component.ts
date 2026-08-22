@@ -5,8 +5,9 @@ import { Component, ElementRef, HostListener, Inject, OnInit, ViewChild } from '
 import { SearchService } from 'app/layout/components/navbar/navbar-search/search.service';
 
 @Component({
-  selector: 'app-navbar-search',
-  templateUrl: './navbar-search.component.html'
+    selector: 'app-navbar-search',
+    templateUrl: './navbar-search.component.html',
+    standalone: false
 })
 export class NavbarSearchComponent implements OnInit {
   // Public

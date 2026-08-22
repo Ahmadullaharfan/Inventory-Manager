@@ -6,8 +6,9 @@ import { takeUntil } from 'rxjs/operators';
 import { CoreConfigService } from '@core/services/config.service';
 
 @Component({
-  selector: 'footer',
-  templateUrl: './footer.component.html'
+    selector: 'footer',
+    templateUrl: './footer.component.html',
+    standalone: false
 })
 export class FooterComponent implements OnInit, OnDestroy {
   public coreConfig: any;

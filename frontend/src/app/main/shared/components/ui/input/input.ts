@@ -3,18 +3,17 @@ import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-input',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './input.html',
-  styleUrls: ['./input.css'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => InputComponent),
-      multi: true
-    }
-  ]
+    selector: 'app-input',
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './input.html',
+    styleUrls: ['./input.css'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => InputComponent),
+            multi: true
+        }
+    ]
 })
 export class InputComponent implements ControlValueAccessor {
 

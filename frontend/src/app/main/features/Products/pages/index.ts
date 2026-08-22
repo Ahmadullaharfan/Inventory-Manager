@@ -8,11 +8,10 @@ import { DataTableComponent } from '../../../shared/components/data-table/data-t
 import type { ColumnConfig } from '../../../shared/components/data-table/data-table.types';
 
 @Component({
-  selector: 'app-index',
-  standalone: true,
-  imports: [CommonModule, DataTableComponent], 
-  templateUrl: './index.html',
-  styleUrls: ['./index.css'],
+    selector: 'app-index',
+    imports: [CommonModule, DataTableComponent],
+    templateUrl: './index.html',
+    styleUrls: ['./index.css']
 })
 export class Index implements OnInit {
   productService = inject(ProductService);

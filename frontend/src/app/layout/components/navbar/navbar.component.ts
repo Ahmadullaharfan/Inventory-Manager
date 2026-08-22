@@ -17,10 +17,11 @@ import { coreConfig } from 'app/app-config';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'app-navbar',
+    templateUrl: './navbar.component.html',
+    styleUrls: ['./navbar.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   public horizontalMenu: boolean;

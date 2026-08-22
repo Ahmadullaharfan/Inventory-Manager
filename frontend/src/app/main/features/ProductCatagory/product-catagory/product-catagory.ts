@@ -8,11 +8,10 @@ import type { ColumnConfig } from '../../../shared/components/data-table/data-ta
 
 
 @Component({
-  selector: 'app-product-catagory',
-  standalone: true,
-  imports: [CommonModule, DataTableComponent],
-  templateUrl: './product-catagory.html',
-  styleUrls: ['./product-catagory.css'],
+    selector: 'app-product-catagory',
+    imports: [CommonModule, DataTableComponent],
+    templateUrl: './product-catagory.html',
+    styleUrls: ['./product-catagory.css']
 })
 export class ProductCategoryListComponent implements OnInit {
   productCategoryService = inject(ProductCategoryService);

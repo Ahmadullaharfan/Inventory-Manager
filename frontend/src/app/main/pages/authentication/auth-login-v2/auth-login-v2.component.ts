@@ -7,10 +7,11 @@ import { Router } from '@angular/router';
 import { CoreConfigService } from '@core/services/config.service';
 
 @Component({
-  selector: 'app-auth-login-v2',
-  templateUrl: './auth-login-v2.component.html',
-  styleUrls: ['./auth-login-v2.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'app-auth-login-v2',
+    templateUrl: './auth-login-v2.component.html',
+    styleUrls: ['./auth-login-v2.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class AuthLoginV2Component implements OnInit {
   //  Public

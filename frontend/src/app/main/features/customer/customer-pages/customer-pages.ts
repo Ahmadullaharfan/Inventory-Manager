@@ -6,11 +6,10 @@ import { DataTableComponent } from '../../../shared/components/data-table/data-t
 import { CustomerService } from '../customer-services/customer.service';
 
 @Component({
-  selector: 'app-customer-pages',
-  standalone: true,
-  imports: [CommonModule, DataTableComponent],
-  templateUrl: './customer-pages.html',
-  styleUrls: ['./customer-pages.css'],
+    selector: 'app-customer-pages',
+    imports: [CommonModule, DataTableComponent],
+    templateUrl: './customer-pages.html',
+    styleUrls: ['./customer-pages.css']
 })
 export class CustomerPages implements OnInit {
   // Inject dependencies using modern Angular inject syntax
