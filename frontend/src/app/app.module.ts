@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import 'hammerjs';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -35,35 +35,24 @@ const appRoutes: Routes = [
   }
 ];
 
-@NgModule({
-  declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    // Register Toastr early so its providers (ToastConfig) are available
-    // for any root services created during bootstrap.
-    ToastrModule.forRoot(),
-    HttpClientModule,
-    RouterModule.forRoot(appRoutes, {
-    scrollPositionRestoration: 'enabled'
-}),
-    TranslateModule.forRoot(),
-
-    //NgBootstrap
-    NgbModule,
-
-    // Core modules
-    CoreModule.forRoot(coreConfig),
-    CoreCommonModule,
-    CoreSidebarModule,
-    CoreThemeCustomizerModule,
-
-    // App modules
-    LayoutModule,
-    ProductModule
-
-  ],
-
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [AppComponent],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        BrowserAnimationsModule,
+        // Register Toastr early so its providers (ToastConfig) are available
+        // for any root services created during bootstrap.
+        ToastrModule.forRoot(),
+        RouterModule.forRoot(appRoutes, {
+            scrollPositionRestoration: 'enabled'
+        }),
+        TranslateModule.forRoot(),
+        //NgBootstrap
+        NgbModule,
+        // Core modules
+        CoreModule.forRoot(coreConfig),
+        CoreCommonModule,
+        CoreSidebarModule,
+        CoreThemeCustomizerModule,
+        // App modules
+        LayoutModule,
+        ProductModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {}
