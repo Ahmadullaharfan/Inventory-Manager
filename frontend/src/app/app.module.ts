@@ -40,16 +40,17 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    // Register Toastr early so its providers (ToastConfig) are available
+    // for any root services created during bootstrap.
+    ToastrModule.forRoot(),
     HttpClientModule,
     RouterModule.forRoot(appRoutes, {
-      scrollPositionRestoration: 'enabled', // Add options right here
-      relativeLinkResolution: 'legacy'
-    }),
+    scrollPositionRestoration: 'enabled'
+}),
     TranslateModule.forRoot(),
 
     //NgBootstrap
     NgbModule,
-    ToastrModule.forRoot(),
 
     // Core modules
     CoreModule.forRoot(coreConfig),

@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, ElementRef, Renderer2 } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ElementRef, Renderer2, Injector } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 
@@ -32,6 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   // Private
   private _unsubscribeAll: Subject<any>;
+  private _translateService: TranslateService | null;
 
   /**
    * Constructor
@@ -57,7 +58,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private _coreLoadingScreenService: CoreLoadingScreenService,
     private _coreMenuService: CoreMenuService,
     private _coreTranslationService: CoreTranslationService,
-    private _translateService: TranslateService
+    private _injector: Injector
   ) {
     // Get the application main menu
     this.menu = menu;
@@ -68,14 +69,18 @@ export class AppComponent implements OnInit, OnDestroy {
     // Set the main menu as our current menu
     this._coreMenuService.setCurrentMenu('main');
 
-    // Add languages to the translation service
-    this._translateService.addLangs(['en', 'fr', 'de', 'pt']);
+    // Lazily resolve TranslateService to avoid bootstrap-time DI errors
+    this._translateService = this._injector.get(TranslateService, null);
+    if (this._translateService) {
+      // Add languages to the translation service
+      this._translateService.addLangs(['en', 'fr', 'de', 'pt']);
 
-    // This language will be used as a fallback when a translation isn't found in the current language
-    this._translateService.setDefaultLang('en');
+      // This language will be used as a fallback when a translation isn't found in the current language
+      this._translateService.setDefaultLang('en');
 
-    // Set the translations for the menu
-    this._coreTranslationService.translate(menuEnglish, menuFrench, menuGerman, menuPortuguese);
+      // Set the translations for the menu
+      this._coreTranslationService.translate(menuEnglish, menuFrench, menuGerman, menuPortuguese);
+    }
 
     // Set the private defaults
     this._unsubscribeAll = new Subject();
@@ -101,7 +106,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
       // ? Use app-config.ts file to set default language
       const appLanguage = this.coreConfig.app.appLanguage || 'en';
-      this._translateService.use(appLanguage);
+      if (this._translateService) {
+        this._translateService.use(appLanguage);
+      }
 
       // ? OR
       // ? User the current browser lang if available, if undefined use 'en'
@@ -126,8 +133,10 @@ export class AppComponent implements OnInit, OnDestroy {
       // Set the default language to 'en' and then back to 'fr'.
 
       setTimeout(() => {
-        this._translateService.setDefaultLang('en');
-        this._translateService.setDefaultLang(appLanguage);
+        if (this._translateService) {
+          this._translateService.setDefaultLang('en');
+          this._translateService.setDefaultLang(appLanguage);
+        }
       });
 
       /**
@@ -244,7 +253,7 @@ export class AppComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
-    this._unsubscribeAll.next();
+    this._unsubscribeAll.next(undefined);
     this._unsubscribeAll.complete();
   }
 

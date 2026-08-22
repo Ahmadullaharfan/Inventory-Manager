@@ -102,7 +102,7 @@ export class CoreMenuVerticalCollapsibleComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
-    this._unsubscribeAll.next();
+    this._unsubscribeAll.next(undefined);
     this._unsubscribeAll.complete();
   }
 
@@ -121,7 +121,7 @@ export class CoreMenuVerticalCollapsibleComponent implements OnInit, OnDestroy {
 
     // Menu collapse toggled...
     this._coreMenuService.onItemCollapsed.next(this.item);
-    this._coreMenuService.onItemCollapseToggled.next();
+    this._coreMenuService.onItemCollapseToggled.next(undefined);
   }
 
   /**
@@ -137,7 +137,7 @@ export class CoreMenuVerticalCollapsibleComponent implements OnInit, OnDestroy {
     // Mark for check
     this._changeDetectorRef.markForCheck();
 
-    this._coreMenuService.onItemCollapseToggled.next();
+    this._coreMenuService.onItemCollapseToggled.next(undefined);
   }
 
   /**
@@ -153,7 +153,7 @@ export class CoreMenuVerticalCollapsibleComponent implements OnInit, OnDestroy {
     // Mark for check
     this._changeDetectorRef.markForCheck();
 
-    this._coreMenuService.onItemCollapseToggled.next();
+    this._coreMenuService.onItemCollapseToggled.next(undefined);
   }
 
   /**

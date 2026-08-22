@@ -93,7 +93,7 @@ export class CoreMenuHorizontalCollapsibleComponent implements OnInit, OnDestroy
    */
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
-    this._unsubscribeAll.next();
+    this._unsubscribeAll.next(undefined);
     this._unsubscribeAll.complete();
   }
 

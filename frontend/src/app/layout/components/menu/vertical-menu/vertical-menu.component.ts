@@ -98,7 +98,7 @@ export class VerticalMenuComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
-    this._unsubscribeAll.next();
+    this._unsubscribeAll.next(undefined);
     this._unsubscribeAll.complete();
   }
 
@@ -109,7 +109,8 @@ export class VerticalMenuComponent implements OnInit, OnDestroy {
    * On Sidebar scroll set isScrolled as true
    */
   onSidebarScroll(): void {
-    if (this.directiveRef.position(true).y > 3) {
+    const pos = this.directiveRef?.position(true);
+    if (pos && Number(pos.y) > 3) {
       this.isScrolled = true;
     } else {
       this.isScrolled = false;

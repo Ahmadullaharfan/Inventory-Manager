@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, HostBinding, HostListener, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, HostBinding, HostListener, ViewEncapsulation, Injector } from '@angular/core';
 import { MediaObserver } from '@angular/flex-layout';
 
 import * as _ from 'lodash';
@@ -62,6 +62,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   // Private
   private _unsubscribeAll: Subject<any>;
+  private _translateService: TranslateService | null;
 
   /**
    * Constructor
@@ -81,7 +82,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private _coreMediaService: CoreMediaService,
     private _coreSidebarService: CoreSidebarService,
     private _mediaObserver: MediaObserver,
-    public _translateService: TranslateService
+    private _injector: Injector
   ) {
     this._authenticationService.currentUser.subscribe(x => (this.currentUser = x));
 
@@ -103,6 +104,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
         flag: 'pt'
       }
     };
+
+    // Lazily resolve TranslateService
+    this._translateService = this._injector.get(TranslateService, null);
 
     // Set the private defaults
     this._unsubscribeAll = new Subject();
@@ -130,7 +134,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.selectedLanguage = language;
 
     // Use the selected language id for translations
-    this._translateService.use(language);
+    if (this._translateService) {
+      this._translateService.use(language);
+    }
 
     this._coreConfigService.setConfig({ app: { appLanguage: language } }, { emitEvent: true });
   }
@@ -211,7 +217,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     // Set the selected language from default languageOptions
     this.selectedLanguage = _.find(this.languageOptions, {
-      id: this._translateService.currentLang
+      id: this._translateService ? this._translateService.currentLang : 'en'
     });
   }
 
@@ -220,7 +226,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
-    this._unsubscribeAll.next();
+    this._unsubscribeAll.next(undefined);
     this._unsubscribeAll.complete();
   }
 }

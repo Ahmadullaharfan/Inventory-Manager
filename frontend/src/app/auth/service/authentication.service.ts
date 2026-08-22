@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -20,7 +20,7 @@ export class AuthenticationService {
    * @param {HttpClient} _http
    * @param {ToastrService} _toastrService
    */
-  constructor(private _http: HttpClient, private _toastrService: ToastrService) {
+  constructor(private _http: HttpClient, private _injector: Injector) {
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
   }
@@ -63,7 +63,8 @@ export class AuthenticationService {
 
             // Display welcome toast!
             setTimeout(() => {
-              this._toastrService.success(
+              const toastr = this._injector.get(ToastrService);
+              toastr.success(
                 'You have successfully logged in as an ' +
                   user.role +
                   ' user to Vuexy. Now you can start to explore. Enjoy! 🎉',

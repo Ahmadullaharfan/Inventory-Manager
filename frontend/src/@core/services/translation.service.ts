@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -11,12 +11,14 @@ export interface Locale {
   providedIn: 'root'
 })
 export class CoreTranslationService {
+  private _translateService: TranslateService;
+
   /**
    * Constructor
    *
-   * @param {TranslateService} _translateService
+   * @param {Injector} _injector
    */
-  constructor(private _translateService: TranslateService) {}
+  constructor(private _injector: Injector) {}
 
   // Public methods
   // -----------------------------------------------------------------------------------------------------
@@ -28,6 +30,11 @@ export class CoreTranslationService {
    */
   translate(...args: Locale[]): void {
     const locales = [...args];
+
+    // Lazily resolve TranslateService to avoid early DI during app bootstrap
+    if (!this._translateService) {
+      this._translateService = this._injector.get(TranslateService);
+    }
 
     locales.forEach(locale => {
       // use setTranslation() with the third argument value as true to append translations instead of replacing them
