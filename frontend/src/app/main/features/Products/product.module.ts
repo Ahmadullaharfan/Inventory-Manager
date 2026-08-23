@@ -8,6 +8,7 @@ import { ContentHeaderModule } from 'app/layout/components/content-header/conten
 
 import { Index } from './pages/index';
 import { HomeComponent } from 'app/main/sample/home.component';
+import { ProductForm } from './pages/product-form/product-form';
 const routes = [
   {
     path: 'products',
@@ -15,11 +16,11 @@ const routes = [
     data: { animation: 'sample' }
   },
 
-  // {
-  // path: '/products/create',
-  //   component: ProductFormComponent,
-  //   data: { animation: 'sample' }
-  // },
+  {
+  path: 'products/create',
+    component: ProductForm,
+    data: { animation: 'sample' }
+  },
 
   {
     path: 'home',
@@ -30,7 +31,7 @@ const routes = [
 
 @NgModule({
   declarations: [HomeComponent],
-  imports: [RouterModule.forChild(routes), ContentHeaderModule, TranslateModule, CoreCommonModule, Index,],
+  imports: [RouterModule.forChild(routes), ContentHeaderModule, TranslateModule, CoreCommonModule, Index, ProductForm,],
   exports: [HomeComponent]
 })
 export class ProductModule {}

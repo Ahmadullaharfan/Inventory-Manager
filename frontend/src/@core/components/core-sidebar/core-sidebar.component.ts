@@ -11,10 +11,11 @@ import {
   OnInit,
   Output,
   Renderer2,
-  ViewEncapsulation
+  ViewEncapsulation,
+  DOCUMENT
 } from '@angular/core';
 import { animate, AnimationBuilder, AnimationPlayer, style } from '@angular/animations';
-import { DOCUMENT } from '@angular/common';
+
 import { MediaObserver } from '@angular/flex-layout';
 
 import { Subject } from 'rxjs';
