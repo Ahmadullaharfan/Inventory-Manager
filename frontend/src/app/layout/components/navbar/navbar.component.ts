@@ -1,6 +1,4 @@
 import { Component, OnDestroy, OnInit, HostBinding, HostListener, ViewEncapsulation, Injector } from '@angular/core';
-import { MediaObserver } from '@angular/flex-layout';
-
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -73,7 +71,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
    * @param {CoreConfigService} _coreConfigService
    * @param {CoreSidebarService} _coreSidebarService
    * @param {CoreMediaService} _coreMediaService
-   * @param {MediaObserver} _mediaObserver
    * @param {TranslateService} _translateService
    */
   constructor(
@@ -82,7 +79,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private _coreConfigService: CoreConfigService,
     private _coreMediaService: CoreMediaService,
     private _coreSidebarService: CoreSidebarService,
-    private _mediaObserver: MediaObserver,
     private _injector: Injector
   ) {
     this._authenticationService.currentUser.subscribe(x => (this.currentUser = x));
@@ -207,7 +203,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (this.coreConfig.layout.type == 'horizontal') {
       // On every media(screen) change
       this._coreMediaService.onMediaUpdate.pipe(takeUntil(this._unsubscribeAll)).subscribe(() => {
-        const isFixedTop = this._mediaObserver.isActive('bs-gt-xl');
+        const isFixedTop = this._coreMediaService.isActive('bs-gt-xl');
         if (isFixedTop) {
           this.isFixed = false;
         } else {

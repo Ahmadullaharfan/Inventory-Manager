@@ -16,8 +16,6 @@ import {
 } from '@angular/core';
 import { animate, AnimationBuilder, AnimationPlayer, style } from '@angular/animations';
 
-import { MediaObserver } from '@angular/flex-layout';
-
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -102,7 +100,6 @@ export class CoreSidebarComponent implements OnInit, OnDestroy {
    * @param {CoreMediaService} _coreMediaService
    * @param {CoreSidebarService} _coreSidebarService
    * @param {AnimationBuilder} _animationBuilder
-   * @param {MediaObserver} _mediaObserver
    */
   constructor(
     @Inject(DOCUMENT) private document: any,
@@ -112,8 +109,7 @@ export class CoreSidebarComponent implements OnInit, OnDestroy {
     private _changeDetectorRef: ChangeDetectorRef,
     private _coreMediaService: CoreMediaService,
     private _coreSidebarService: CoreSidebarService,
-    private _animationBuilder: AnimationBuilder,
-    private _mediaObserver: MediaObserver
+    private _animationBuilder: AnimationBuilder
   ) {
     // Set Defaults
     this.isOpened = false;
@@ -245,7 +241,7 @@ export class CoreSidebarComponent implements OnInit, OnDestroy {
     // On every media(screen) change
     this._coreMediaService.onMediaUpdate.pipe(takeUntil(this._unsubscribeAll)).subscribe(() => {
       // Get the collapsible status
-      const isCollapsible = this._mediaObserver.isActive(this.collapsibleSidebar);
+      const isCollapsible = this._coreMediaService.isActive(this.collapsibleSidebar);
       //! On screen resize set the config collapsed state if we have else this.collapsed
       this._wasCollapsed = this._coreConfig.layout.menu.collapsed || this.collapsed;
 

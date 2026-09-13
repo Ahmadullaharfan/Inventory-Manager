@@ -3,8 +3,11 @@
   class="card"
   #coreCard
   [ngClass]="{ 'card-fullscreen': onclickEvent.expandStatus }"
-  *blockUI="coreCardId; template: _CoreBlockUiComponent"
+  style="position: relative"
 >
+  <div class="block-ui-wrapper" *ngIf="blocked">
+    <core-block-ui></core-block-ui>
+  </div>
   <div class="card-header" #cardHeader>
     <ng-content select=".card-title"></ng-content>
     <!-- heading elements -->
