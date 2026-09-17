@@ -10,6 +10,7 @@ import type { ColumnConfig } from '../../../shared/components/data-table/data-ta
 @Component({
     selector: 'app-product-catagory',
     imports: [CommonModule, DataTableComponent],
+    standalone: true,
     templateUrl: './product-catagory.html',
     styleUrls: ['./product-catagory.css']
 })
@@ -22,58 +23,57 @@ export class ProductCategoryListComponent implements OnInit {
   productCategory: ProductCategory[] = [];
   isLoading = true;
 
-  columns: ColumnConfig[] = [
-    { key: 'id', label: 'ID' },
-    { key: 'name', label: 'Name' },
-    { key: 'description', label: 'Description' },
-    { key: 'actions', label: 'Actions' }
-  ];
+  // columns: ColumnConfig[] = [
+  //   { key: 'id', label: 'ID' },
+  //   { key: 'name', label: 'Name' },
+  //   { key: 'description', label: 'Description' },
+  //   { key: 'actions', label: 'Actions' }
+  // ];
   
   ngOnInit() {
-    this.loadCategories();
   }
 
-  loadCategories(){
-    this.isLoading = true;
-    this.productCategoryService.getAllCategories().subscribe({
-      next: (categories: ProductCategory[])=> {
-        this.productCategory = categories;
-        this.isLoading = false;
-        setTimeout(()=>{
-          if(this.dataTable){
-            this.dataTable.triggerRefreshAnimation();
-          }
-        }, 100);
-      },
-      error: (err:any)=>{
-        console.error('Error Loading Categories', err);
-        this.isLoading = false;
-      }
-    });
-  }
+  // loadCategories(){
+  //   this.isLoading = true;
+  //   this.productCategoryService.getAllCategories().subscribe({
+  //     next: (categories: ProductCategory[])=> {
+  //       this.productCategory = categories;
+  //       this.isLoading = false;
+  //       setTimeout(()=>{
+  //         if(this.dataTable){
+  //           this.dataTable.triggerRefreshAnimation();
+  //         }
+  //       }, 100);
+  //     },
+  //     error: (err:any)=>{
+  //       console.error('Error Loading Categories', err);
+  //       this.isLoading = false;
+  //     }
+  //   });
+  // }
   
-  onRowEdit(category: ProductCategory){
-    this.router.navigate(['/productCategories/edit', category.id]);
-  }
+  // onRowEdit(category: ProductCategory){
+  //   this.router.navigate(['/productCategories/edit', category.id]);
+  // }
 
-  onRowDelete(category: ProductCategory) {
-    if (confirm('Are you sure you want to delete category ' + category.name + '?')) {
-      console.log('Deleting Category', category);
-      this.isLoading = true;
-      this.productCategoryService.deleteCategory(category.id!).subscribe({
-        next: () => {
-          this.loadCategories();
-        },
-        error: (err: any) => {
-          console.error('Error Deleting Category', err);
-          this.isLoading = false;
-        }
-      });
-    }
-  }
+  // onRowDelete(category: ProductCategory) {
+  //   if (confirm('Are you sure you want to delete category ' + category.name + '?')) {
+  //     console.log('Deleting Category', category);
+  //     this.isLoading = true;
+  //     this.productCategoryService.deleteCategory(category.id!).subscribe({
+  //       next: () => {
+  //         this.loadCategories();
+  //       },
+  //       error: (err: any) => {
+  //         console.error('Error Deleting Category', err);
+  //         this.isLoading = false;
+  //       }
+  //     });
+  //   }
+  // }
 
-  navigateToCreate() {
-    this.router.navigate(['/productCategories/create']);
-  }
+  // navigateToCreate() {
+  //   this.router.navigate(['/productCategories/create']);
+  // }
 
 }

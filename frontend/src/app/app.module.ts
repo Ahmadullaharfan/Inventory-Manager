@@ -18,6 +18,8 @@ import { coreConfig } from 'app/app-config';
 import { AppComponent } from 'app/app.component';
 import { LayoutModule } from 'app/layout/layout.module';
 import { ProductModule } from './main/features/Products/product.module';
+import { ProductCatagoryModule } from './main/features/ProductCatagory/product-catagory.module';
+
 
 const appRoutes: Routes = [
   {
@@ -37,22 +39,17 @@ const appRoutes: Routes = [
 
 @NgModule({ declarations: [AppComponent],
     bootstrap: [AppComponent], imports: [BrowserModule,
-        BrowserAnimationsModule,
-        // Register Toastr early so its providers (ToastConfig) are available
-        // for any root services created during bootstrap.
-        ToastrModule.forRoot(),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
         RouterModule.forRoot(appRoutes, {
             scrollPositionRestoration: 'enabled'
         }),
-        TranslateModule.forRoot(),
-        //NgBootstrap
-        NgbModule,
-        // Core modules
-        CoreModule.forRoot(coreConfig),
-        CoreCommonModule,
-        CoreSidebarModule,
-        CoreThemeCustomizerModule,
-        // App modules
-        LayoutModule,
-        ProductModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+    TranslateModule.forRoot(),
+    NgbModule,
+    CoreModule.forRoot(coreConfig),
+    CoreCommonModule,
+    CoreSidebarModule,
+    CoreThemeCustomizerModule,
+    LayoutModule,
+    ProductModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {}

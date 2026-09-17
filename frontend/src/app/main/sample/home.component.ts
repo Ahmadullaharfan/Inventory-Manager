@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core'
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { ContentHeaderModule } from 'app/layout/components/content-header/content-header.module';
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss'],
-    standalone: false
+    standalone: true,
+    imports: [CommonModule, ContentHeaderModule]
 })
 export class HomeComponent implements OnInit {
   constructor() {}

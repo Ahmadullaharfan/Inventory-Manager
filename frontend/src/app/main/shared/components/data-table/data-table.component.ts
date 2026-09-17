@@ -1,41 +1,55 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import type { ColumnConfig } from './data-table.types';
 
 @Component({
-    selector: 'app-data-table',
-    imports: [CommonModule],
-    templateUrl: './data-table.component.html',
-    styleUrls: ['./data-table.component.scss']
+  selector: 'app-data-table',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './data-table.component.html',
+  styleUrls: ['./data-table.component.scss'],
 })
-export class DataTableComponent {
+export class DataTableComponent implements OnChanges {
   @Input() data: any[] = [];
   @Input() columns: ColumnConfig[] | ReadonlyArray<ColumnConfig> = [];
   @Input() loading = false;
-  @Input() loadingLabel = 'Loading...';
+  @Input() loadingLabel = 'Loading…';
+
   @Output() rowEdit = new EventEmitter<any>();
   @Output() rowDelete = new EventEmitter<any>();
 
-  // Add refresh animation trigger
   isRefreshing = false;
 
-  formatPrice(value: number): string {
-    return `$${value}`;
+  ngOnChanges(changes: SimpleChanges): void {
+    // Pulse the table whenever data changes (skip the very first empty render)
+    if (changes['data'] && !changes['data'].firstChange) {
+      this.isRefreshing = true;
+      setTimeout(() => (this.isRefreshing = false), 200);
+    }
   }
 
-  onEdit(row: any) {
+  formatPrice(value: number | string): string {
+    const n = Number(value);
+    if (Number.isNaN(n)) return String(value);
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 2,
+    }).format(n);
+  }
+
+  onEdit(row: any): void {
     this.rowEdit.emit(row);
   }
 
-  onDelete(ProductId: any) {
-    this.rowDelete.emit(ProductId);
-  }
-
-  // Method to trigger refresh animation from parent
-  triggerRefreshAnimation() {
-    this.isRefreshing = true;
-    setTimeout(() => {
-      this.isRefreshing = false;
-    }, 600);
+  onDelete(id: any): void {
+    this.rowDelete.emit(id);
   }
 }

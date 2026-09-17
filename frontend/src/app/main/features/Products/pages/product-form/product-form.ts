@@ -1,401 +1,171 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
-  FormGroup,
   ReactiveFormsModule,
-  Validators
+  Validators,
+  AbstractControl,
 } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-
-import { InputComponent } from '../../../../shared/components/ui/input/input';
+import { HttpErrorResponse } from '@angular/common/http';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize } from 'rxjs';
+import { InputComponent } from 'app/main/shared/components/ui/input/input';
+import { ImageDropzoneComponent } from 'app/main/shared/components/image-dropzone.componenet';
+import { FieldErrorComponent } from 'app/main/shared/components/filed-error.component';
 import { ProductService } from '../../services/product.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-form',
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    InputComponent
+    InputComponent,
+    FieldErrorComponent,
+    ImageDropzoneComponent,
   ],
   templateUrl: './product-form.html',
-  styleUrls: ['./product-form.css']
 })
 export class ProductForm implements OnInit {
-
-  // Dependency Injection
   private fb = inject(FormBuilder);
   private productService = inject(ProductService);
-  private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
 
-  // Product Form
-  productForm!: FormGroup;
-
-  // Edit Mode
   isEditMode = false;
-
-  // Product ID
   productId: number | null = null;
 
-  // Selected Product Image
-  selectedFile: File | null = null;
+  saving = signal(false);
+  successMessage = signal<string | null>(null);
 
+  productForm = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(3)]],
+    brand: [''],
+    description: [''],
+    cost_price: [null as number | null, [Validators.required, Validators.min(0)]],
+    unit_of_measure: ['', [Validators.required]],
+    units_per_package: [1, [Validators.required, Validators.min(1)]],
+    location: [''],
+    is_active: [true],
+    image: [null as File | null],
+  });
+
+  previewUrl = signal<string | null>(null);
 
   ngOnInit(): void {
-    this.initForm();
-    this.checkForEditMode();
+    // If edit mode, patch values + set previewUrl here
   }
 
+  onFileSelected(file: File | null): void {
+    this.productForm.patchValue({ image: file });
+    this.productForm.get('image')?.markAsTouched();
 
-  /**
-   * Initialize Product Form
-   */
-  private initForm(): void {
-
-    this.productForm = this.fb.group({
-
-      product_category_id: [null],
-
-      supplier_id: [null],
-
-      name: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(3)
-        ]
-      ],
-
-      description: [''],
-
-      brand: [''],
-
-      cost_price: [
-        '',
-        [
-          Validators.required,
-          Validators.min(0)
-        ]
-      ],
-
-      unit_of_measure: [
-        '',
-        [
-          Validators.required
-        ]
-      ],
-
-      units_per_package: [
-        1,
-        [
-          Validators.required,
-          Validators.min(1)
-        ]
-      ],
-
-      location: [''],
-
-      is_active: [true],
-
-      image: [null]
-
-    });
-
-  }
-
-
-  /**
-   * Handle Product Image Selection
-   */
-  onFileSelected(event: Event): void {
-
-    const inputElement = event.target as HTMLInputElement;
-
-    if (
-      inputElement.files &&
-      inputElement.files.length > 0
-    ) {
-
-      this.selectedFile = inputElement.files[0];
-
+    if (file) {
+      const url = URL.createObjectURL(file);
+      this.previewUrl.set(url);
+    } else {
+      this.previewUrl.set(null);
     }
-
   }
 
-
-  /**
-   * Return to Product List
-   */
-  cancel(): void {
-    this.router.navigate(['/products']);
-  }
-
-
-  /**
-   * Check if we are Editing a Product
-   */
-  private checkForEditMode(): void {
-
-    this.route.params.subscribe(params => {
-
-      if (params['id']) {
-
-        this.isEditMode = true;
-
-        this.productId = +params['id'];
-
-        this.loadProductData();
-
-      }
-
-    });
-
-  }
-
-
-  /**
-   * Load Product Data for Editing
-   */
-  private loadProductData(): void {
-
-    this.productService
-      .getProduct(this.productId!)
-      .subscribe({
-
-        next: (res: any) => {
-
-          this.productForm.patchValue({
-            product_category_id: res.data.product_category_id,
-            supplier_id: res.data.supplier_id,
-            name: res.data.name,
-            description: res.data.description,
-            brand: res.data.brand,
-            cost_price: res.data.cost_price,
-            unit_of_measure: res.data.unit_of_measure,
-            units_per_package: res.data.units_per_package,
-            location: res.data.location,
-            is_active: res.data.is_active
-          });
-
-        },
-
-        error: (err) => {
-          console.error(
-            'Error fetching product data:',
-            err
-          );
-        }
-
-      });
-
-  }
-
-
-  /**
-   * Create or Update Product
-   */
   onSubmit(): void {
-
-    // Check Form Validation
     if (this.productForm.invalid) {
-
       this.productForm.markAllAsTouched();
-
       return;
-
     }
 
+    this.saving.set(true);
+    this.successMessage.set(null);
+    this.clearServerErrors();
 
-    // Create FormData
-    const formData = new FormData();
+    const formData = this.buildFormData();
 
-
-    // Category
-    const productCategoryId =
-      this.productForm.get('product_category_id')?.value;
-
-    if (productCategoryId) {
-
-      formData.append(
-        'product_category_id',
-        productCategoryId
-      );
-
-    }
-
-
-    // Supplier
-    const supplierId =
-      this.productForm.get('supplier_id')?.value;
-
-    if (supplierId) {
-
-      formData.append(
-        'supplier_id',
-        supplierId
-      );
-
-    }
-
-
-    // Product Name
-    formData.append(
-      'name',
-      this.productForm.get('name')?.value
-    );
-
-
-    // Description
-    formData.append(
-      'description',
-      this.productForm.get('description')?.value ?? ''
-    );
-
-
-    // Brand
-    formData.append(
-      'brand',
-      this.productForm.get('brand')?.value ?? ''
-    );
-
-
-    // Cost Price
-    formData.append(
-      'cost_price',
-      this.productForm.get('cost_price')?.value
-    );
-
-
-    // Unit Of Measure
-    formData.append(
-      'unit_of_measure',
-      this.productForm.get('unit_of_measure')?.value
-    );
-
-
-    // Units Per Package
-    formData.append(
-      'units_per_package',
-      this.productForm.get('units_per_package')?.value
-    );
-
-
-    // Location
-    formData.append(
-      'location',
-      this.productForm.get('location')?.value ?? ''
-    );
-
-
-    // Active Status
-    formData.append(
-      'is_active',
-      this.productForm.get('is_active')?.value ? '1' : '0'
-    );
-
-
-    // Product Image
-    if (this.selectedFile) {
-
-      formData.append(
-        'image',
-        this.selectedFile,
-        this.selectedFile.name
-      );
-
-    }
-
-
-    /**
-     * Laravel PUT Method Override
-     *
-     * This is useful when updating
-     * multipart/form-data with Laravel.
-     */
-    if (
-      this.isEditMode &&
-      this.productId
-    ) {
-
-      formData.append('_method', 'PUT');
-
-    }
-
-
-    /**
-     * Determine whether to
-     * CREATE or UPDATE
-     */
     const request$ =
       this.isEditMode && this.productId
+        ? this.productService.updateProductWithFormData(this.productId, formData)
+        : this.productService.createProductWithFormData(formData);
 
-        ? this.productService.updateProduct(
-            this.productId,
-            formData
-          )
-
-        : this.productService.createProduct(
-            formData
+    request$
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.saving.set(false)),
+      )
+      .subscribe({
+        next: (res) => {
+          this.successMessage.set(
+            res?.message ?? (this.isEditMode ? 'Product updated successfully.' : 'Product created successfully.'),
           );
-
-
-    /**
-     * Send Request
-     */
-    request$.subscribe({
-
-      next: () => {
-
-        this.router.navigate(['/products']);
-
-      },
-
-
-      error: (err) => {
-
-        // Laravel Validation Errors
-        if (err.error?.errors) {
-
-          const validationErrors =
-            err.error.errors;
-
-
-          Object.keys(validationErrors)
-            .forEach(field => {
-
-              const control =
-                this.productForm.get(field);
-
-
-              if (control) {
-
-                control.setErrors({
-
-                  ...control.errors,
-
-                  serverError:
-                    validationErrors[field][0]
-
-                });
-
-              }
-
-            });
-
-        } else {
-
-          console.error(
-            'An unexpected transmission error occurred:',
-            err
-          );
-
-        }
-
-      }
-
-    });
-
+          this.router.navigate(['/products']);
+        },
+        error: (err: HttpErrorResponse) => {
+          if (err.status === 422 && err.error?.errors) {
+            this.applyServerErrors(err.error.errors);
+          } else {
+            console.error('Unexpected error:', err);
+          }
+        },
+      });
   }
 
+  cancel(): void {
+    this.productForm.reset({ is_active: true, units_per_package: 1 });
+    this.previewUrl.set(null);
+  }
+
+  get f() {
+    return this.productForm.controls;
+  }
+
+  // ------------------ Helpers ------------------
+
+  private buildFormData(): FormData {
+    const fd = new FormData();
+    const value = this.productForm.getRawValue();
+
+    const scalarFields: (keyof typeof value)[] = [
+      'name',
+      'brand',
+      'description',
+      'cost_price',
+      'unit_of_measure',
+      'units_per_package',
+      'location',
+    ];
+
+    scalarFields.forEach((key) => {
+      const v = value[key];
+      if (v === null || v === undefined || v === '') return;
+      fd.append(key as string, String(v));
+    });
+
+    // Booleans → "1" / "0" so Laravel validation handles them cleanly
+    fd.append('is_active', value.is_active ? '1' : '0');
+
+    if (value.image instanceof File) {
+      fd.append('image', value.image, value.image.name);
+    }
+
+    return fd;
+  }
+
+  private applyServerErrors(errors: Record<string, string[]>): void {
+    Object.entries(errors).forEach(([field, messages]) => {
+      const control = this.productForm.get(field);
+      if (!control) return;
+
+      control.setErrors({ ...(control.errors ?? {}), serverError: messages[0] });
+      control.markAsTouched();
+    });
+  }
+
+  private clearServerErrors(): void {
+    Object.values(this.productForm.controls).forEach((control: AbstractControl) => {
+      const errs = control.errors;
+      if (errs?.['serverError']) {
+        const { serverError, ...rest } = errs;
+        control.setErrors(Object.keys(rest).length ? rest : null);
+      }
+    });
+  }
 }

@@ -19,7 +19,7 @@ class ProductController extends Controller
     {
         $products = Product::with(['category', 'supplier'])
             ->latest()
-            ->paginate(15);
+            ->simplePaginate(15);
 
         return ProductResource::collection($products);
     }

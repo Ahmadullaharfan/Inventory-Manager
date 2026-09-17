@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, ElementRef, Renderer2, Injector, DOCUMENT } from '@angular/core';
 
 import { Title } from '@angular/platform-browser';
@@ -12,6 +13,8 @@ import { CoreSidebarService } from '@core/components/core-sidebar/core-sidebar.s
 import { CoreConfigService } from '@core/services/config.service';
 import { CoreLoadingScreenService } from '@core/services/loading-screen.service';
 import { CoreTranslationService } from '@core/services/translation.service';
+import { VerticalLayoutModule } from 'app/layout/vertical/vertical-layout.module';
+import { HorizontalLayoutModule } from 'app/layout/horizontal/horizontal-layout.module';
 
 import { menu } from 'app/menu/menu';
 import { locale as menuEnglish } from 'app/menu/i18n/en';
@@ -23,7 +26,8 @@ import { locale as menuPortuguese } from 'app/menu/i18n/pt';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    standalone: false
+    standalone: true,
+    imports: [CommonModule, VerticalLayoutModule, HorizontalLayoutModule]
 })
 export class AppComponent implements OnInit, OnDestroy {
   coreConfig: any;

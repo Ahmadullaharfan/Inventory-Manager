@@ -1,4 +1,3 @@
-// product.service.ts
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
@@ -13,7 +12,6 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  // Simplified version - let the component handle the response
   getProducts(): Observable<any> {
     return this.http.get(`${this.apiUrl}/products`)
       .pipe(catchError(this.handleError));
@@ -51,7 +49,7 @@ export class ProductService {
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'An error occurred';
-    
+
     if (error.error instanceof ErrorEvent) {
       errorMessage = error.error.message;
     } else {
@@ -63,7 +61,7 @@ export class ProductService {
         }
       }
     }
-    
+
     console.error(errorMessage);
     return throwError(() => error);
   }

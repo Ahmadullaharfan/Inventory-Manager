@@ -1,106 +1,128 @@
 // index.component.ts
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router'; 
+import { Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { catchError, finalize, map, of } from 'rxjs';
+
 import { ProductService } from '../../Products/services/product.service';
 import { Product } from '../models/product.model';
 import { DataTableComponent } from '../../../shared/components/data-table/data-table.component';
 import type { ColumnConfig } from '../../../shared/components/data-table/data-table.types';
 
+/** Row model actually rendered in the table — adds display-only fields. */
+export interface ProductRow extends Product {
+  category_name: string;
+  cost_price_display: string;
+}
+
 @Component({
-    selector: 'app-index',
-    imports: [CommonModule, DataTableComponent],
-    templateUrl: './index.html',
-    styleUrls: ['./index.css']
+  selector: 'app-index',
+  standalone: true,
+  imports: [CommonModule, DataTableComponent],
+  templateUrl: './index.html',
+  styleUrls: ['./index.css'],
 })
 export class Index implements OnInit {
-  productService = inject(ProductService);
-  router = inject(Router);
-  
-  @ViewChild(DataTableComponent) dataTable!: DataTableComponent;
-  
-  products: Product[] = [];
-  isLoading = true;
+  private readonly productService = inject(ProductService);
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
+
+  // NOTE: @ViewChild removed on purpose — it was the source of the race condition.
+
+  products: ProductRow[] = [];
+  isLoading = false;
+  errorMessage: string | null = null;
 
   columns: ColumnConfig[] = [
     { key: 'id', label: 'ID' },
     { key: 'name', label: 'Name' },
     { key: 'brand', label: 'Brand' },
     { key: 'category_name', label: 'Category' },
-    { key: 'cost_price', label: 'Price' },
+    { key: 'cost_price_display', label: 'Price' },
     { key: 'units_per_package', label: 'Stock' },
     { key: 'description', label: 'Description' },
-    { key: 'actions', label: 'Actions' }
+    { key: 'actions', label: 'Actions' },
   ];
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadProducts();
   }
 
-  loadProducts() {
+  loadProducts(): void {
     this.isLoading = true;
-    this.productService.getProducts().subscribe({
-      next: (products: any) => {
-       
-        
-        // Ensure we have an array
-        let productArray: Product[] = [];
-        
-        if (Array.isArray(products)) {
-          productArray = products;
-        } else if (products && products.data && Array.isArray(products.data)) {
-          // If the response has a data property
-          productArray = products.data;
-        } else {
-          console.error('Unexpected products format:', products);
-          productArray = [];
-        }
-        
-        // Transform the data
-        const transformedProducts = productArray.map(product => ({
-          ...product,
-          category_name: product.category?.name || 'No Category',
-          // If you need to format price
-          cost_price: product.cost_price ? `$${product.cost_price}` : '0',
-        }));
-        
-        this.products = transformedProducts;
-        this.isLoading = false;
-        
-        setTimeout(() => {
-          if (this.dataTable) {
-            this.dataTable.triggerRefreshAnimation();
-          }
-        }, 100);
-      },
-      error: (err: any) => {
-        console.error('Error loading products', err);
-        this.isLoading = false;
-        this.products = []; // Set empty array on error
-      }
-    });
+    this.errorMessage = null;
+
+    this.productService
+      .getProducts()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        map((response: unknown) => this.normalizeProducts(response)),
+        map((products) => products.map((product) => this.toRowModel(product))),
+        catchError((err) => {
+          console.error('Error loading products', err);
+          this.errorMessage = 'Could not load products. Please try again.';
+          return of<ProductRow[]>([]);
+        }),
+        finalize(() => {
+          this.isLoading = false;
+        }),
+      )
+      .subscribe((rows) => {
+        this.products = rows;
+        this.isLoading=false;
+      });
   }
 
-  onRowEdit(product: Product) {
+  onRowEdit(product: ProductRow): void {
     this.router.navigate([`/products/edit/${product.id}`]);
   }
 
-  onRowDelete(productId: number) {
-    if (confirm('Are you sure?')) {
-      this.isLoading = true;
-      this.productService.deleteProduct(productId!).subscribe({
-        next: () => {
+  onRowDelete(productId: number): void {
+    if (!confirm('Are you sure?')) return;
+
+    this.isLoading = true;
+
+    this.productService
+      .deleteProduct(productId)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.isLoading = false;
+        }),
+        catchError((err) => {
+          console.error('Delete error', err);
+          this.errorMessage = 'Could not delete the product. Please try again.';
+          return of(null);
+        }),
+      )
+      .subscribe(() => {
+        if (!this.errorMessage) {
           this.loadProducts();
-        },
-        error: (err: any) => {
-        console.error('Delete error', err);
-        this.isLoading = false;
         }
       });
-    }
   }
 
-  navigateToCreate() {
+  navigateToCreate(): void {
     this.router.navigate(['/products/create']);
+  }
+
+  private normalizeProducts(response: unknown): Product[] {
+    if (Array.isArray(response)) return response as Product[];
+
+    const data = (response as { data?: unknown } | null)?.data;
+    if (Array.isArray(data)) return data as Product[];
+
+    console.error('Unexpected products format:', response);
+    return [];
+  }
+
+  private toRowModel(product: Product): ProductRow {
+    return {
+      ...product,
+      category_name: product.category?.name ?? 'No Category',
+      cost_price_display:
+        product.cost_price != null ? `$${product.cost_price}` : '—',
+    };
   }
 }

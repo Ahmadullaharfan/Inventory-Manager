@@ -9,6 +9,7 @@ import { InputComponent } from '../../../../shared/components/ui/input/input';
   selector: 'app-product-category-form',
   imports: [ReactiveFormsModule, CommonModule, InputComponent],
   templateUrl: './product-category-form.html',
+  standalone: true,
   styleUrls: ['./product-category-form.css'] // Changed from styleUrl to styleUrls
 })
 export class ProductCategoryFormComponent implements OnInit {
@@ -57,7 +58,7 @@ export class ProductCategoryFormComponent implements OnInit {
       : this.productCategoryService.createCategory(categoryData);
 
     request.subscribe({
-      next: () => this.router.navigate(['/productCategories']),
+      next: () => this.router.navigate(['/productCatagory']),
       error: (err) => {
         if (err.error?.errors) {
           const errors = err.error.errors;
@@ -76,6 +77,6 @@ export class ProductCategoryFormComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigate(['/productCategories']);
+    this.router.navigate(['/productCatagory']);
   }
 }
