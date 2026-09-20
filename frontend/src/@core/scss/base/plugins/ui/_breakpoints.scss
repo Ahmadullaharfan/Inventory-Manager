@@ -1,3 +1,5 @@
+@use 'sass:list';
+
 // config
 $debug: false;
 
@@ -15,12 +17,12 @@ $mq-sync: xs $usn-x-small, sm $usn-small, md $usn-medium, lg $usn-large, xl $usn
 
 // build each media query for js ingestion
 @each $mq in $mq-sync {
-  @media screen and (min-width: nth($mq, 2)) {
+  @media screen and (min-width: list.nth($mq, 2)) {
     head {
-      font-family: '#{nth($mq, 1)} #{nth($mq, 2)}';
+      font-family: '#{list.nth($mq, 1)} #{list.nth($mq, 2)}';
     }
     body:after {
-      content: '#{nth($mq, 1)} - min-width: #{nth($mq, 2)}';
+      content: '#{list.nth($mq, 1)} - min-width: #{list.nth($mq, 2)}';
     }
   }
 }

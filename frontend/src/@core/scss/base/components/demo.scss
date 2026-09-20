@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 /*=========================================================================================
     File Name: demo.scss
     Description: CSS used for demo purpose only. Remove this css from your project.
@@ -43,7 +45,7 @@
 .scroll-example {
   padding: 0.5rem;
   position: relative;
-  border: 2px solid darken($body-bg, 10%);
+  border: 2px solid color.adjust($body-bg, $lightness: -10%);
   overflow: auto;
 
   .horz-scroll-content {

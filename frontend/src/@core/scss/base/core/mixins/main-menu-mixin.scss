@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 //  =========================================================================================
 // File Name: main-menu-mixin.scss
 // Description: Common mixin for menus, contain dark and light version scss.
@@ -112,14 +114,14 @@
 // $theme-bg    : Menu background color
 // ================================================
 @mixin menu-theme($theme-color, $theme-bg) {
-  $main-menu-top-open-color: darken($theme-color, 10%);
-  $main-menu-top-open-hover-bg: darken($theme-bg, 6%);
-  $main-menu-top-open-head-bg: darken($theme-bg, 4%);
+  $main-menu-top-open-color: color.adjust($theme-color, $lightness: -10%);
+  $main-menu-top-open-hover-bg: color.adjust($theme-bg, $lightness: -6%);
+  $main-menu-top-open-head-bg: color.adjust($theme-bg, $lightness: -4%);
 
-  $main-menu-top-active-head-bg: darken($theme-bg, 4%); //$primary
+  $main-menu-top-active-head-bg: color.adjust($theme-bg, $lightness: -4%); //$primary
 
   $main-menu-sub-color: $theme-color;
-  $main-menu-sub-hover-color: lighten($theme-color, 4%);
+  $main-menu-sub-hover-color: color.adjust($theme-color, $lightness: 4%);
 
   $main-menu-sub-open-color: $theme-color;
 
@@ -129,7 +131,7 @@
   .navigation {
     background: $theme-bg;
     .navigation-header {
-      color: lighten($theme-color, 21.5%);
+      color: color.adjust($theme-color, $lightness: 21.5%);
       margin: calc(#{$content-padding} + 0.286rem) 0 0.8rem ($content-padding + 0.2rem);
       padding: 0;
       line-height: 1.5;
@@ -145,12 +147,12 @@
         }
       }
       a {
-        color: darken($theme-color, 4.9%);
+        color: color.adjust($theme-color, $lightness: -4.9%);
         padding: $menu-padding;
         line-height: 1.45;
 
         span.menu-sub-title {
-          color: lighten($theme-color, 30%);
+          color: color.adjust($theme-color, $lightness: 30%);
         }
 
         & > * {

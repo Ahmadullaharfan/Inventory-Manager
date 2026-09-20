@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 // Modals
 
 .modal {
@@ -115,7 +117,7 @@
       flex-grow: 0;
     }
 
-    @media (min-width: (map-get($grid-breakpoints, sm))) {
+    @media (min-width: (map.get($grid-breakpoints, sm))) {
       width: $modal-slide-in-width;
     }
 
@@ -123,7 +125,7 @@
       width: $modal-slide-in-width-sm;
     }
     &.sidebar-lg {
-      @media (min-width: (map-get($grid-breakpoints, sm))) {
+      @media (min-width: (map.get($grid-breakpoints, sm))) {
         width: $modal-slide-in-width-lg;
       }
     }

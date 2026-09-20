@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 @import '../../bootstrap-extended/include'; // Bootstrap includes
 @import '../../components/include'; // Components includes
 
@@ -82,7 +84,7 @@
 
     &:hover {
       text-decoration: none;
-      color: darken($danger, 10%);
+      color: color.adjust($danger, $lightness: -10%);
     }
   }
 }
@@ -101,6 +103,6 @@
 // dark layout
 .dark-layout {
   .dropzone {
-    background-color: lighten($theme-dark-card-bg, 3%);
+    background-color: color.adjust($theme-dark-card-bg, $lightness: 3%);
   }
 }

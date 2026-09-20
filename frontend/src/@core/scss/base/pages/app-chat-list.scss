@@ -7,6 +7,9 @@
 //   Author URL: http://www.themeforest.net/user/pixinvent
 // ================================================================================================
 
+@use 'sass:color';
+@use 'sass:map';
+
 @import '../bootstrap-extended/include'; // Bootstrap includes
 @import '../components/include'; // Components includes
 
@@ -62,7 +65,7 @@ $chat-widget-height: 390px;
         margin: 0 1rem 10px 0;
         clear: both;
         color: $white;
-        @include gradient-directional(map-get($primary-color, 'base'), map-get($primary-color, 'lighten-2'), 80deg);
+        @include gradient-directional(map.get($primary-color, 'base'), map.get($primary-color, 'lighten-2'), 80deg);
         border-radius: $border-radius;
         box-shadow: 0 4px 8px 0 rgba($black, 0.12);
         max-width: 75%;
@@ -82,7 +85,7 @@ $chat-widget-height: 390px;
           margin: 0 0 10px 1rem;
           color: $body-color;
           background: none;
-          background-color: lighten($white, 18%);
+          background-color: color.adjust($white, $lightness: 18%);
         }
       }
     }

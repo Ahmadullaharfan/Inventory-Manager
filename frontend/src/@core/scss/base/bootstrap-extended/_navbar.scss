@@ -8,8 +8,10 @@
     Author URL: http://www.themeforest.net/user/pixinvent
 ================================================================================================*/
 
+@use 'sass:color';
+
 @function set-navbar-text-color($color) {
-  @if (lightness($color) > 50) {
+  @if (color.channel($color, 'lightness', $space: hsl) > 50) {
     @return $white; // Lighter backgorund, return dark color
   } @else {
     @return $black; // Darker background, return light color
