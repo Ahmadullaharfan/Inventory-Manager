@@ -7,6 +7,8 @@
 // 	Author URL: http://www.themeforest.net/user/pixinvent
 // ================================================================================================
 
+@use 'sass:color';
+
 @import '../bootstrap-extended/include'; // Bootstrap includes
 @import '../components/include'; // Components includes
 
@@ -30,7 +32,7 @@
       &.open:not(.menu-item-closing),
       &.sidebar-group-active {
         > a {
-          background: darken($white, 7%);
+          background: color.adjust($white, $lightness: -7%);
         }
       }
     }

@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 //
 // Labels
 //
@@ -209,7 +211,7 @@ textarea {
 
 // Used for Card - Check it and remove if not used
 .form-actions {
-  border-top: 1px solid darken($body-bg, 10%);
+  border-top: 1px solid color.adjust($body-bg, $lightness: -10%);
   padding: 20px 0;
   margin-top: 20px;
 
@@ -225,7 +227,7 @@ textarea {
 
   &.top {
     border-top: 0;
-    border-bottom: 1px solid darken($body-bg, 10%);
+    border-bottom: 1px solid color.adjust($body-bg, $lightness: -10%);
     margin-top: 0;
     margin-bottom: 20px;
   }

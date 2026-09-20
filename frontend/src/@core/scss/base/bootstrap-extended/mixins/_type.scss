@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 // Font weight mixins
 // ------------------
 @mixin font-weight($weight) {
@@ -23,8 +25,8 @@
   );
 
   $output: $weight;
-  @if map-has-key($weights, $weight) {
-    $output: map-get($weights, $weight);
+  @if map.has-key($weights, $weight) {
+    $output: map.get($weights, $weight);
   }
 
   font-weight: $output;

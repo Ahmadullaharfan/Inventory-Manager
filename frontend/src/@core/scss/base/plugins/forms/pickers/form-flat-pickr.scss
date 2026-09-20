@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 @import '../../../bootstrap-extended/include'; // Bootstrap includes
 @import '../../../components/include'; // Components includes
 
@@ -21,9 +23,9 @@
 
     &.inRange,
     &.inRange:hover {
-      background: lighten($color: $primary, $amount: 30%);
-      border-color: lighten($color: $primary, $amount: 30%);
-      box-shadow: -5px 0 0 lighten($color: $primary, $amount: 30%), 5px 0 0 lighten($color: $primary, $amount: 30%);
+      background: color.adjust($primary, $lightness: 30%);
+      border-color: color.adjust($primary, $lightness: 30%);
+      box-shadow: -5px 0 0 color.adjust($primary, $lightness: 30%), 5px 0 0 color.adjust($primary, $lightness: 30%);
     }
     &.startRange,
     &.endRange,

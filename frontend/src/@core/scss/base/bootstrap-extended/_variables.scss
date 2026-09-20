@@ -7,6 +7,10 @@
 //  Author URL: http://www.themeforest.net/user/pixinvent
 //  ================================================================================================
 
+@use 'sass:map';
+@use 'sass:math';
+@use 'sass:color';
+
 // Color system
 
 $white: #fff !default;
@@ -65,7 +69,7 @@ $container-max-widths: (
 $spacer: 1rem !default;
 $spacers: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
-$spacers: map-merge(
+$spacers: map.merge(
   (
     0: 0,
     25: (
@@ -107,7 +111,7 @@ $body-color: #6e6b7b !default;
 // Style anchor elements.
 
 $link-color: $primary !default;
-$link-hover-color: darken($link-color, 5%) !default;
+$link-hover-color: color.adjust($link-color, $lightness: -5%) !default;
 $link-hover-decoration: none !default;
 
 // Grid columns
@@ -142,8 +146,8 @@ $font-family-monospace: 'Montserrat', Helvetica, Arial, serif !default;
 
 // stylelint-enable value-keyword-case
 $font-size-base: 1rem !default;
-$font-size-lg: ceil($font-size-base * 1.25) !default;
-$font-size-sm: ceil($font-size-base * 0.85) !default;
+$font-size-lg: math.ceil($font-size-base * 1.25) !default;
+$font-size-sm: math.ceil($font-size-base * 0.85) !default;
 
 $font-weight-normal: 400 !default;
 $font-weight-bold: 500 !default;

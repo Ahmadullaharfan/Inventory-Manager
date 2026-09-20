@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 @import '../../bootstrap-extended/include'; // Bootstrap includes
 @import '../../components/include'; // Components includes
 
@@ -51,7 +53,7 @@
         &.swal2-active-progress-step {
           ~ .swal2-progress-step-line,
           ~ .swal2-progress-step {
-            background-color: lighten(theme-color('primary'), 15%);
+            background-color: color.adjust(theme-color('primary'), $lightness: 15%);
           }
         }
       }
