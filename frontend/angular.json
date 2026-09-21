@@ -3,136 +3,126 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "vuexy": {
+    "ng-tailadmin": {
+      "projectType": "application",
+      "schematics": {},
       "root": "",
       "sourceRoot": "src",
-      "projectType": "application",
       "prefix": "app",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
       "architect": {
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "allowedCommonJsDependencies": [
-              "hammerjs",
-              "node-waves",
-              "@angularclass/hmr",
-              "lodash",
-              "apexcharts",
-              "chart.js",
-              "highlight.js",
-              "sweetalert2",
-              "bs-stepper",
-              "perfect-scrollbar"
-            ],
-            "outputPath": {
-              "base": "dist/vuexy",
-              "browser": ""
-            },
+            "outputPath": "dist/ng-tailadmin",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": ["src/polyfills.ts"],
-            "tsConfig": "src/tsconfig.app.json",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": [
-              "src/styles.scss",
-              "node_modules/highlight.js/scss/atom-one-dark.scss",
-              "src/assets/fonts/feather/iconfont.css",
-              "src/assets/fonts/font-awesome/css/font-awesome.min.css",
-              "node_modules/perfect-scrollbar/css/perfect-scrollbar.css"
+            "polyfills": [
+              "zone.js"
             ],
-            "stylePreprocessorOptions": {
-              "includePaths": ["node_modules", "src", "src/assets/"]
-            },
-            "scripts": ["node_modules/katex/dist/katex.min.js", "node_modules/quill/dist/quill.js"],
-            "sourceMap": true,
-            "optimization": false,
-            "extractLicenses": false
+            "allowedCommonJsDependencies": [
+               "prismjs",
+               "polylabel"
+            ],
+            "tsConfig": "tsconfig.app.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": [
+              "src/styles.css"
+            ],
+            "scripts": [
+              "node_modules/apexcharts/dist/apexcharts.min.js"
+            ]
           },
           "configurations": {
             "production": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
-              "baseHref": "/",
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractLicenses": true,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "4mb",
-                  "maximumError": "8mb"
+                  "maximumWarning": "8MB",
+                  "maximumError": "10MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "100kb"
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
                 }
-              ]
+              ],
+              "outputHashing": "all"
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
-            },
-            "hmr": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.hmr.ts"
-                }
-              ]
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular/build:dev-server",
-          "options": {
-            "buildTarget": "vuexy:build:development"
-          },
           "configurations": {
             "production": {
-              "buildTarget": "vuexy:build:production"
+              "buildTarget": "ng-tailadmin:build:production"
             },
             "development": {
-              "buildTarget": "vuexy:build:development"
-            },
-            "hmr": {
-              "buildTarget": "vuexy:build:hmr"
+              "buildTarget": "ng-tailadmin:build:development"
             }
           },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@angular/build:extract-i18n",
-          "options": {
-            "buildTarget": "vuexy:build"
-          }
+          "builder": "@angular/build:extract-i18n"
         },
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "polyfills": ["src/polyfills.ts"],
-            "tsConfig": "src/tsconfig.spec.json",
-            "karmaConfig": "src/karma.conf.js",
-            "styles": ["src/styles.scss"],
-            "scripts": ["node_modules/apexcharts/dist/apexcharts.min.js"],
-            "assets": ["src/favicon.ico", "src/assets"],
-            "stylePreprocessorOptions": {
-              "includePaths": ["node_modules", "src", "src/assets/"]
-            }
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "tsconfig.spec.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": [
+              "src/styles.css"
+            ],
+            "scripts": []
           }
         }
       }
+    }
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "type": "component"
+    },
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
     }
   },
   "cli": {

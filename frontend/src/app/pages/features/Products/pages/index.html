@@ -1,0 +1,88 @@
+<div class="container pl-4 pr-4 mx-auto flex justify-between items-center">
+  <h1 class="text-3xl text-gray-900 mb-8">Products</h1>
+  <button
+    (click)="navigateToCreate()"
+    class="text-black px-4 py-2 rounded-lg shadow-md transition duration-200 mb-8"
+  >
+    Add New Product
+  </button>
+</div>
+
+<div class="container pl-4 pr-4 mx-auto">
+  @if (errorMessage) {
+    <div class="mb-4 rounded-md bg-red-50 px-4 py-3 text-red-700" role="alert">
+      {{ errorMessage }}
+    </div>
+  }
+
+
+<ngx-datatable
+  #tableRowDetails
+  class="bootstrap core-bootstrap"
+  [columnMode]="ColumnMode.force"
+  [headerHeight]="40"
+  [footerHeight]="50"
+  [rowHeight]="58"
+  [limit]="10"
+  [rows]="products"
+  [scrollbarH]="true"
+>
+  <!-- Row Detail Template -->
+  <ngx-datatable-row-detail [rowHeight]="50">
+    <ng-template let-row="row" ngx-datatable-row-detail-template>
+      <div class="ml-75 pl-5 pt-75">
+        <div>
+          <span><strong>Description : </strong> {{ row.description }}</span>
+          <span class="ml-1"><strong>Category : </strong> {{ row.category_name }}</span>
+          <span class="ml-1"><strong>Stock : </strong> {{ row.units_per_package }}</span>
+        </div>
+      </div>
+    </ng-template>
+  </ngx-datatable-row-detail>
+
+  <!-- Expand toggle column -->
+  <ngx-datatable-column
+    [width]="50"
+    [resizeable]="false"
+    [sortable]="false"
+    [draggable]="false"
+    [canAutoResize]="false"
+  >
+    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+      <a
+        href="javascript:void(0)"
+        [class.datatable-icon-right]="!expanded"
+        [class.datatable-icon-down]="expanded"
+        title="Expand/Collapse Row"
+        (click)="rowDetailsToggleExpand(row)"
+      ></a>
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column name="ID" prop="id" [width]="70"></ngx-datatable-column>
+  <ngx-datatable-column name="Name" prop="name" [width]="220"></ngx-datatable-column>
+  <ngx-datatable-column name="Brand" prop="brand" [width]="160"></ngx-datatable-column>
+  <ngx-datatable-column name="Category" prop="category_name" [width]="160"></ngx-datatable-column>
+  <ngx-datatable-column name="Price" prop="cost_price_display" [width]="120"></ngx-datatable-column>
+  <ngx-datatable-column name="Stock" prop="units_per_package" [width]="100"></ngx-datatable-column>
+
+  <ngx-datatable-column name="Actions" [width]="120" [sortable]="false">
+    <ng-template let-row="row" ngx-datatable-cell-template>
+      <div class="d-flex align-items-center">
+        <i
+          data-feather="edit"
+          class="text-primary cursor-pointer mr-1"
+          (click)="onRowEdit(row)"
+        ></i>
+        <i
+          data-feather="trash-2"
+          class="text-danger cursor-pointer"
+          (click)="onRowDelete(row.id)"
+        ></i>
+      </div>
+    </ng-template>
+  </ngx-datatable-column>
+</ngx-datatable>
+  
+
+</div>
