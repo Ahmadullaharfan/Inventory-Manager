@@ -23,7 +23,6 @@ import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
     AuthenticationModule,
     MiscellaneousModule
   ],
-
   providers: []
 })
 export class PagesModule {}
