@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { EcommerceComponent } from './pages/dashboard/ecommerce/ecommerce.component';
-import { ProfileComponent } from './pages/profile/profile.component';
+import { ProfileComponent } from './pages/user/profile/profile.component';
 import { FormElementsComponent } from './pages/forms/form-elements/form-elements.component';
 import { BasicTablesComponent } from './pages/tables/basic-tables/basic-tables.component';
 import { BlankComponent } from './pages/blank/blank.component';
@@ -18,6 +18,7 @@ import { VideosComponent } from './pages/ui-elements/videos/videos.component';
 import { SignInComponent } from './pages/auth-pages/sign-in/sign-in.component';
 import { SignUpComponent } from './pages/auth-pages/sign-up/sign-up.component';
 import { CalenderComponent } from './pages/calender/calender.component';
+import { UserComponent } from './pages/user/user.component';
 
 export const routes: Routes = [
   {
@@ -40,6 +41,12 @@ export const routes: Routes = [
         path:'profile',
         component:ProfileComponent,
         title:'Angular Profile Dashboard | TailAdmin - Angular Admin Dashboard Template'
+      },
+
+      {
+        path:'users',
+        component:UserComponent,
+        title:'Users'
       },
       {
         path:'form-elements',
