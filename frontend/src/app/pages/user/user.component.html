@@ -1,8 +1,25 @@
 <app-page-breadcrumb pageTitle="Users" />
+
 <div class="space-y-6">
   <div>
     <app-component-card title="Basic Table 2">
-      <app-basic-table-two [tableRowData]="tableRowData"   [tableColumns]="tableColumns" />
+      <!-- 1. Check if the resource is still loading data from your API -->
+      @if (usersResource.isLoading()) {
+        <div class="p-4 text-center text-gray-500">
+          Loading users from backend...
+        </div>
+      } @else if (usersResource.error()) {
+        <div class="p-4 text-center text-red-500">
+          Failed to load users. Please try again.
+        </div>
+      } @else {
+        <!-- 2. Pass the computed array into your table by executing the signal: tableRowData() -->
+        <app-basic-table-two 
+          title="Users"
+          [tableRowData]="tableRowData()"   
+          [tableColumns]="tableColumns" 
+        />
+      }
     </app-component-card>
   </div>
 </div>

@@ -2,20 +2,19 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends Factory<User>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
 class UserFactory extends Factory
 {
     /**
      * The current password being used by the factory.
      */
-    protected static ?string $password;
+    protected static ?string $password = null;
 
     /**
      * Define the model's default state.
@@ -25,21 +24,21 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
+            'phone_number' => fake()->optional()->phoneNumber(),
+            'role' => fake()->randomElement(['admin', 'manager', 'user']),
+            'bio' => fake()->optional()->paragraph(),
+            'avatar_url' => fake()->optional()->imageUrl(200, 200, 'people'),
             'password' => static::$password ??= Hash::make('password'),
+            'email_verified' => fake()->boolean(80),
+            'email_verified_at' => fake()->optional(0.8)->dateTimeBetween('-1 year', 'now'),
+            'two_fa_enabled' => fake()->boolean(20),
+            'two_fa_secret' => null,
+            'status' => fake()->randomElement(['active', 'inactive']),
+            'last_login_at' => fake()->optional(0.7)->dateTimeBetween('-6 months', 'now'),
             'remember_token' => Str::random(10),
         ];
-    }
-
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\UserController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -16,3 +17,5 @@ Route::apiResource('productCategories', ProductCategoryController::class);
 Route::apiResource('suppliers', SupplierController::class);
 Route::apiResource('customers', CustomerController::class );
 
+
+Route::apiResource('users', UserController::class);

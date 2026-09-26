@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { PageBreadcrumbComponent } from '../../shared/components/common/page-breadcrumb/page-breadcrumb.component';
-import { BasicTableTwoComponent } from '../../shared/components/tables/basic-tables/basic-table-two/basic-table-two.component';
-import { BasicTableOneComponent } from '../../shared/components/tables/basic-tables/basic-table-one/basic-table-one.component';
+import { BasicTableTwoComponent, TableColumn } from '../../shared/components/tables/basic-tables/basic-table-two/basic-table-two.component';
 import { ComponentCardComponent } from '../../shared/components/common/component-card/component-card.component';
+import { UserService } from './service/user.service';
 
 @Component({
   imports: [PageBreadcrumbComponent, BasicTableTwoComponent, ComponentCardComponent],
@@ -11,57 +11,42 @@ import { ComponentCardComponent } from '../../shared/components/common/component
   templateUrl: './user.component.html',
 })
 export class UserComponent {
+  private userService = inject(UserService);
 
-  tableColumns = [
-    { key: 'id', label: 'Deal ID' },
-    { key: 'user', label: 'Customer' },
-    { key: 'product', label: 'Product/Service' },
-    { key: 'price', label: 'Deal Value' },
-    { key: 'purchaseDate', label: 'Close Date' },
-    { key: 'status', label: 'Status' },
-    { key: 'actions', label: 'Action' }
+  public usersResource = this.userService.usersResource;
+
+  // Columns must match the keys you emit in tableRowData
+  tableColumns: TableColumn[] = [
+    { key: 'id',       label: 'User ID' },
+    { key: 'user',     label: 'User', type: 'avatar', nameKey: 'name', imageKey: 'avatarUrl' },
+    { key: 'email',    label: 'Email' },
+    { key: 'phone',    label: 'Phone' },
+    { key: 'role',     label: 'Role' },
+    { key: 'status',   label: 'Status' },
+    { key: 'lastLogin', label: 'Last Login' },
+    { key: 'actions',  label: 'Action', type: 'actions' },
   ];
 
-   tableRowData = [
-    {
-      id: 'DE124321',
-      user: { initials: 'AB', name: 'John Doe', email: 'johndoe@gmail.com' },
-      avatarColor: 'brand',
-      product: { name: 'Software License', price: '$18,50.34', purchaseDate: '2024-06-15' },
-      status: { type: 'Complete' },
+public tableRowData = computed(() => {
+  const apiUsers = this.usersResource.value() ?? [];
+
+  return apiUsers.map(user => {
+    return {
+      id: `USR-${user.id}`,
+      user: {
+        name: `${user.first_name} ${user.last_name}`,
+        email: user.email,
+        avatarUrl: user.avatar_url,
+      },
+      email: user.email,
+      phone: user.phone_number ?? '—',
+      role: user.role,
+      status: user.status,
+      lastLogin: user.last_login_at
+        ? new Date(user.last_login_at).toLocaleDateString()
+        : 'Never',
       actions: { delete: true },
-    },
-    {
-      id: 'DE124322',
-      user: { initials: 'CD', name: 'Jane Smith', email: 'janesmith@gmail.com' },
-      avatarColor: 'brand',
-      product: { name: 'Cloud Hosting', price: '$12,99.00', purchaseDate: '2024-06-18' },
-      status: { type: 'Pending' },
-      actions: { delete: true },
-    },
-    {
-      id: 'DE124323',
-      user: { initials: 'EF', name: 'Michael Brown', email: 'michaelbrown@gmail.com' },
-      avatarColor: 'brand',
-      product: { name: 'Web Domain', price: '$9,50.00', purchaseDate: '2024-06-20' },
-      status: { type: 'Cancel' },
-      actions: { delete: true },
-    },
-    {
-      id: 'DE124324',
-      user: { initials: 'GH', name: 'Alice Johnson', email: 'alicejohnson@gmail.com' },
-      avatarColor: 'brand',
-      product: { name: 'SSL Certificate', price: '$2,30.45', purchaseDate: '2024-06-25' },
-      status: { type: 'Pending' },
-      actions: { delete: true },
-    },
-    {
-      id: 'DE124325',
-      user: { initials: 'IJ', name: 'Robert Lee', email: 'robertlee@gmail.com' },
-      avatarColor: 'brand',
-      product: { name: 'Premium Support', price: '$15,20.00', purchaseDate: '2024-06-30' },
-      status: { type: 'Complete' },
-      actions: { delete: true },
-    },
-  ];
+    };
+  });
+});
 }
