@@ -27,26 +27,27 @@ export class UserComponent {
     { key: 'actions',  label: 'Action', type: 'actions' },
   ];
 
-public tableRowData = computed(() => {
-  const apiUsers = this.usersResource.value() ?? [];
-
-  return apiUsers.map(user => {
-    return {
-      id: `USR-${user.id}`,
-      user: {
-        name: `${user.first_name} ${user.last_name}`,
+  public tableRowData = computed(() => {
+    const apiUsers = this.usersResource.value() ?? [];
+    return apiUsers.map(user => {
+      return {
+        id: `USR-${user.id}`,
+        user: {
+          name: `${user.first_name} ${user.last_name}`,
+          email: user.email,
+          avatarUrl: user.avatar_url,
+        },
         email: user.email,
-        avatarUrl: user.avatar_url,
-      },
-      email: user.email,
-      phone: user.phone_number ?? '—',
-      role: user.role,
-      status: user.status,
-      lastLogin: user.last_login_at
-        ? new Date(user.last_login_at).toLocaleDateString()
-        : 'Never',
-      actions: { delete: true },
-    };
+        phone: user.phone_number ?? '—',
+        role: user.role,
+        status: user.status,
+        lastLogin: user.last_login_at
+          ? new Date(user.last_login_at).toLocaleDateString()
+          : 'Never',
+        actions: { delete: true },
+      };
+    });
   });
-});
+
+  
 }

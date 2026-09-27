@@ -2,6 +2,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AvatarTextComponent } from '../../../ui/avatar/avatar-text.component';
 import { CheckboxComponent } from '../../../form/input/checkbox.component';
+import { TableDropdownComponent } from '../../../common/table-dropdown/table-dropdown.component';
 
 export interface TableColumn {
   key: string;
@@ -17,7 +18,8 @@ export type TableRow = object;
   selector: 'app-basic-table-two',
   imports: [
     AvatarTextComponent,
-    CheckboxComponent
+    CheckboxComponent,
+    TableDropdownComponent
   ],
   templateUrl: './basic-table-two.component.html',
   styles: ``
@@ -29,6 +31,7 @@ export class BasicTableTwoComponent {
   @Input() tableRowData: TableRow[] = [];
   @Input() tableColumns: TableColumn[] = [];
   @Output() rowAction = new EventEmitter<{ action: 'delete'; row: TableRow }>();
+  
 
   selectedRows: Array<string | number> = [];
   selectAll: boolean = false;
@@ -85,6 +88,36 @@ export class BasicTableTwoComponent {
 
   hasDeleteAction(row: TableRow, column: TableColumn): boolean {
     return this.getNestedValue(row, `${column.key}.delete`) === true;
+  }
+
+  handleViewMore(row: TableRow) {
+    console.log('View More clicked for row:', row);
+  }
+
+  handleDelete(row: TableRow) {
+    this.rowAction.emit({ action: 'delete', row });
+  }
+
+  isRowSelected(row: TableRow): boolean {
+    const rowKey = this.getRowKey(row);
+    return rowKey !== undefined && this.selectedRows.includes(rowKey);
+  }
+
+  isAllRowsSelected(): boolean {
+    return this.tableRowData.length > 0 && this.tableRowData.every(row => {
+      const rowKey = this.getRowKey(row);
+      return rowKey !== undefined && this.selectedRows.includes(rowKey);
+    });
+  }
+
+  toggleSelectAll() {
+    if (this.isAllRowsSelected()) {
+      this.selectedRows = [];
+    } else {
+      this.selectedRows = this.tableRowData
+        .map(row => this.getRowKey(row))
+        .filter((key): key is string | number => key !== undefined);
+    }
   }
 
   private getNestedValue(value: unknown, path: string): unknown {
