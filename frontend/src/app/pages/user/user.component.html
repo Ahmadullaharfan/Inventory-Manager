@@ -1,25 +1,21 @@
 <app-page-breadcrumb pageTitle="Users" />
 
-<div class="space-y-6">
-  <div>
     <app-component-card title="Basic Table 2">
-      <!-- 1. Check if the resource is still loading data from your API -->
-      @if (usersResource.isLoading()) {
-        <div class="p-4 text-center text-gray-500">
-          Loading users from backend...
-        </div>
-      } @else if (usersResource.error()) {
-        <div class="p-4 text-center text-red-500">
-          Failed to load users. Please try again.
-        </div>
-      } @else {
-        <!-- 2. Pass the computed array into your table by executing the signal: tableRowData() -->
-        <app-basic-table-two 
-          title="Users"
-          [tableRowData]="tableRowData()"   
-          [tableColumns]="tableColumns" 
-        />
-      }
+      <div  class="max-w-full overflow-x-auto">
+        <table class="min-w-full" mat-table [dataSource]="dataSource">
+         @for(column of displayedColumns; track column) {
+          <div matColumnDef="{{column}}">
+            <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start" mat-header-cell *matHeaderCellDef> {{column}} </th>
+            <td  class="px-4 sm:px-6 py-3.5 text-gray-500 text-theme-sm dark:text-gray-400" mat-cell *matCellDef="let element"> {{element[column]}} </td>
+         </div>
+         }
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                      showFirstLastButtons
+                      aria-label="Select page of users">
+        </mat-paginator>
+      </div>
     </app-component-card>
-  </div>
-</div>
