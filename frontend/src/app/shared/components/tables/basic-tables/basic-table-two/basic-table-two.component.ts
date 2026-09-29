@@ -1,8 +1,7 @@
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { AvatarTextComponent } from '../../../ui/avatar/avatar-text.component';
-import { CheckboxComponent } from '../../../form/input/checkbox.component';
-import { TableDropdownComponent } from '../../../common/table-dropdown/table-dropdown.component';
+import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
 export interface TableColumn {
   key: string;
@@ -17,115 +16,43 @@ export type TableRow = object;
 @Component({
   selector: 'app-basic-table-two',
   imports: [
-    AvatarTextComponent,
-    CheckboxComponent,
-    TableDropdownComponent
+    MatPaginatorModule,
+    MatTableModule,
+    
   ],
   templateUrl: './basic-table-two.component.html',
   styles: ``
 })
-export class BasicTableTwoComponent {
-  @Input() title = '';
-  @Input() rowKey = 'id';
-  @Input() selectable = true;
-  @Input() tableRowData: TableRow[] = [];
-  @Input() tableColumns: TableColumn[] = [];
-  @Output() rowAction = new EventEmitter<{ action: 'delete'; row: TableRow }>();
+export class BasicTableTwoComponent implements AfterViewInit {
+  @Input() title: string = '';
+  @Input() dataSource: any;
+  @Input() displayedColumns: string[] = [];
+  @Input() columnHeaders: Record<string, string> = {};
+  
+  @Input() columns: TableColumn[] = [];
+  @Input() showCheckbox: boolean = false;
+  @Input() showActions: boolean = false;
+  @Input() actions: string[] = [];
+  @Input() isLoading: boolean = false;
+  @Input() noDataMessage: string = 'No data available';
+  @Input() showPagination: boolean = true;
+  @Input() showSearch: boolean = true;
+  @Input() searchPlaceholder: string = 'Search...';
+  @Input() searchKey: string = '';
+  @Input() searchValue: string = '';
+  @Input() searchFunction: (data: TableRow, searchValue: string) => boolean = (data, searchValue) => {
+    return Object.values(data).some(value => value.toString().toLowerCase().includes(searchValue.toLowerCase()));
+  };
+  @Output() rowSelected: EventEmitter<TableRow> = new EventEmitter<TableRow>();
+  @Output() selectAllRows: EventEmitter<boolean> = new EventEmitter<boolean>();
   
 
   selectedRows: Array<string | number> = [];
   selectAll: boolean = false;
 
-  handleSelectAll() {
-    this.selectAll = !this.selectAll;
-    if (this.selectAll) {
-      this.selectedRows = this.tableRowData
-        .map(row => this.getRowKey(row))
-        .filter((key): key is string | number => key !== undefined);
-    } else {
-      this.selectedRows = [];
-    }
-  }
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  handleRowSelect(id: string | number | undefined) {
-    if (id === undefined) return;
-
-    if (this.selectedRows.includes(id)) {
-      this.selectedRows = this.selectedRows.filter(rowId => rowId !== id);
-    } else {
-      this.selectedRows = [...this.selectedRows, id];
-    }
-
-    this.selectAll = this.tableRowData.length > 0 && this.tableRowData.every(row => {
-      const rowKey = this.getRowKey(row);
-      return rowKey !== undefined && this.selectedRows.includes(rowKey);
-    });
-  }
-
-  getRowKey(row: TableRow): string | number | undefined {
-    const value = this.getNestedValue(row, this.rowKey);
-    return typeof value === 'string' || typeof value === 'number' ? value : undefined;
-  }
-
-  getCellValue(row: TableRow, column: TableColumn): unknown {
-    const value = this.getNestedValue(row, column.key);
-    if (column.type !== 'avatar' || !value || typeof value !== 'object') return value;
-    return this.getNestedValue(value, column.nameKey ?? 'name');
-  }
-
-  getAvatarName(row: TableRow, column: TableColumn): string {
-    const name = this.getCellValue(row, column);
-    return typeof name === 'string' ? name : '';
-  }
-
-  getAvatarImage(row: TableRow, column: TableColumn): string | undefined {
-    const value = this.getNestedValue(row, column.key);
-    if (!value || typeof value !== 'object') return undefined;
-
-    const image = this.getNestedValue(value, column.imageKey ?? 'avatarUrl');
-    return typeof image === 'string' && image.length > 0 ? image : undefined;
-  }
-
-  hasDeleteAction(row: TableRow, column: TableColumn): boolean {
-    return this.getNestedValue(row, `${column.key}.delete`) === true;
-  }
-
-  handleViewMore(row: TableRow) {
-    console.log('View More clicked for row:', row);
-  }
-
-  handleDelete(row: TableRow) {
-    this.rowAction.emit({ action: 'delete', row });
-  }
-
-  isRowSelected(row: TableRow): boolean {
-    const rowKey = this.getRowKey(row);
-    return rowKey !== undefined && this.selectedRows.includes(rowKey);
-  }
-
-  isAllRowsSelected(): boolean {
-    return this.tableRowData.length > 0 && this.tableRowData.every(row => {
-      const rowKey = this.getRowKey(row);
-      return rowKey !== undefined && this.selectedRows.includes(rowKey);
-    });
-  }
-
-  toggleSelectAll() {
-    if (this.isAllRowsSelected()) {
-      this.selectedRows = [];
-    } else {
-      this.selectedRows = this.tableRowData
-        .map(row => this.getRowKey(row))
-        .filter((key): key is string | number => key !== undefined);
-    }
-  }
-
-  private getNestedValue(value: unknown, path: string): unknown {
-    return path.split('.').reduce<unknown>((current, key) => {
-      if (current && typeof current === 'object' && key in current) {
-        return (current as Record<string, unknown>)[key];
-      }
-      return undefined;
-    }, value);
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
   }
 }

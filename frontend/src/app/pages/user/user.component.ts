@@ -1,29 +1,27 @@
-import { AfterViewInit, Component, computed, effect, inject, ViewChild } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { Component, computed, effect, inject } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
 import { ComponentCardComponent } from '../../shared/components/common/component-card/component-card.component';
 import { PageBreadcrumbComponent } from '../../shared/components/common/page-breadcrumb/page-breadcrumb.component';
 import { UserService } from './service/user.service';
 import { User } from './module/user.module';
+import { BasicTableTwoComponent } from '../../shared/components/tables/basic-tables/basic-table-two/basic-table-two.component';
 
 
 @Component({
+  standalone: true,
   imports: [
     PageBreadcrumbComponent,
     ComponentCardComponent,
-    MatPaginatorModule,
-    MatTableModule,
+    BasicTableTwoComponent,
    ],
   selector: 'app-user',
   styleUrl: './user.component.css',
   templateUrl: './user.component.html',
 })
-export class UserComponent implements AfterViewInit {
+export class UserComponent {
   private userService = inject(UserService);
 
   public usersResource = this.userService.usersResource;
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   displayedColumns: (keyof User)[] = [
     'id',
@@ -35,6 +33,21 @@ export class UserComponent implements AfterViewInit {
     'status',
     'last_login_at',
   ];
+
+  columnHeaders: Record<keyof User, string> = {
+    id: 'ID',
+    user: 'User',
+    first_name: 'First Name',
+    last_name: 'Last Name',
+    email: 'Email',
+    phone: 'Phone',
+    role: 'Role',
+    avatar_url: 'Avatar',
+    email_verified: 'Email Verified',
+    status: 'Status',
+    last_login_at: 'Last Login',
+  };
+  
   dataSource = new MatTableDataSource<User>();
 
   public tableRowData = computed(() => {
@@ -64,7 +77,4 @@ export class UserComponent implements AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
 }

@@ -5,113 +5,33 @@
     </h3>
   }
 
-  <div class="max-w-full overflow-x-auto">
-    <table class="min-w-full">
-      <thead class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
-        <tr>
-          @for (column of tableColumns; track $index) {
-            <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
-
-              @if (selectable && column.key === rowKey) {
-                <div class="flex items-center gap-3">
-                  <div>
-                    <app-checkbox
-                      [checked]="selectAll"
-                      (checkedChange)="handleSelectAll()"
-                    />
-                  </div>
-
-                  <div>
-                    <span class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                      {{ column.label }}
-                    </span>
-                  </div>
-                </div>
-              } @else {
-                {{ column.label }}
-              }
-
-            </th>
+      <ng-container   class="max-w-full overflow-x-auto">
+        <table class="min-w-full" mat-table [dataSource]="dataSource">
+          @for(column of displayedColumns; track column) {
+            <div matColumnDef="{{column}}">
+              <th
+                class="text-center px-4 py-3.5 text-gray-900 text-theme-sm   dark:text-white/90"
+                mat-header-cell
+                *matHeaderCellDef
+              >
+                {{ columnHeaders[column] }}
+              </th>
+              <td
+                class="px-4 sm:px-6 py-3.5 text-gray-500 text-theme-sm dark:text-gray-400"
+                mat-cell
+                *matCellDef="let element"
+              >
+                {{ element[column] }}
+              </td>
+            </div>
           }
-        </tr>
-      </thead>
-      <tbody>
-        @for (row of tableRowData; track getRowKey(row) ?? $index) {
-        <tr>
-          @for (column of tableColumns; track column.key) {
-            <td class="px-4 sm:px-6 py-3.5 text-gray-500 text-theme-sm dark:text-gray-400">
-              @if (column.type === 'avatar') {
-                <div class="flex items-center gap-3">
-                  @if (getAvatarImage(row, column); as avatarUrl) {
-                    <img
-                      [src]="avatarUrl"
-                      [alt]="getCellValue(row, column) ?? 'Avatar'"
-                      class="size-10 rounded-full object-cover"
-                    />
-                  } @else {
-                    <app-avatar-text
-                      [name]="getAvatarName(row, column)"
-                      class="w-10 h-10" />
-                  }
-                  <span class="font-medium text-gray-700 dark:text-gray-400">
-                    {{ getCellValue(row, column) ?? '—' }}
-                  </span>
-                </div>
-              } @else if (column.type === 'actions') {
-                @if (hasDeleteAction(row, column)) {
-                  <app-table-dropdown>
-                    <div dropdown-button>
-                      <button class="text-gray-500 dark:text-gray-400">
-                        <svg
-                          class="fill-current"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
-                            d="M5.99902 10.245C6.96552 10.245 7.74902 11.0285 7.74902 11.995V12.005C7.74902 12.9715 6.96552 13.755 5.99902 13.755C5.03253 13.755 4.24902 12.9715 4.24902 12.005V11.995C4.24902 11.0285 5.03253 10.245 5.99902 10.245ZM17.999 10.245C18.9655 10.245 19.749 11.0285 19.749 11.995V12.005C19.749 12.9715 18.9655 13.755 17.999 13.755C17.0325 13.755 16.249 12.9715 16.249 12.005V11.995C16.249 11.0285 17.0325 10.245 17.999 10.245ZM13.749 11.995C13.749 11.0285 12.9655 10.245 11.999 10.245C11.0325 10.245 10.249 11.0285 10.249 11.995V12.005C10.249 12.9715 11.0325 13.755 11.999 13.755C12.9655 13.755 13.749 12.9715 13.749 12.005V11.995Z"
-                            fill=""
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                    <div dropdown-content>
-                      <button
-                        (onClick)="handleViewMore(row)"
-                        class="text-xs flex w-full rounded-lg px-3 py-2 text-start font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                      >
-                        View More
-                      </button>
-                      <button
-                        class="text-xs flex w-full rounded-lg px-3 py-2 text-start font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </app-table-dropdown>
-                }
-              } @else if (selectable && column.key === rowKey) {
-                <div class="flex items-center gap-3">
-                  <app-checkbox
-                    [checked]="selectedRows.includes(getRowKey(row) ?? '')"
-                    (checkedChange)="handleRowSelect(getRowKey(row))"
-                  />
-                  <span class="font-medium text-gray-700 dark:text-gray-400">
-                    {{ getCellValue(row, column) ?? '—' }}
-                  </span>
-                </div>
-              } @else {
-                {{ getCellValue(row, column) ?? '—' }}
-              }
-            </td>
-          }
-        </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSize]="5"
+                [pageSizeOptions]="[5, 10, 20]"
+                      showFirstLastButtons
+                      aria-label="Select page of users">
+        </mat-paginator>
+      </ng-container >
 </div>
