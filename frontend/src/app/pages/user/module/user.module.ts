@@ -10,4 +10,8 @@ export interface User {
   email_verified: boolean;
   status: string;
   last_login_at: string | null;
+  actions?: {
+    edit: boolean;
+    delete: boolean;
+  };
 }

@@ -1,11 +1,14 @@
 <app-page-breadcrumb pageTitle="Users" />
 
-    <app-component-card title="All Users" class="mt-6">
-      <app-basic-table-two
-        [dataSource]="dataSource"
-        [displayedColumns]="displayedColumns"
-        [columnHeaders]="columnHeaders"
-      >
-      </app-basic-table-two>
-      
-    </app-component-card>
+<app-component-card title="All Users" class="mt-6">
+  <app-basic-table-two
+    [dataSource]="dataSource"
+    [displayedColumns]="displayedColumns" 
+    [columnHeaders]="columnHeaders"
+    [actions]="actions" 
+    [actionsColumn]="actionsColumn" 
+    (editRow)="onEditUser($event)"
+    (deleteRow)="onDeleteUser($event)">
+  </app-basic-table-two>
+
+</app-component-card>

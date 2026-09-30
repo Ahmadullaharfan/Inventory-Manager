@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, httpResource } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { User } from '../module/user.module';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Injectable({
   providedIn: 'root'
@@ -10,18 +11,19 @@ export class UserService {
   private http = inject(HttpClient);
   private readonly apiUrl = environment.apiUrl;
 
-  /**
-   * Reactive, signal-based resource.
-   * The arrow function makes the URL reactive — if you later read a signal
-   * inside it (e.g. a filter, search term, user id), the resource auto-refetches.
-   */
+ 
   public readonly usersResource = httpResource<User[]>(
     () => `${this.apiUrl}/users`
   );
 
-  /**
-   * Optional: reload helper for after create/update/delete operations.
-   */
+  update(id: string, user: Partial<User>): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/${id}`, user);
+  }
+
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
   public reloadUsers(): void {
     this.usersResource.reload();
   }
