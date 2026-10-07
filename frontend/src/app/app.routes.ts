@@ -1,3 +1,4 @@
+import { authGuard, userAdminGuard } from './shared/services/auth.guard';
 import { Routes } from '@angular/router';
 import { EcommerceComponent } from './pages/dashboard/ecommerce/ecommerce.component';
 import { ProfileComponent } from './pages/user/profile/profile.component';
@@ -24,6 +25,7 @@ export const routes: Routes = [
   {
     path:'',
     component:AppLayoutComponent,
+    canActivate: [authGuard],
     children:[
       {
         path: '',
@@ -38,6 +40,12 @@ export const routes: Routes = [
         title:'Angular Calender | TailAdmin - Angular Admin Dashboard Template'
       },
       {
+        path:'users/:id',
+        canActivate: [userAdminGuard],
+        component: ProfileComponent,
+        title: 'User details'
+      },
+      {
         path:'profile',
         component:ProfileComponent,
         title:'Angular Profile Dashboard | TailAdmin - Angular Admin Dashboard Template'
@@ -45,6 +53,7 @@ export const routes: Routes = [
 
       {
         path:'users',
+        canActivate: [userAdminGuard],
         component:UserComponent,
         title:'Users'
       },

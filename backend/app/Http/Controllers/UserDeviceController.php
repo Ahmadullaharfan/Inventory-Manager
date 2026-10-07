@@ -2,65 +2,49 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\UserDevice;
-use App\Http\Requests\StoreUserDeviceRequest;
-use App\Http\Requests\UpdateUserDeviceRequest;
+use App\UserModuleService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 class UserDeviceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct(private UserModuleService $users) {}
+
+    public function index(Request $request, User $user): JsonResponse
     {
-        //
+        Gate::authorize('update', $user);
+        $current = $this->users->sessionHash($request);
+
+        return response()->json(['data' => $user->devices()->latest('id')->get()->map(fn (UserDevice $device): array => array_merge($device->toArray(), ['is_current' => $user->id === $request->user()->id && $device->refresh_token_hash === $current]))]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function destroy(Request $request, User $user, UserDevice $device): Response
     {
-        //
+        Gate::authorize('update', $user);
+        $device->update(['revoked_at' => now()]);
+        $user->forceFill(['remember_token' => Str::random(60)])->save();
+        $this->users->audit($user, 'device_revoked', $request, ['device_id' => $device->id]);
+
+        return response()->noContent();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreUserDeviceRequest $request)
+    public function revokeAll(Request $request, User $user): Response
     {
-        //
-    }
+        Gate::authorize('update', $user);
+        $this->users->revokeDevices($user, $request);
+        $this->users->audit($user, 'all_devices_revoked', $request);
+        if ($user->id === $request->user()->id && $request->hasSession()) {
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(UserDevice $userDevice)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(UserDevice $userDevice)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateUserDeviceRequest $request, UserDevice $userDevice)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(UserDevice $userDevice)
-    {
-        //
+        return response()->noContent();
     }
 }

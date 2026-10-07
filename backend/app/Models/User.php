@@ -3,18 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     protected $fillable = [
         'first_name', 'last_name', 'email', 'phone_number',
         'role', 'bio', 'avatar_url', 'password',
-        'two_fa_enabled', 'two_fa_secret', 'status',
+        'two_fa_enabled', 'two_fa_secret', 'status', 'email_verified', 'email_verified_at', 'last_login_at',
     ];
 
     protected $hidden = [
@@ -22,12 +24,18 @@ class User extends Authenticatable
     ];
 
     protected $casts = [
-        'email_verified'   => 'boolean',
-        'email_verified_at'=> 'datetime',
-        'two_fa_enabled'   => 'boolean',
-        'last_login_at'    => 'datetime',
-        'password'         => 'hashed',   // Laravel 10+
+        'email_verified' => 'boolean',
+        'email_verified_at' => 'datetime',
+        'two_fa_enabled' => 'boolean',
+        'two_fa_secret' => 'encrypted',
+        'last_login_at' => 'datetime',
+        'password' => 'hashed',   // Laravel 10+
     ];
+
+    public function auditLogs(): HasMany
+    {
+        return $this->hasMany(AuditLog::class);
+    }
 
     public function address()
     {

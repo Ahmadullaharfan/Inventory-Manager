@@ -1,41 +1,6 @@
-import { Component } from '@angular/core';
-import { ModalService } from '../../../services/modal.service';
-
-import { InputFieldComponent } from '../../form/input/input-field.component';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { UserAddress } from '../../../../pages/user/module/user.module';
 import { ButtonComponent } from '../../ui/button/button.component';
-import { LabelComponent } from '../../form/label/label.component';
-import { ModalComponent } from '../../ui/modal/modal.component';
-import { FormsModule } from '@angular/forms';
-
-@Component({
-  selector: 'app-user-address-card',
-  imports: [
-    InputFieldComponent,
-    ButtonComponent,
-    LabelComponent,
-    ModalComponent,
-    FormsModule,
-  ],
-  templateUrl: './user-address-card.component.html',
-  styles: ``
-})
-export class UserAddressCardComponent {
-
-  constructor(public modal: ModalService) {}
-
-  isAddressModalOpen = false;
-  openAddressModal() { this.isAddressModalOpen = true; }
-  closeAddressModal() { this.isAddressModalOpen = false; }
-
-  address = {
-    country: 'United States',
-    cityState: 'Arizona, United States.',
-    postalCode: 'ERT 2489',
-    taxId: 'AS4568384',
-  };
-
-  handleAddressSave() {
-    console.log('Saving address changes:', this.address);
-    this.closeAddressModal();
-  }
-}
+import { BadgeComponent } from '../../ui/badge/badge.component';
+@Component({ selector: 'app-user-address-card', standalone: true, imports: [ButtonComponent, BadgeComponent], templateUrl: './user-address-card.component.html' })
+export class UserAddressCardComponent { @Input() addresses: UserAddress[] = []; @Input() canEdit = false; @Output() edit = new EventEmitter<void>(); }

@@ -1,64 +1,37 @@
-<div
-  class="overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
-  @if (title) {
-  <h3 class="mb-4 px-6 text-lg font-semibold text-gray-800 dark:text-white/90">
-    {{ title }}
-  </h3>
-  }
-
-  <ng-container class="max-w-full overflow-x-auto">
+<div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+  @if (title) { <h3 class="px-6 py-4 text-lg font-semibold text-gray-800 dark:text-white/90">{{ title }}</h3> }
+  <div class="max-w-full overflow-x-auto">
     <table class="min-w-full" mat-table [dataSource]="dataSource" matSort>
-      @for (column of displayedColumns; track column) {
-      <!-- ACTIONS COLUMN: only render when allowed -->
-      @if (column === 'actions') {
-      @if (actionsColumn && (actions.edit || actions.delete)) {
-      <ng-container matColumnDef="actions">
-        <th *matHeaderCellDef class="text-center px-4 py-3.5 text-gray-900 text-theme-sm dark:text-white/90"
-          mat-header-cell>
-          {{ columnHeaders['actions'] }}
-        </th>
-        <td mat-cell *matCellDef="let element" class="px-4 sm:px-6 py-3.5">
-          <div class="flex items-center justify-center gap-2">
-            @if (actions.edit) {
-            <button type="button" (click)="onEdit(element)"
-              class="rounded-md px-2 py-1 text-theme-xs font-medium text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-500/10"
-              [attr.aria-label]="'Edit ' + element[columnHeaders['user']]">
-              Edit
-            </button>
-            }
-            @if (actions.delete) {
-            <button type="button" (click)="onDelete(element)"
-              class="rounded-md px-2 py-1 text-theme-xs font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10">
-              Delete
-            </button>
-            }
-          </div>
-        </td>
-      </ng-container>
+      @for (key of effectiveColumns; track key) {
+        <ng-container [matColumnDef]="key">
+          @if (key === 'actions') {
+            <th mat-header-cell *matHeaderCellDef class="px-4 py-4 text-start text-theme-sm text-gray-800 dark:text-white/90">{{ columnHeaders[key] || 'Actions' }}</th>
+            <td mat-cell *matCellDef="let row" class="px-4 py-4">
+              <div class="flex items-center gap-2">
+                @if (actions.view) { <button type="button" (click)="viewRow.emit(row)" class="rounded-lg px-2 py-1 text-theme-xs text-brand-500 hover:bg-brand-50 dark:text-brand-400 dark:hover:bg-brand-500/10" [attr.aria-label]="'View ' + (row.full_name || 'record')">View</button> }
+                @if (actions.edit && canEditRow(row)) { <button type="button" (click)="editRow.emit(row)" class="rounded-lg px-2 py-1 text-theme-xs text-brand-500 hover:bg-brand-50 dark:text-brand-400 dark:hover:bg-brand-500/10" [attr.aria-label]="'Edit ' + (row.full_name || 'record')">Edit</button> }
+                @if (actions.delete && canDeleteRow(row)) { <button type="button" (click)="deleteRow.emit(row)" class="rounded-lg px-2 py-1 text-theme-xs text-error-500 hover:bg-error-50 dark:text-error-400 dark:hover:bg-error-500/10" [attr.aria-label]="'Delete ' + (row.full_name || 'record')">Delete</button> }
+              </div>
+            </td>
+          } @else {
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="px-4 py-4 text-start text-theme-sm text-gray-800 dark:text-white/90">{{ columnHeaders[key] || key }}</th>
+            <td mat-cell *matCellDef="let row" class="px-4 py-4 text-theme-sm text-gray-500 dark:text-gray-400">
+              @if (column(key)?.type === 'avatar') {
+                <div class="flex items-center gap-3">
+                  @if (row[column(key)?.imageKey || 'avatar_url']) { <img [src]="row[column(key)?.imageKey || 'avatar_url']" alt="" class="size-10 rounded-full object-cover" /> }
+                  @else { <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-50 font-medium text-brand-500 dark:bg-brand-500/15 dark:text-brand-400">{{ (row[column(key)?.nameKey || key] || '?').slice(0, 1) }}</span> }
+                  <span class="font-medium text-gray-800 dark:text-white/90">{{ row[column(key)?.nameKey || key] }}</span>
+                </div>
+              } @else if (column(key)?.type === 'badge') { <app-badge size="sm" [color]="badgeColor(row[key])">{{ row[key] }}</app-badge> }
+              @else { {{ row[key] ?? '—' }} }
+            </td>
+          }
+        </ng-container>
       }
-      }
-      @else {
-      <!-- NORMAL DATA COLUMNS -->
-      <ng-container matColumnDef="{{ column }}">
-        <th *matHeaderCellDef class="text-center px-4 py-3.5 text-gray-900 text-theme-sm dark:text-white/90"
-          mat-header-cell mat-sort-header sortActionDescription="Sort by {{ columnHeaders[column] }}">
-          {{ columnHeaders[column] }}
-        </th>
-        <td class="px-4 sm:px-6 py-3.5 text-gray-500 text-theme-sm dark:text-gray-400" mat-cell
-          *matCellDef="let element">
-          {{ element[column] }}
-        </td>
-      </ng-container>
-      }
-      }
-
-      <!-- Header row: only include 'actions' in columns when it's actually rendered -->
       <tr mat-header-row *matHeaderRowDef="effectiveColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: effectiveColumns;"></tr>
+      <tr mat-row *matRowDef="let row; columns: effectiveColumns"></tr>
+      <tr *matNoDataRow><td [attr.colspan]="effectiveColumns.length || 1" class="px-6 py-12 text-center text-sm text-gray-500 dark:text-gray-400">{{ emptyMessage }}</td></tr>
     </table>
-
-    <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons
-      aria-label="Select page of users">
-    </mat-paginator>
-  </ng-container>
+  </div>
+  <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons aria-label="Select page of records" />
 </div>

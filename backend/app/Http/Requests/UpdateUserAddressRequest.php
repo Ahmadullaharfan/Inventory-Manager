@@ -2,28 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Foundation\Http\FormRequest;
-
-class UpdateUserAddressRequest extends FormRequest
+class UpdateUserAddressRequest extends UserSettingsRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return false;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        return ['country' => ['nullable', 'string', 'max:100'], 'city_state' => ['nullable', 'string', 'max:150'], 'postal_code' => ['nullable', 'string', 'max:20'], 'tax_id' => ['nullable', 'string', 'max:50'], 'is_primary' => ['sometimes', 'boolean']];
     }
 }

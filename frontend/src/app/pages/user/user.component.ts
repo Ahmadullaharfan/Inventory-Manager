@@ -1,144 +1,63 @@
-import { Component, computed, effect, inject } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { ComponentCardComponent } from '../../shared/components/common/component-card/component-card.component';
-import { PageBreadcrumbComponent } from '../../shared/components/common/page-breadcrumb/page-breadcrumb.component';
-import { UserService } from './service/user.service';
-import { User } from './module/user.module';
-import { ConfirmDialogComponent } from '../../shared/components/ui/confirm_dialog/confirm-dialog.component';
-import { BasicTableTwoComponent } from '../../shared/components/tables/basic-tables/basic-table-two/basic-table-two.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { ComponentCardComponent } from '../../shared/components/common/component-card/component-card.component';
+import { PageBreadcrumbComponent } from '../../shared/components/common/page-breadcrumb/page-breadcrumb.component';
+import { BasicTableTwoComponent, TableColumn } from '../../shared/components/tables/basic-tables/basic-table-two/basic-table-two.component';
+import { ConfirmDialogComponent } from '../../shared/components/ui/confirm_dialog/confirm-dialog.component';
+import { InputFieldComponent } from '../../shared/components/form/input/input-field.component';
+import { SelectComponent } from '../../shared/components/form/select/select.component';
+import { ButtonComponent } from '../../shared/components/ui/button/button.component';
+import { AuthService } from '../../shared/services/auth.service';
+import { UserService, apiError } from './service/user.service';
+import { User } from './module/user.module';
 import { UserFormDialogComponent } from './components/user-form-dialog.component';
-
-@Component({
-  standalone: true,
-  imports: [
-    PageBreadcrumbComponent,
-    ComponentCardComponent,
-    BasicTableTwoComponent,
-  ],
-  selector: 'app-user',
-  styleUrl: './user.component.css',
-  templateUrl: './user.component.html',
-})
-
+@Component({ selector: 'app-user', standalone: true, imports: [PageBreadcrumbComponent, ComponentCardComponent, BasicTableTwoComponent, InputFieldComponent, SelectComponent, ButtonComponent], templateUrl: './user.component.html', styleUrl: './user.component.css' })
 export class UserComponent {
-
-  private userService = inject(UserService);
+  readonly auth = inject(AuthService);
+  private users = inject(UserService);
   private dialog = inject(MatDialog);
-  private snackBar = inject(MatSnackBar);
-  public usersResource = this.userService.usersResource;
-
-  displayedColumns: (keyof User)[] = [
-    'id',
-    'first_name',
-    'last_name',
-    'email',
-    'phone',
-    'role',
-    'status',
-    'last_login_at',
-    'actions',
-  ];
-  actionsColumn: boolean = true;
-  actions: { edit: boolean; delete: boolean } = { edit: true, delete: true };
-  columnHeaders: Record<keyof User, string> = {
-    id: 'ID',
-    user: 'User',
-    first_name: 'First Name',
-    last_name: 'Last Name',
-    email: 'Email',
-    phone: 'Phone',
-    role: 'Role',
-    avatar_url: 'Avatar',
-    email_verified: 'Email Verified',
-    status: 'Status',
-    last_login_at: 'Last Login',
-    actions: 'Actions',
-  };
-
-  dataSource = new MatTableDataSource<User>();
-
-  public tableRowData = computed(() => {
-    const apiUsers = this.usersResource.value() ?? [];
-    return apiUsers.map(user => {
-      return {
-        id: `USR-${user.id}`,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        user: `${user.first_name} ${user.last_name}`,
-        email: user.email,
-        phone: user.phone ?? '—',
-        role: user.role,
-        status: user.status,
-        avatar_url: user.avatar_url,
-        email_verified: user.email_verified,
-        last_login_at: user.last_login_at
-          ? new Date(user.last_login_at).toLocaleDateString()
-          : 'Never',
-      };
-    });
-  });
-
+  private snack = inject(MatSnackBar);
+  private router = inject(Router);
+  readonly usersResource = this.users.usersResource;
+  readonly search = signal('');
+  readonly role = signal('');
+  readonly status = signal('');
+  readonly deleting = signal(false);
+  readonly total = computed(() => this.usersResource.value().length);
+  readonly active = computed(() => this.usersResource.value().filter(user => user.status === 'active').length);
+  readonly admins = computed(() => this.usersResource.value().filter(user => user.role === 'admin').length);
+  readonly roles = [{ value: 'admin', label: 'Admin' }, { value: 'manager', label: 'Manager' }, { value: 'user', label: 'User' }];
+  readonly statuses = [{ value: 'active', label: 'Active' }, { value: 'inactive', label: 'Inactive' }, { value: 'suspended', label: 'Suspended' }];
+  readonly displayedColumns = ['display_id', 'full_name', 'email', 'phone_number', 'role', 'status', 'last_login_label', 'actions'];
+  readonly columnHeaders = { display_id: 'ID', full_name: 'User', email: 'Email', phone_number: 'Phone', role: 'Role', status: 'Status', last_login_label: 'Last login', actions: 'Actions' };
+  readonly columns: TableColumn[] = [{ key: 'full_name', label: 'User', type: 'avatar', nameKey: 'full_name', imageKey: 'avatar_url' }, { key: 'status', label: 'Status', type: 'badge' }, { key: 'role', label: 'Role', type: 'badge' }];
+  readonly dataSource = new MatTableDataSource<any>();
+  readonly canEdit = (row: User) => this.auth.isAdmin() || this.auth.user()?.id === row.id;
+  readonly canDelete = (row: User) => this.auth.isAdmin() && this.auth.user()?.id !== row.id && !this.deleting();
   constructor() {
     effect(() => {
-      this.dataSource.data = this.tableRowData();
+      const query = this.search().trim().toLowerCase();
+      this.dataSource.data = this.usersResource.value().filter(user => (!this.role() || user.role === this.role()) && (!this.status() || user.status === this.status()) && [user.id, user.first_name, user.last_name, user.email, user.phone_number].join(' ').toLowerCase().includes(query)).map(user => ({ ...user, display_id: 'USR-' + user.id, full_name: user.first_name + ' ' + user.last_name, last_login_label: user.last_login_at ? new Date(user.last_login_at).toLocaleString() : 'Never' }));
+      this.dataSource.paginator?.firstPage();
     });
   }
-
-
-  // --- EDIT ---------------------------------------------------------
-  onEditUser(user: User): void {
-    const ref = this.dialog.open(UserFormDialogComponent, {
-      width: '600px',
-      data: { user },                
-    });
-
-    ref.afterClosed().subscribe((result: User | undefined) => {
-      if (!result) return;       
-
-      this.userService.update(result.id, result).subscribe({
-        next: (updated) => {
-          const idx = this.dataSource.data.findIndex((u: User) => u.id === updated.id);
-          if (idx > -1) {
-            this.dataSource.data[idx] = updated;
-            this.dataSource.data = [...this.dataSource.data]; // trigger change detection
-          }
-          this.snackBar.open('User updated', 'Close', { duration: 2500 });
-        },
-        error: (err) => {
-          this.snackBar.open('Update failed: ' + err.message, 'Close', { duration: 4000 });
-        },
-      });
-    });
+  reload() { this.users.reloadUsers(); }
+  handleAddUser() { this.openForm(); }
+  onViewUser(user: User) { void this.router.navigate(['/users', user.id]); }
+  onEditUser(user: User) { this.users.get(user.id).subscribe({ next: detail => this.openForm(detail), error: error => this.notify(apiError(error)) }); }
+  private openForm(user?: User) {
+    this.dialog.open(UserFormDialogComponent, { width: '760px', maxWidth: '95vw', disableClose: true, data: { user } }).afterClosed().subscribe((saved?: User) => { if (saved) { this.auth.updateCurrent(saved); this.reload(); this.notify(user ? 'User updated.' : 'User created.'); } });
   }
-
-  // --- DELETE -------------------------------------------------------
-  onDeleteUser(user: User): void {
-    const ref = this.dialog.open(ConfirmDialogComponent, {
-      width: '420px',
-      data: {
-        title: 'Delete user',
-        message: `Are you sure you want to delete "${user.first_name} ${user.last_name}"? This action cannot be undone.`,
-        confirmText: 'Delete',
-        confirmColor: 'warn',
-      },
-    });
-
-    ref.afterClosed().subscribe((confirmed: boolean) => {
+  onDeleteUser(user: User) {
+    if (!this.canDelete(user)) return;
+    this.dialog.open(ConfirmDialogComponent, { width: '420px', data: { title: 'Delete user', message: 'Delete ' + user.first_name + ' ' + user.last_name + '? Their sessions will be revoked.', confirmText: 'Delete', confirmColor: 'warn' } }).afterClosed().subscribe(confirmed => {
       if (!confirmed) return;
-
-      this.userService.delete(user.id).subscribe({
-        next: () => {
-          // Option A: mutate in place
-          this.dataSource.data = this.dataSource.data.filter((u: User) => u.id !== user.id);
-          this.snackBar.open('User deleted', 'Close', { duration: 2500 });
-        },
-        error: (err) => {
-          this.snackBar.open('Delete failed: ' + err.message, 'Close', { duration: 4000 });
-        },
-      });
+      this.deleting.set(true);
+      this.users.delete(user.id).subscribe({ next: () => { this.deleting.set(false); this.reload(); this.notify('User deleted.'); }, error: error => { this.deleting.set(false); this.notify(apiError(error)); } });
     });
   }
-
+  private notify(message: string) { this.snack.open(message, 'Close', { duration: 5000 }); }
 }

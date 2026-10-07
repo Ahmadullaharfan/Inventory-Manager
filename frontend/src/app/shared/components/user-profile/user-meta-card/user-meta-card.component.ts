@@ -1,50 +1,6 @@
-import { Component } from '@angular/core';
-import { ModalService } from '../../../services/modal.service';
-import { InputFieldComponent } from '../../form/input/input-field.component';
-
-import { ModalComponent } from '../../ui/modal/modal.component';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { User } from '../../../../pages/user/module/user.module';
 import { ButtonComponent } from '../../ui/button/button.component';
-import { FormsModule } from '@angular/forms';
-
-@Component({
-  selector: 'app-user-meta-card',
-  imports: [
-    ModalComponent,
-    InputFieldComponent,
-    ButtonComponent,
-    FormsModule,
-  ],
-  templateUrl: './user-meta-card.component.html',
-  styles: ``
-})
-export class UserMetaCardComponent {
-
-  constructor(public modal: ModalService) {}
-
-  isInfoModalOpen = false;
-  openInfoModal() { this.isInfoModalOpen = true; }
-  closeInfoModal() { this.isInfoModalOpen = false; }
-
-  // Example user data (could be made dynamic)
-  user = {
-    firstName: 'Chowdury',
-    lastName: 'Musharof',
-    role: 'Team Manager',
-    location: 'Arizona, United States.',
-    avatar: '/images/user/owner.png',
-    social: {
-      facebook: 'https://www.facebook.com/PimjoHQ',
-      x: 'https://x.com/PimjoHQ',
-      linkedin: 'https://www.linkedin.com/company/pimjohq',
-      instagram: 'https://instagram.com/pimjohq',
-    },
-    email: 'randomuser@pimjo.com',
-    phone: '+09 363 398 46',
-    bio: 'Team Manager',
-  };
-
-  handleInfoSave() {
-    console.log('Saving profile changes:', this.user);
-    this.closeInfoModal();
-  }
-}
+import { BadgeComponent } from '../../ui/badge/badge.component';
+@Component({ selector: 'app-user-meta-card', standalone: true, imports: [ButtonComponent, BadgeComponent], templateUrl: './user-meta-card.component.html' })
+export class UserMetaCardComponent { @Input({required: true}) user!: User; @Input() canEdit = false; @Output() edit = new EventEmitter<void>(); }

@@ -2,28 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Foundation\Http\FormRequest;
-
-class UpdateNotificationPreferenceRequest extends FormRequest
+class UpdateNotificationPreferenceRequest extends UserSettingsRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return false;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        return ['realtime_enabled' => ['sometimes', 'boolean'], 'team_alerts' => ['sometimes', 'boolean'], 'email_notifications' => ['sometimes', 'boolean']];
     }
 }

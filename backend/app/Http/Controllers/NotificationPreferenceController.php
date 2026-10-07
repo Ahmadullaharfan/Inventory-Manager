@@ -2,65 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\NotificationPreference;
-use App\Http\Requests\StoreNotificationPreferenceRequest;
 use App\Http\Requests\UpdateNotificationPreferenceRequest;
+use App\Models\User;
+use App\UserModuleService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 class NotificationPreferenceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct(private UserModuleService $users) {}
+
+    public function show(User $user): JsonResponse
     {
-        //
+        Gate::authorize('update', $user);
+
+        return response()->json(['data' => $user->notificationPreference()->firstOrCreate(['user_id' => $user->id])->fresh()]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function update(UpdateNotificationPreferenceRequest $request, User $user): JsonResponse
     {
-        //
-    }
+        $preference = $user->notificationPreference()->updateOrCreate(['user_id' => $user->id], $request->validated());
+        $this->users->audit($user, 'notification_preferences_updated', $request);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreNotificationPreferenceRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(NotificationPreference $notificationPreference)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(NotificationPreference $notificationPreference)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateNotificationPreferenceRequest $request, NotificationPreference $notificationPreference)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(NotificationPreference $notificationPreference)
-    {
-        //
+        return response()->json(['data' => $preference->fresh()]);
     }
 }

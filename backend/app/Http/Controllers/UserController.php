@@ -2,80 +2,86 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Http\Requests\DeleteAccountRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\UserResource;
+use App\Models\User;
+use App\Totp;
+use App\UserModuleService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-     public function index()
-    {
-        $users = User::query()
-            ->select([
-                'id',
-                'first_name',
-                'last_name',
-                'email',
-                'phone_number',
-                'role',
-                'avatar_url',
-                'email_verified',
-                'status',
-                'last_login_at',
-            ])
-            ->get();
+    public function __construct(private UserModuleService $users) {}
 
-        return response()->json($users);
+    public function index(): AnonymousResourceCollection
+    {
+        Gate::authorize('viewAny', User::class);
+
+        return UserResource::collection(User::query()->latest('id')->get());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreUserRequest $request): JsonResponse
     {
-        //
+        return (new UserResource($this->users->save(null, $request->validated(), $request)))->response()->setStatusCode(201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreUserRequest $request)
+    public function show(User $user): UserResource
     {
-        //
+        Gate::authorize('view', $user);
+
+        return new UserResource($this->users->load($user));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
+    public function update(UpdateUserRequest $request, User $user): UserResource
     {
-        //
+        return new UserResource($this->users->save($user, $request->validated(), $request));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(User $user)
+    public function destroy(Request $request, User $user): Response
     {
-        //
+        Gate::authorize('delete', $user);
+        DB::transaction(function () use ($request, $user): void {
+            User::where('role', 'admin')->where('status', 'active')->orderBy('id')->lockForUpdate()->get();
+            $user = User::whereKey($user->id)->lockForUpdate()->firstOrFail();
+            if ($user->role === 'admin' && $user->status === 'active') {
+                $this->users->ensureAnotherAdmin($user);
+            }
+            $this->users->revokeDevices($user, $request);
+            $this->users->audit($user, 'user_deleted', $request);
+            $user->delete();
+        });
+
+        return response()->noContent();
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateUserRequest $request, User $user)
+    public function destroyAccount(DeleteAccountRequest $request, User $user, Totp $totp): Response
     {
-        //
-    }
+        DB::transaction(function () use ($request, $user, $totp): void {
+            User::where('role', 'admin')->where('status', 'active')->orderBy('id')->lockForUpdate()->get();
+            $user = User::whereKey($user->id)->lockForUpdate()->firstOrFail();
+            if ($user->role === 'admin') {
+                $this->users->ensureAnotherAdmin($user);
+            }
+            if ($user->two_fa_enabled && ! $this->users->verifySecondFactor($user, $request->validated('code'), $request, $totp)) {
+                throw ValidationException::withMessages(['code' => 'Enter a valid authenticator or unused recovery code.']);
+            }
+            $this->users->revokeDevices($user, $request);
+            $this->users->audit($user, 'account_deleted', $request);
+            $user->delete();
+        });
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $user)
-    {
-        //
+        return response()->noContent();
     }
 }

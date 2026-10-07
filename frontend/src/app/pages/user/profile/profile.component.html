@@ -1,124 +1,41 @@
-<app-page-breadcrumb pageTitle="User Profile" />
-
-<div class="rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-  <h3 class="mb-5 text-lg font-semibold text-gray-800 lg:mb-7 dark:text-white/90">
-    My Profile
-  </h3>
-
-  <!-- Info -->
-  <app-user-meta-card />
-
-  <!-- Address -->
-  <app-user-address-card />
-
-  <!-- Security -->
-  <div class="mb-6 rounded-2xl border border-gray-200 p-5 lg:p-6 dark:border-gray-800">
-    <h4 class="text-lg font-semibold text-gray-800 lg:mb-6 dark:text-white/90">
-      Security
-    </h4>
-    <div>
-      <div
-        class="flex flex-col justify-between gap-4 border-b border-gray-200 py-4 first:pt-0 last:border-b-0 last:pb-0 sm:flex-row sm:items-end dark:border-gray-800">
-        <div>
-          <span class="mb-1 block text-base font-medium text-gray-800 dark:text-white/90">Change Password</span>
-          <p class="text-sm text-gray-500 dark:text-gray-400">
-            Receive real-time notifications and team alerts.
-          </p>
-        </div>
-        <div>
-          <button
-            class="shadow-theme-xs flex h-10 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white py-2.5 ltr:pr-4 ltr:pl-3.5 rtl:pl-4 rtl:pr-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/3 dark:hover:text-gray-200">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path
-                d="M12.3861 5.08087L14.9182 7.61296M15.6437 3.5917L16.408 4.35603C16.8962 4.84419 16.8962 5.63564 16.408 6.1238L7.83547 14.6963C7.69039 14.8414 7.51182 14.9486 7.31554 15.0083L3.97461 16.0251L4.99141 12.6842C5.05115 12.4879 5.15829 12.3093 5.30337 12.1642L13.8759 3.5917C14.3641 3.10355 15.1555 3.10355 15.6437 3.5917Z"
-                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            Change Password
-          </button>
-        </div>
-      </div>
-      <div
-        class="flex flex-col justify-between gap-4 border-b border-gray-200 py-4 first:pt-0 last:border-b-0 last:pb-0 sm:flex-row sm:items-end dark:border-gray-800">
-        <div>
-          <span class="mb-1 block text-base font-medium text-gray-800 dark:text-white/90">Two-factor authentication
-            (2FA)</span>
-          <p class="text-sm text-gray-500 dark:text-gray-400">
-            Keep your account secure by enabling 2FA
-          </p>
-        </div>
-        <div>
-          <label
-            for="toggle1"
-            class="flex cursor-pointer items-center gap-3 text-sm font-medium text-gray-700 select-none dark:text-gray-400"
-          >
-            <div class="relative">
-              <input
-                type="checkbox"
-                id="toggle1"
-                class="sr-only"
-                [(ngModel)]="twoFactorEnabled"
-              />
-              <div
-                class="block h-5 w-9 rounded-full"
-                [ngClass]="twoFactorEnabled ? 'bg-brand-500 dark:bg-brand-500' : 'bg-gray-200 dark:bg-white/10'"
-              ></div>
-              <div
-                [ngClass]="twoFactorEnabled ? 'ltr:translate-x-full rtl:-translate-x-full': 'translate-x-0'"
-                class="shadow-theme-sm absolute top-0.5 ltr:left-0.5 rtl:right-0.5 h-4 w-4 rounded-full bg-white duration-200 ease-linear"
-              ></div>
-            </div>
-          </label>
-        </div>
-      </div>
-    </div>
+<app-page-breadcrumb [pageTitle]="isOwn() ? 'My Profile' : 'User Details'" />
+@if (loading()) { <p role="status" class="text-sm text-gray-500 dark:text-gray-400">Loading profile…</p> }
+@if (error()) { <div role="alert" class="rounded-xl bg-error-50 p-5 text-error-600 dark:bg-error-500/10 dark:text-error-400">{{ error() }}<div class="mt-3"><app-button variant="outline" (btnClick)="load()">Retry</app-button></div></div> }
+@if (profile(); as user) {
+  <div class="space-y-6 rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+    <app-user-meta-card [user]="user" [canEdit]="canEdit()" (edit)="edit()" />
+    @if (canEdit()) {
+      <app-user-address-card [addresses]="user.addresses || []" [canEdit]="true" (edit)="edit('Addresses')" />
+      <app-component-card title="Notification preferences"><div class="space-y-4">@for (field of preferenceFields; track field.key) { <label class="flex items-center justify-between gap-4 text-sm text-gray-700 dark:text-gray-400">{{ field.label }}<input type="checkbox" [checked]="preferences[field.key]" [disabled]="busy()" (change)="togglePreference(field.key, $event)" class="size-4 accent-brand-500" /></label> }</div><app-button size="sm" [disabled]="busy()" (btnClick)="savePreferences()">Save preferences</app-button></app-component-card>
+      <app-component-card title="Security">
+        <div class="flex flex-wrap items-center justify-between gap-4"><div><h4 class="font-medium text-gray-800 dark:text-white/90">Password</h4><p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Changing your password signs out other devices.</p></div>@if (isOwn()) { <app-button size="sm" variant="outline" (btnClick)="openSecurity('password')">Change password</app-button> }</div>
+        <div class="flex flex-wrap items-center justify-between gap-4 border-t border-gray-200 pt-5 dark:border-gray-800"><div><h4 class="font-medium text-gray-800 dark:text-white/90">Two-factor authentication</h4><p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ user.two_fa_enabled ? 'Enabled — authenticator and recovery codes protect sign-in.' : 'Add an authenticator app to protect your account.' }}</p></div>@if (isOwn()) { <div class="flex flex-wrap gap-2">@if (user.two_fa_enabled) { <app-button size="sm" variant="outline" (btnClick)="openSecurity('recovery')">New recovery codes</app-button><app-button size="sm" variant="outline" (btnClick)="openSecurity('disable')">Disable 2FA</app-button> } @else { <app-button size="sm" (btnClick)="openSecurity('setup')">Enable 2FA</app-button> }</div> }</div>
+      </app-component-card>
+      <app-component-card title="Devices and sessions"><div class="flex items-center justify-between gap-4"><p class="text-sm text-gray-500 dark:text-gray-400">Manage browsers that have signed in to this account.</p><app-button size="sm" variant="outline" (btnClick)="revokeAll()">Sign out all devices</app-button></div>
+        @if (deviceError()) { <p role="alert" class="text-sm text-error-500">{{ deviceError() }}</p> }
+        <div class="space-y-3">@for (device of devices(); track device.id) { <div class="flex flex-wrap items-center justify-between gap-3 border-t border-gray-200 pt-4 dark:border-gray-800"><div class="min-w-0"><p class="max-w-lg break-words text-sm font-medium text-gray-800 dark:text-white/90">{{ device.device_name || 'Browser' }}{{ device.is_current ? ' (this device)' : '' }}</p><p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ device.ip_address || 'Unknown IP' }} · Last used {{ device.last_used_at | date:'medium' }}{{ device.revoked_at ? ' · Revoked' : '' }}</p></div>@if (!device.revoked_at) { <app-button size="sm" variant="outline" (btnClick)="revokeDevice(device)">Revoke</app-button> }</div> } @empty { <p class="text-sm text-gray-500 dark:text-gray-400">No devices recorded.</p> }</div>
+      </app-component-card>
+      @if (isOwn()) { <app-component-card title="Delete account"><div class="flex flex-wrap items-center justify-between gap-4"><p class="text-sm text-gray-500 dark:text-gray-400">Deleting your account removes your access and revokes all sessions.</p><app-button size="sm" variant="outline" className="text-error-500 dark:text-error-400" (btnClick)="openSecurity('delete')">Delete my account</app-button></div></app-component-card> }
+      <app-component-card title="Account activity">
+        @if (auditError()) { <p role="alert" class="text-sm text-error-500">{{ auditError() }}</p> }
+        @if (history(); as events) { <ol class="divide-y divide-gray-200 dark:divide-gray-800">@for (event of events.data; track event.id) { <li class="flex flex-wrap justify-between gap-2 py-3"><div><p class="text-sm font-medium capitalize text-gray-800 dark:text-white/90">{{ eventLabel(event.event) }}</p><p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ event.ip_address || 'Unknown IP' }}</p></div><time class="text-xs text-gray-500 dark:text-gray-400">{{ event.created_at | date:'medium' }}</time></li> } @empty { <li class="py-3 text-sm text-gray-500 dark:text-gray-400">No activity recorded.</li> }</ol><div class="flex items-center justify-between"><app-button size="sm" variant="outline" [disabled]="events.current_page <= 1" (btnClick)="audit(events.current_page - 1)">Previous</app-button><span class="text-sm text-gray-500 dark:text-gray-400">Page {{ events.current_page }} of {{ events.last_page }}</span><app-button size="sm" variant="outline" [disabled]="events.current_page >= events.last_page" (btnClick)="audit(events.current_page + 1)">Next</app-button></div> }
+      </app-component-card>
+    }
   </div>
-
-  <!-- Danger Zone -->
-  <div class="mb-6 rounded-2xl border border-gray-200 p-5 lg:p-6 dark:border-gray-800">
-    <h4 class="text-lg font-semibold text-gray-800 lg:mb-6 dark:text-white/90">
-      Danger Zone
-    </h4>
-    <div>
-      <div
-        class="flex flex-col justify-between gap-4 border-b border-gray-200 py-4 first:pt-0 last:border-b-0 last:pb-0 sm:flex-row sm:items-end dark:border-gray-800">
-        <div>
-          <span class="mb-1 block text-base font-medium text-gray-800 dark:text-white/90">Logout all devices</span>
-          <p class="text-sm text-gray-500 dark:text-gray-400">
-            Sign out from every active session.
-          </p>
-        </div>
-        <div>
-          <button
-            class="shadow-theme-xs flex h-10 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white py-2.5 ltr:pr-4 ltr:pl-3.5 rtl:pl-4 rtl:pr-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/3 dark:hover:text-gray-200">
-            <svg class="rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path
-                d="M3.33325 10.0003L9.79159 10.0003M6.66599 6.66699L3.33488 10.0002L6.66599 13.3337M8.12492 4.16374V3.54199C8.12492 2.85164 8.68456 2.29199 9.37492 2.29199H14.3749C15.0653 2.29199 15.6249 2.85164 15.6249 3.54199V16.4587C15.6249 17.149 15.0653 17.7087 14.3749 17.7087H9.37492C8.68456 17.7087 8.12492 17.149 8.12492 16.4587V15.8337"
-                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            Logout all devices
-          </button>
-        </div>
-      </div>
-      <div
-        class="flex flex-col justify-between gap-4 border-b border-gray-200 py-4 first:pt-0 last:border-b-0 last:pb-0 sm:flex-row sm:items-end dark:border-gray-800">
-        <div>
-          <span class="mb-1 block text-base font-medium text-gray-800 dark:text-white/90">Delete account</span>
-          <p class="text-sm text-gray-500 dark:text-gray-400">
-            Sign out from every active session.
-          </p>
-        </div>
-        <div>
-          <button
-            class="border-error-500 text-error-500 hover:bg-error-100 dark:border-error-500/15 inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg border px-3.5 py-2.5 ltr:pr-4 ltr:pl-3.5 rtl:pl-4 rtl:pr-3.5 text-sm font-medium transition-all dark:hover:bg-red-500/15">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path
-                d="M4.37492 4.79199V16.4587C4.37492 17.149 4.93456 17.7087 5.62492 17.7087H14.3749C15.0653 17.7087 15.6249 17.149 15.6249 16.4587V4.79199M3.33325 4.79199H16.6658M4.37492 13.2466V8.24658M15.6249 13.2466V8.24658M8.33325 13.7503V8.75033M11.6666 13.7503V8.75033M12.7078 4.79199V3.54199C12.7078 2.85164 12.1482 2.29199 11.4578 2.29199H8.54118C7.85082 2.29199 7.29118 2.85164 7.29118 3.54199V4.79199H12.7078Z"
-                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            Delete account
-          </button>
-        </div>
-      </div>
+}
+@if (mode()) {
+  <app-modal [isOpen]="true" (close)="closeSecurity()" className="max-w-lg m-4"><div class="rounded-2xl bg-white p-6 dark:bg-gray-900"><h3 class="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90">{{ mode() === 'delete' ? 'Delete your account' : mode() === 'password' ? 'Change password' : mode() === 'codes' ? 'Save your recovery codes' : mode() === 'disable' ? 'Disable two-factor authentication' : mode() === 'recovery' ? 'Generate new recovery codes' : 'Set up two-factor authentication' }}</h3>
+    @if (securityError()) { <p role="alert" class="mb-4 rounded-lg bg-error-50 p-3 text-sm text-error-600 dark:bg-error-500/10 dark:text-error-400">{{ securityError() }}</p> }
+    <div class="space-y-4">
+      @if (mode() === 'delete') { <p class="text-sm text-error-500 dark:text-error-400">Confirm your password to delete your account and sign out all devices.</p> }
+      @if (mode() === 'codes') { <p class="text-sm text-gray-500 dark:text-gray-400">Each code works once. Save these now; they will not be shown again. Store them somewhere private.</p><pre class="select-all rounded-xl bg-gray-50 p-4 text-sm text-gray-800 dark:bg-gray-800 dark:text-white/90">{{ recoveryText() }}</pre><app-button variant="outline" (btnClick)="downloadCodes()">Download codes</app-button> }
+      @else {
+        @if (mode() !== 'confirm') { <div><label for="security-current-password" class="mb-2 block text-sm text-gray-700 dark:text-gray-400">Current password</label><app-input-field id="security-current-password" type="password" [value]="currentPassword" (valueChange)="currentPassword = $event.toString()" [disabled]="busy()" /></div> }
+        @if (mode() === 'password') { <div><label for="security-new-password" class="mb-2 block text-sm text-gray-700 dark:text-gray-400">New password</label><app-input-field id="security-new-password" type="password" [value]="newPassword" (valueChange)="newPassword = $event.toString()" [disabled]="busy()" /></div><div><label for="security-confirm-password" class="mb-2 block text-sm text-gray-700 dark:text-gray-400">Confirm new password</label><app-input-field id="security-confirm-password" type="password" [value]="confirmPassword" (valueChange)="confirmPassword = $event.toString()" [disabled]="busy()" /></div> }
+        @if (mode() === 'confirm') { <p class="text-sm text-gray-500 dark:text-gray-400">Add this setup key to your authenticator app as a time-based account, then enter its six-digit code.</p><p class="select-all break-all rounded-lg bg-gray-50 p-3 font-mono text-sm text-gray-800 dark:bg-gray-800 dark:text-white/90">{{ setupSecret() }}</p><a [href]="setupUri()" class="text-sm text-brand-500">Open authenticator app</a> }
+        @if (mode() === 'confirm' || mode() === 'disable' || mode() === 'recovery' || (mode() === 'delete' && profile()?.two_fa_enabled)) { <div><label for="security-code" class="mb-2 block text-sm text-gray-700 dark:text-gray-400">{{ mode() === 'confirm' ? 'Authenticator code' : 'Authenticator or recovery code' }}</label><app-input-field id="security-code" [value]="code" (valueChange)="code = $event.toString()" [disabled]="busy()" /></div> }
+      }
+      <div class="flex justify-end gap-3 pt-3"><app-button variant="outline" [disabled]="busy()" (btnClick)="closeSecurity()">{{ mode() === 'codes' ? 'Done' : 'Cancel' }}</app-button>@if (mode() !== 'codes') { <app-button [disabled]="busy()" (btnClick)="submitSecurity()">{{ busy() ? 'Working…' : mode() === 'setup' ? 'Continue' : 'Confirm' }}</app-button> }</div>
     </div>
-  </div>
-</div>
+  </div></app-modal>
+}

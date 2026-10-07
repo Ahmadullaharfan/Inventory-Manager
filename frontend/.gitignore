@@ -40,3 +40,7 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Files created by Windows shell startup profiles
+/%LOCALAPPDATA%/
+/Author Software/

@@ -1,4 +1,7 @@
-import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
+import { AuthService } from '../../../services/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { apiError } from '../../../../pages/user/service/user.service';
+import { Component, ElementRef, HostListener, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -17,6 +20,9 @@ export interface Language {
   imports: [CommonModule, RouterModule]
 })
 export class UserDropdownComponent implements OnInit {
+  readonly auth = inject(AuthService);
+  private snack = inject(MatSnackBar);
+  signOut() { this.auth.logout().subscribe({ next: () => this.closeDropdown(), error: error => this.snack.open(apiError(error), 'Close', { duration: 5000 }) }); }
   isOpen = false;
   subDropdownOpen = false;
   currentLocale = 'en';
