@@ -1,7 +1,7 @@
 services:
   mysql:
     image: mysql:8.0
-    container_name: laravel_mysql
+    container_name: inventory-manager-database
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: laravel_db
@@ -20,11 +20,12 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    image: inventory-manager-laravel:latest
-    container_name: laravel_app
+    image: inventory-manager-backend:latest
+    container_name: inventory-manager-backend
     ports:
       - "8000:8000"
     environment:
+      APP_NAME: "Inventory Manager"
       DB_HOST: mysql
       DB_PORT: 3306
       DB_DATABASE: laravel_db
@@ -42,8 +43,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: inventory-manager-angular:latest
-    container_name: angular_app
+    image: inventory-manager-frontend:latest
+    container_name: inventory-manager-frontend
     ports:
       - "4200:4200"
     volumes:

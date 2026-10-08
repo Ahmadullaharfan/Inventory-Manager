@@ -1,7 +1,10 @@
 {
-  "Keep at least one active administrator.": "لږ تر لږه یو فعال مدیر وساتئ.",
-  "The credentials are incorrect or the account is inactive.": "د ننوتلو معلومات ناسم دي یا حساب غیرفعال دی.",
-  "Enter a valid authenticator or unused recovery code.": "د تایید سم کوډ یا نه کارول شوی بېرته ترلاسه کولو کوډ ولیکئ.",
-  "The code is invalid or setup expired. Start setup again.": "کوډ ناسم دی یا تنظیم پای ته رسېدلی. تنظیم بیا پیل کړئ.",
-  "Choose exactly one primary address.": "یوازې یوه اصلي پته وټاکئ."
+    "Keep at least one active administrator.": "لږ تر لږه یو فعال مدیر وساتئ.",
+    "The credentials are incorrect or the account is inactive.": "د ننوتلو معلومات ناسم دي یا حساب غیرفعال دی.",
+    "Enter a valid authenticator or unused recovery code.": "د تایید سم کوډ یا نه کارول شوی بېرته ترلاسه کولو کوډ ولیکئ.",
+    "The code is invalid or setup expired. Start setup again.": "کوډ ناسم دی یا تنظیم پای ته رسېدلی. تنظیم بیا پیل کړئ.",
+    "Choose exactly one primary address.": "یوازې یوه اصلي پته وټاکئ.",
+    "Service ready": "خدمت چمتو دی",
+    "Manage inventory, people, and business operations in one place.": "خپل توکي، کارنان او سوداګریزې چارې په یوه ځای کې اداره کړئ.",
+    "Application API": "د سیستم API"
 }

@@ -200,7 +200,7 @@ export const dari = {
   "Confirm your password to delete your account and sign out all devices.": "برای حذف حساب و خروج از همه دستگاه‌ها، رمز عبور خود را تأیید کنید.",
   "Each code works once. Save these now; they will not be shown again. Store them somewhere private.": "هر کد یک بار کار می‌کند. اکنون آن‌ها را ذخیره کنید؛ دوباره نمایش داده نمی‌شوند. در جای امن نگهداری کنید.",
   "Add this setup key to your authenticator app as a time-based account, then enter its six-digit code.": "این کلید را به‌عنوان حساب مبتنی بر زمان به برنامه تأییدکننده اضافه کنید، سپس کد شش‌رقمی را وارد کنید.",
-  "Free and Open-Source Tailwind CSS Admin Dashboard Template": "قالب رایگان و متن‌باز داشبورد مدیریتی Tailwind CSS",
+  "Manage inventory, people, and business operations in one place.": "موجودی، کاربران و امور کسب‌وکار را در یک جا مدیریت کنید.",
   "Toggle Sidebar": "باز و بسته کردن فهرست کناری",
   "Search or type command...": "جستجو یا تایپ دستور…",
   "Select an option": "یک گزینه انتخاب کنید",

@@ -1,4 +1,4 @@
-# Docker Setup for Laravel + Angular + MySQL
+# Inventory Manager — Docker Setup
 
 ## Project Structure
 ```
@@ -41,19 +41,19 @@ This command will:
 ## Services
 
 ### MySQL Database
-- **Container**: laravel_mysql
+- **Container**: inventory-manager-database
 - **User**: laravel_user / laravel_password
 - **Root Password**: root
 - **Port**: 3306
 - **Volume**: Persisted in `mysql_data` volume
 
 ### Laravel Backend
-- **Container**: laravel_app
+- **Container**: inventory-manager-backend
 - **Port**: 8000
 - **Live Code Sync**: `/backend` directory is mounted as a volume
 
 ### Angular Frontend
-- **Container**: angular_app
+- **Container**: inventory-manager-frontend
 - **Port**: 4200
 - **Live Reload**: `/frontend/src` is mounted for hot reload
 

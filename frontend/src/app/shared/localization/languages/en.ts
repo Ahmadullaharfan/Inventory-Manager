@@ -199,7 +199,7 @@ export const english = {
   "Confirm your password to delete your account and sign out all devices.": "Confirm your password to delete your account and sign out all devices.",
   "Each code works once. Save these now; they will not be shown again. Store them somewhere private.": "Each code works once. Save these now; they will not be shown again. Store them somewhere private.",
   "Add this setup key to your authenticator app as a time-based account, then enter its six-digit code.": "Add this setup key to your authenticator app as a time-based account, then enter its six-digit code.",
-  "Free and Open-Source Tailwind CSS Admin Dashboard Template": "Free and Open-Source Tailwind CSS Admin Dashboard Template",
+  "Manage inventory, people, and business operations in one place.": "Manage inventory, people, and business operations in one place.",
   "Toggle Sidebar": "Toggle Sidebar",
   "Search or type command...": "Search or type command...",
   "Select an option": "Select an option",

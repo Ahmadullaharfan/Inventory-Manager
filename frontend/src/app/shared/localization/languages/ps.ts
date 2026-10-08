@@ -200,7 +200,7 @@ export const pashto = {
   "Confirm your password to delete your account and sign out all devices.": "د حساب ړنګولو او له ټولو وسایلو وتلو لپاره خپل پټنوم تایید کړئ.",
   "Each code works once. Save these now; they will not be shown again. Store them somewhere private.": "هر کوډ یو ځل کار کوي. اوس یې خوندي کړئ؛ بیا نه ښکاره کېږي. په خوندي ځای کې یې وساتئ.",
   "Add this setup key to your authenticator app as a time-based account, then enter its six-digit code.": "دا کلۍ خپل تایید اپلېکېشن ته د وخت پر بنسټ د حساب په توګه زیاته کړئ، بیا یې شپږ عددي کوډ ولیکئ.",
-  "Free and Open-Source Tailwind CSS Admin Dashboard Template": "د Tailwind CSS وړیا او پرانیستې سرچینې مدیریتي ډشبورډ",
+  "Manage inventory, people, and business operations in one place.": "خپل توکي، کارنان او سوداګریزې چارې په یوه ځای کې اداره کړئ.",
   "Toggle Sidebar": "اړخیزه غورنۍ بدلول",
   "Search or type command...": "ولټوئ یا امر ولیکئ…",
   "Select an option": "یو غوراوی وټاکئ",

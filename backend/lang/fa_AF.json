@@ -1,7 +1,10 @@
 {
-  "Keep at least one active administrator.": "حداقل یک مدیر فعال نگه دارید.",
-  "The credentials are incorrect or the account is inactive.": "معلومات ورود نادرست است یا حساب غیرفعال است.",
-  "Enter a valid authenticator or unused recovery code.": "کد تأیید معتبر یا کد بازیابی استفاده‌نشده وارد کنید.",
-  "The code is invalid or setup expired. Start setup again.": "کد نامعتبر است یا مهلت تنظیم گذشته است. تنظیم را دوباره شروع کنید.",
-  "Choose exactly one primary address.": "دقیقاً یک نشانی اصلی انتخاب کنید."
+    "Keep at least one active administrator.": "حداقل یک مدیر فعال نگه دارید.",
+    "The credentials are incorrect or the account is inactive.": "معلومات ورود نادرست است یا حساب غیرفعال است.",
+    "Enter a valid authenticator or unused recovery code.": "کد تأیید معتبر یا کد بازیابی استفاده‌نشده وارد کنید.",
+    "The code is invalid or setup expired. Start setup again.": "کد نامعتبر است یا مهلت تنظیم گذشته است. تنظیم را دوباره شروع کنید.",
+    "Choose exactly one primary address.": "دقیقاً یک نشانی اصلی انتخاب کنید.",
+    "Service ready": "سرویس آماده است",
+    "Manage inventory, people, and business operations in one place.": "موجودی، کاربران و امور کسب‌وکار را در یک جا مدیریت کنید.",
+    "Application API": "API برنامه"
 }
