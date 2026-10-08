@@ -28,7 +28,7 @@ class UserResource extends JsonResource
             'created_at' => $this->created_at?->toIso8601String(),
             'addresses' => $this->when($private, $this->whenLoaded('addresses')),
             'social_links' => $this->whenLoaded('socialLinks'),
-            'notification_preferences' => $this->when($private, $this->whenLoaded('notificationPreference')),
+            'notification_preferences' => $this->when($private, $this->whenLoaded('notificationPreference', fn ($preferences): array => $preferences->only(['realtime_enabled', 'team_alerts', 'email_notifications']))),
         ];
     }
 }

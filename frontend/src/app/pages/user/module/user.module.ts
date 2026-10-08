@@ -1,4 +1,9 @@
 export type UserRole = 'admin' | 'manager' | 'user';
+export const userRoleDetails: Record<UserRole, { label: string; description: string }> = {
+  admin: { label: 'Admin', description: 'Create users, edit user profiles, assign roles and account status, and delete other accounts.' },
+  manager: { label: 'Manager', description: 'Browse users and view profiles. Edit your own profile and manage your own account settings.' },
+  user: { label: 'User', description: 'Edit your own profile and manage your own account settings. Ask an administrator to change your role.' },
+};
 export type UserStatus = 'active' | 'inactive' | 'suspended';
 export interface UserAddress { id?: number; country: string | null; city_state: string | null; postal_code: string | null; tax_id: string | null; is_primary: boolean; }
 export interface SocialLink { id?: number; platform: string; url: string; }

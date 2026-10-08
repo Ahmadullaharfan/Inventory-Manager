@@ -1,5 +1,5 @@
 <div class="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-4 py-10">
-  <div class="mb-8"><h1 class="mb-2 text-title-sm font-semibold text-gray-800 dark:text-white/90">Sign In</h1><p class="text-sm text-gray-500 dark:text-gray-400">Sign in to your inventory account.</p></div>
+  <div class="mb-8"><h1 class="mb-2 text-title-sm font-semibold text-gray-800 dark:text-white/90">Sign In</h1><p class="text-sm text-gray-500 dark:text-gray-400">Sign in to your inventory account. Admins, managers and users all sign in here using their own email and password.</p></div>
   @if (error()) { <p role="alert" class="mb-5 rounded-lg bg-error-50 p-3 text-sm text-error-600 dark:bg-error-500/10 dark:text-error-400">{{ error() }}</p> }
   <form (ngSubmit)="onSignIn()" class="space-y-5">
     <div><app-label for="signin-email">Email</app-label><app-input-field id="signin-email" type="email" [(value)]="email" [disabled]="busy()" /></div>

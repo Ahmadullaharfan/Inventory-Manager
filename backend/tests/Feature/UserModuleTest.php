@@ -119,6 +119,36 @@ test('primary addresses and false notification preferences persist', function ()
     $this->putJson('/api/users/'.$user->id.'/notification-preferences', ['email_notifications' => false])->assertJsonPath('data.email_notifications', false);
 });
 
+test('profile notification preferences round trip through a multipart update', function () {
+    $user = User::factory()->create();
+    $user->notificationPreference()->create(['realtime_enabled' => true, 'team_alerts' => false, 'email_notifications' => false]);
+    $preferences = $this->actingAs($user)->getJson('/api/users/'.$user->id)->assertSuccessful()->json('data.notification_preferences');
+    $preferences['realtime_enabled'] = false;
+
+    $this->post('/api/users/'.$user->id.'?_method=PUT', [
+        'notification_preferences' => json_encode($preferences),
+    ], ['Accept' => 'application/json'])->assertSuccessful()
+        ->assertJsonPath('data.notification_preferences.realtime_enabled', false)
+        ->assertJsonPath('data.notification_preferences.team_alerts', false)
+        ->assertJsonPath('data.notification_preferences.email_notifications', false)
+        ->assertJsonMissingPath('data.notification_preferences.id')
+        ->assertJsonMissingPath('data.notification_preferences.user_id')
+        ->assertJsonMissingPath('data.notification_preferences.created_at')
+        ->assertJsonMissingPath('data.notification_preferences.updated_at');
+    expect($user->notificationPreference()->first()->realtime_enabled)->toBeFalse();
+});
+
+test('multipart notification preferences reject malformed data and unknown fields', function (string $preferences) {
+    $user = User::factory()->create();
+    $this->actingAs($user)->post('/api/users/'.$user->id.'?_method=PUT', [
+        'notification_preferences' => $preferences,
+    ], ['Accept' => 'application/json'])->assertUnprocessable()->assertJsonValidationErrors('notification_preferences');
+})->with([
+    'malformed JSON' => '{"email_notifications":',
+    'scalar JSON' => 'false',
+    'database metadata' => '{"email_notifications":false,"user_id":123}',
+]);
+
 test('deleting a user revokes devices and soft deletes the account', function () {
     $admin = User::factory()->create(['role' => 'admin']);
     $target = User::factory()->create();

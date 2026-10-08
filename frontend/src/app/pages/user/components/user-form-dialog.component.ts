@@ -6,7 +6,7 @@ import { SelectComponent } from '../../../shared/components/form/select/select.c
 import { ButtonComponent } from '../../../shared/components/ui/button/button.component';
 import { AuthService } from '../../../shared/services/auth.service';
 import { UserService, apiError } from '../service/user.service';
-import { defaultPreferences, User } from '../module/user.module';
+import { defaultPreferences, User, UserRole, userRoleDetails } from '../module/user.module';
 @Component({ selector: 'app-user-form-dialog', standalone: true, imports: [ReactiveFormsModule, MatDialogModule, InputFieldComponent, SelectComponent, ButtonComponent], templateUrl: './user-form-dialog.component.html' })
 export class UserFormDialogComponent implements OnDestroy {
   readonly auth = inject(AuthService);
@@ -18,7 +18,7 @@ export class UserFormDialogComponent implements OnDestroy {
   readonly tabs = ['Personal', 'Addresses', 'Social links', 'Notifications'];
   readonly isEdit: boolean;
   readonly form: FormGroup;
-  readonly roles = [{ value: 'admin', label: 'Admin' }, { value: 'manager', label: 'Manager' }, { value: 'user', label: 'User' }];
+  readonly roles = (Object.keys(userRoleDetails) as UserRole[]).map(value => ({ value, ...userRoleDetails[value] }));
   readonly statuses = [{ value: 'active', label: 'Active' }, { value: 'inactive', label: 'Inactive' }, { value: 'suspended', label: 'Suspended' }];
   readonly socialPlatforms = [{ value: 'facebook', label: 'Facebook' }, { value: 'x', label: 'X' }, { value: 'linkedin', label: 'LinkedIn' }, { value: 'instagram', label: 'Instagram' }, { value: 'github', label: 'GitHub' }, { value: 'website', label: 'Website' }];
   avatar: File | null = null;
@@ -27,13 +27,15 @@ export class UserFormDialogComponent implements OnDestroy {
   private objectUrl: string | null = null;
   constructor(public dialogRef: MatDialogRef<UserFormDialogComponent, User | undefined>, @Inject(MAT_DIALOG_DATA) public data: { user?: User; initialTab?: string }) {
     const user = data?.user;
+    const preferences = user?.notification_preferences ?? defaultPreferences();
     this.isEdit = !!user;
     this.tab.set(data?.initialTab ?? 'Personal');
     this.avatarPreview = user?.avatar_url ?? null;
-    this.form = this.fb.group({ first_name: [user?.first_name ?? '', [Validators.required, Validators.maxLength(100)]], last_name: [user?.last_name ?? '', [Validators.required, Validators.maxLength(100)]], email: [user?.email ?? '', [Validators.required, Validators.email, Validators.maxLength(255)]], phone_number: [user?.phone_number ?? '', Validators.maxLength(30)], bio: [user?.bio ?? '', Validators.maxLength(5000)], role: [user?.role ?? 'user', Validators.required], status: [user?.status ?? 'active', Validators.required], email_verified: [user?.email_verified ?? false], password: ['', this.isEdit ? [Validators.minLength(8), Validators.maxLength(255)] : [Validators.required, Validators.minLength(8), Validators.maxLength(255)]], password_confirmation: [''], addresses: this.fb.array([]), social_links: this.fb.array([]), notification_preferences: this.fb.group(user?.notification_preferences ?? defaultPreferences()) });
+    this.form = this.fb.group({ first_name: [user?.first_name ?? '', [Validators.required, Validators.maxLength(100)]], last_name: [user?.last_name ?? '', [Validators.required, Validators.maxLength(100)]], email: [user?.email ?? '', [Validators.required, Validators.email, Validators.maxLength(255)]], phone_number: [user?.phone_number ?? '', Validators.maxLength(30)], bio: [user?.bio ?? '', Validators.maxLength(5000)], role: [user?.role ?? 'user', Validators.required], status: [user?.status ?? 'active', Validators.required], email_verified: [user?.email_verified ?? false], password: ['', this.isEdit ? [Validators.minLength(8), Validators.maxLength(255)] : [Validators.required, Validators.minLength(8), Validators.maxLength(255)]], password_confirmation: [''], addresses: this.fb.array([]), social_links: this.fb.array([]), notification_preferences: this.fb.group({ realtime_enabled: [preferences.realtime_enabled], team_alerts: [preferences.team_alerts], email_notifications: [preferences.email_notifications] }) });
     for (const address of user?.addresses ?? []) this.addresses.push(this.fb.group({ country: [address.country ?? '', Validators.maxLength(100)], city_state: [address.city_state ?? '', Validators.maxLength(150)], postal_code: [address.postal_code ?? '', Validators.maxLength(20)], tax_id: [address.tax_id ?? '', Validators.maxLength(50)], is_primary: [address.is_primary] }));
     for (const link of user?.social_links ?? []) this.socials.push(this.fb.group({ platform: [link.platform, [Validators.required, Validators.maxLength(50)]], url: [link.url, [Validators.required, Validators.pattern(/^https?:\/\/.+/), Validators.maxLength(500)]] }));
   }
+  get roleDescription(): string { return this.roles.find(role => role.value === this.value('role'))?.description ?? ''; }
   get addresses(): FormArray { return this.form.get('addresses') as FormArray; }
   get socials(): FormArray { return this.form.get('social_links') as FormArray; }
   value(key: string): string { return this.form.get(key)?.value ?? ''; }

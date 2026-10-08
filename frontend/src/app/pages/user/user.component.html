@@ -5,6 +5,7 @@
   }
 </div>
 <app-component-card title="All users" buttonTitle="Add User" [addbutton]="auth.isAdmin()" (buttonClick)="handleAddUser()">
+  <p class="text-sm text-gray-500 dark:text-gray-400">@if (auth.isAdmin()) { Use Add User to create an account, or Edit on a user to change their role and status in the Personal tab. Permissions are determined by the selected role. } @else { You have Manager access. You can browse users and edit your own profile. An administrator manages roles and account status. }</p>
   <div class="grid grid-cols-1 items-end gap-3 sm:grid-cols-2 lg:grid-cols-4">
     <div><label for="user-search" class="mb-2 block text-sm text-gray-700 dark:text-gray-400">Search users</label><app-input-field id="user-search" placeholder="Name, email, phone or ID" [value]="search()" (valueChange)="search.set($event.toString())" /></div>
     <div><label class="mb-2 block text-sm text-gray-700 dark:text-gray-400">Role</label><app-select [options]="roles" placeholder="All roles" [value]="role()" (valueChange)="role.set($event)" /></div>
