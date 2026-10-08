@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../../shared/pipe/localize.pipe';
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -7,7 +8,7 @@ import { InputComponent } from '../../../../shared/components/ui/input/input';
 
 @Component({
   selector: 'app-product-category-form',
-  imports: [ReactiveFormsModule, CommonModule, InputComponent],
+  imports: [LocalizePipe, ReactiveFormsModule, CommonModule, InputComponent],
   templateUrl: './product-category-form.html',
   standalone: true,
   styleUrls: ['./product-category-form.css'] // Changed from styleUrl to styleUrls

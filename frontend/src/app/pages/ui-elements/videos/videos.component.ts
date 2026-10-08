@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../shared/pipe/localize.pipe';
 import { Component } from '@angular/core';
 import { PageBreadcrumbComponent } from '../../../shared/components/common/page-breadcrumb/page-breadcrumb.component';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
@@ -9,7 +10,7 @@ import { TwentyoneIstoNineComponent } from "../../../shared/components/ui/videos
 
 @Component({
   selector: 'app-videos',
-  imports: [
+  imports: [LocalizePipe,
     PageBreadcrumbComponent,
     ComponentCardComponent,
     // AspectRatioVideoComponent,

@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../shared/pipe/localize.pipe';
 import { Component } from '@angular/core';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 import { PageBreadcrumbComponent } from '../../../shared/components/common/page-breadcrumb/page-breadcrumb.component';
@@ -9,7 +10,7 @@ import { BasicTableFiveComponent } from '../../../shared/components/tables/basic
 
 @Component({
   selector: 'app-basic-tables',
-  imports: [
+  imports: [LocalizePipe,
     ComponentCardComponent,
     PageBreadcrumbComponent,
     BasicTableOneComponent,

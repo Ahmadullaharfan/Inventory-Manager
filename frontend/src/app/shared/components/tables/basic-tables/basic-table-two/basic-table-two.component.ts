@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -5,7 +6,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { BadgeComponent } from '../../../ui/badge/badge.component';
 export interface TableColumn { key: string; label: string; type?: 'text' | 'avatar' | 'badge' | 'actions'; nameKey?: string; imageKey?: string; }
 export type TableRow = Record<string, any>;
-@Component({ selector: 'app-basic-table-two', standalone: true, imports: [MatPaginatorModule, MatTableModule, MatSortModule, BadgeComponent], templateUrl: './basic-table-two.component.html' })
+@Component({ selector: 'app-basic-table-two', standalone: true, imports: [LocalizePipe, MatPaginatorModule, MatTableModule, MatSortModule, BadgeComponent], templateUrl: './basic-table-two.component.html' })
 export class BasicTableTwoComponent implements AfterViewInit {
   @Input() title = '';
   @Input() dataSource = new MatTableDataSource<TableRow>();

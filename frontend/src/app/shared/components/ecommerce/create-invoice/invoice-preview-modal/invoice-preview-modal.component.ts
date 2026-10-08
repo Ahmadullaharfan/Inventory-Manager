@@ -1,10 +1,11 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 import { Component } from '@angular/core';
 import { ButtonComponent } from '../../../ui/button/button.component';
 import { ModalComponent } from '../../../ui/modal/modal.component';
 
 @Component({
   selector: 'app-invoice-preview-modal',
-  imports: [
+  imports: [LocalizePipe,
     ButtonComponent,
     ModalComponent,
   ],

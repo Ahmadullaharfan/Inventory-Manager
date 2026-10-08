@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../shared/pipe/localize.pipe';
 import { Component } from '@angular/core';
 import { PageBreadcrumbComponent } from '../../shared/components/common/page-breadcrumb/page-breadcrumb.component';
 import { InvoiceSidebarComponent } from '../../shared/components/invoice/invoice-sidebar/invoice-sidebar.component';
@@ -5,7 +6,7 @@ import { InvoiceMainComponent } from '../../shared/components/invoice/invoice-ma
 
 @Component({
   selector: 'app-invoices',
-  imports: [
+  imports: [LocalizePipe,
     PageBreadcrumbComponent,
     InvoiceSidebarComponent,
     InvoiceMainComponent

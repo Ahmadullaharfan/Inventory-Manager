@@ -1,5 +1,7 @@
+import { LocalizationService } from '../../../services/localization.service';
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { computed, inject, AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import flatpickr from 'flatpickr';
 import { Instance } from 'flatpickr/dist/types/instance';
 import { NgApexchartsModule } from 'ng-apexcharts';
@@ -21,10 +23,13 @@ import { ChartTabComponent } from '../../common/chart-tab/chart-tab.component';
 
 @Component({
   selector: 'app-statics-chart',
-  imports: [NgApexchartsModule, ChartTabComponent],
+  imports: [LocalizePipe, NgApexchartsModule, ChartTabComponent],
   templateUrl: './statics-chart.component.html',
 })
 export class StatisticsChartComponent implements AfterViewInit {
+  readonly localizedSeries = computed(() => this.series.map(series => ({ ...series, name: this.localization.text(series.name) })));
+  readonly localizedXAxis = computed(() => ({ ...this.xaxis, categories: (this.xaxis.categories ?? []).map((label: string | number | (string | number)[]) => Array.isArray(label) ? label.map(value => typeof value === 'string' ? this.localization.text(value) : value) : typeof label === 'string' ? this.localization.text(label) : label) as ApexXAxis['categories'] }));
+  readonly localization = inject(LocalizationService);
   @ViewChild('datepicker') datepicker!: ElementRef<HTMLInputElement>;
 
   ngAfterViewInit() {

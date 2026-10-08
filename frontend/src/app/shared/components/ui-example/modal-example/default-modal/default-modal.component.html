@@ -21,10 +21,10 @@
       </p>
       <div class="flex items-center justify-end w-full gap-3 mt-8">
         <app-button size="sm" variant="outline" (btnClick)="closeModal()">
-          Close
+          {{ 'Close' | localize }}
         </app-button>
         <app-button size="sm" (btnClick)="handleSave()">
-          Save Changes
+          {{ 'Save Changes' | localize }}
         </app-button>
       </div>
     </app-modal>

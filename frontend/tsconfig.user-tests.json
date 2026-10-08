@@ -3,6 +3,7 @@
   "include": [
     "src/app/pages/user/**/*.spec.ts",
     "src/app/shared/services/auth*.spec.ts",
+    "src/app/shared/services/localization*.spec.ts",
     "src/app/shared/components/tables/basic-tables/basic-table-two/*.spec.ts",
     "src/**/*.d.ts"
   ]

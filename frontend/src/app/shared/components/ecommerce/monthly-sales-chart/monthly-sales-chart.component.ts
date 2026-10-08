@@ -1,5 +1,7 @@
+import { LocalizationService } from '../../../services/localization.service';
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 
-import { Component } from '@angular/core';
+import { computed, inject, Component } from '@angular/core';
 import { NgApexchartsModule, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexPlotOptions, ApexDataLabels, ApexStroke, ApexLegend, ApexYAxis, ApexGrid, ApexFill, ApexTooltip } from 'ng-apexcharts';
 import { DropdownComponent } from '../../ui/dropdown/dropdown.component';
 import { DropdownItemComponent } from '../../ui/dropdown/dropdown-item/dropdown-item.component';
@@ -7,7 +9,7 @@ import { DropdownItemComponent } from '../../ui/dropdown/dropdown-item/dropdown-
 @Component({
   selector: 'app-monthly-sales-chart',
   standalone: true,
-  imports: [
+  imports: [LocalizePipe,
     NgApexchartsModule,
     DropdownComponent,
     DropdownItemComponent
@@ -15,6 +17,9 @@ import { DropdownItemComponent } from '../../ui/dropdown/dropdown-item/dropdown-
   templateUrl: './monthly-sales-chart.component.html'
 })
 export class MonthlySalesChartComponent {
+  readonly localizedSeries = computed(() => this.series.map(series => ({ ...series, name: this.localization.text(series.name) })));
+  readonly localizedXAxis = computed(() => ({ ...this.xaxis, categories: (this.xaxis.categories ?? []).map((label: string | number | (string | number)[]) => Array.isArray(label) ? label.map(value => typeof value === 'string' ? this.localization.text(value) : value) : typeof label === 'string' ? this.localization.text(label) : label) as ApexXAxis['categories'] }));
+  readonly localization = inject(LocalizationService);
   public series: ApexAxisChartSeries = [
     {
       name: 'Sales',

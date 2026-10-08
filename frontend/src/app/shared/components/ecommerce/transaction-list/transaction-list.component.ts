@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -22,7 +23,7 @@ interface SortState {
 
 @Component({
   selector: 'app-transaction-list',
-  imports: [
+  imports: [LocalizePipe,
     CommonModule,
     RouterModule,
     TableDropdownComponent,

@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { InputFieldComponent } from '../../../form/input/input-field.component';
@@ -24,7 +25,7 @@ interface FormData {
 
 @Component({
   selector: 'app-create-invoice-table',
-  imports: [
+  imports: [LocalizePipe,
     CommonModule,
     InputFieldComponent,
     LabelComponent,

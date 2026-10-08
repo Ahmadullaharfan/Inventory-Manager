@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../shared/pipe/localize.pipe';
 import { Component } from '@angular/core';
 import { AvatarComponent } from '../../../shared/components/ui/avatar/avatar.component';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
@@ -5,7 +6,7 @@ import { PageBreadcrumbComponent } from '../../../shared/components/common/page-
 
 @Component({
   selector: 'app-avatar-element',
-  imports: [
+  imports: [LocalizePipe,
     AvatarComponent,
     ComponentCardComponent,
     PageBreadcrumbComponent

@@ -1,6 +1,7 @@
+import { LocalizePipe } from '../../../../shared/pipe/localize.pipe';
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router'; 
+import { Router } from '@angular/router';
 import { ProductCategoryService } from '../services/product-category.service';
 import { ProductCategory } from '../models/product-category.model';
 import { DataTableComponent } from '../../../shared/components/data-table/data-table.component';
@@ -9,7 +10,7 @@ import type { ColumnConfig } from '../../../shared/components/data-table/data-ta
 
 @Component({
     selector: 'app-product-catagory',
-    imports: [CommonModule, DataTableComponent],
+    imports: [LocalizePipe, CommonModule, DataTableComponent],
     standalone: true,
     templateUrl: './product-catagory.html',
     styleUrls: ['./product-catagory.css']
@@ -17,9 +18,9 @@ import type { ColumnConfig } from '../../../shared/components/data-table/data-ta
 export class ProductCategoryListComponent implements OnInit {
   productCategoryService = inject(ProductCategoryService);
   router = inject(Router);
-  
+
   @ViewChild(DataTableComponent) dataTable!: DataTableComponent;
-  
+
   productCategory: ProductCategory[] = [];
   isLoading = true;
 
@@ -29,7 +30,7 @@ export class ProductCategoryListComponent implements OnInit {
   //   { key: 'description', label: 'Description' },
   //   { key: 'actions', label: 'Actions' }
   // ];
-  
+
   ngOnInit() {
   }
 
@@ -51,7 +52,7 @@ export class ProductCategoryListComponent implements OnInit {
   //     }
   //   });
   // }
-  
+
   // onRowEdit(category: ProductCategory){
   //   this.router.navigate(['/productCategories/edit', category.id]);
   // }

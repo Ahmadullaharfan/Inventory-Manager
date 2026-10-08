@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../pipe/localize.pipe';
 import {
   Component,
   EventEmitter,
@@ -12,7 +13,7 @@ import type { ColumnConfig } from './data-table.types';
 @Component({
   selector: 'app-data-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [LocalizePipe, CommonModule],
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss'],
 })

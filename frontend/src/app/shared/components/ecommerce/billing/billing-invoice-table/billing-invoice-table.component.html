@@ -3,16 +3,16 @@
   <div class="flex flex-col justify-between gap-5 py-4 sm:flex-row sm:items-center">
     <div>
       <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
-        Invoices
+        {{ 'Invoices' | localize }}
       </h3>
       <p class="text-sm text-gray-500 dark:text-gray-400">
-        Access all your previous invoices.
+        {{ 'Access all your previous invoices.' | localize }}
       </p>
     </div>
     <div>
       <button (click)="onDownloadAll()" type="button" class="shadow-theme-xs flex w-full justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
         <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none"><path d="M17.1661 13.333V15.4163C17.1661 16.1067 16.6064 16.6663 15.9161 16.6663H5.08203C4.39168 16.6663 3.83203 16.1067 3.83203 15.4163V13.333M10.5004 13.333L10.5005 3.33301M6.64456 9.47918L10.4986 13.3308L14.3529 9.47918" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-        Download All
+        {{ 'Download All' | localize }}
       </button>
     </div>
   </div>
@@ -25,32 +25,32 @@
           <th
             class="px-6 py-3 text-left text-sm font-normal text-gray-500 first:pl-0 dark:text-gray-400"
           >
-            Name
+            {{ 'Name' | localize }}
           </th>
           <th
             class="px-6 py-3 text-left text-sm font-normal text-gray-500 dark:text-gray-400"
           >
-            Date
+            {{ 'Date' | localize }}
           </th>
           <th
             class="px-6 py-3 text-left text-sm font-normal text-gray-500 dark:text-gray-400"
           >
-            Price
+            {{ 'Price' | localize }}
           </th>
           <th
             class="px-6 py-3 text-left text-sm font-normal text-gray-500 dark:text-gray-400"
           >
-            Plan
+            {{ 'Plan' | localize }}
           </th>
           <th
             class="px-6 py-3 text-left text-sm font-normal text-gray-500 dark:text-gray-400"
           >
-            Status
+            {{ 'Status' | localize }}
           </th>
           <th
             class="px-6 py-3 text-right text-sm font-normal text-gray-500 dark:text-gray-400"
           >
-            Action
+            {{ 'Action' | localize }}
           </th>
         </tr>
       </thead>
@@ -130,7 +130,7 @@
                   invoice.status === 'Unpaid'
               }"
             >
-              {{ invoice.status }}
+              {{ invoice.status | localize }}
             </span>
           </td>
           <td class="px-6 py-3">
@@ -153,9 +153,9 @@
       <div
         class="block pb-4 text-sm text-gray-700 sm:hidden dark:text-gray-400"
       >
-        Showing <span>{{ startItem }}</span> to
-        <span>{{ endItem }}</span> of <span>{{ totalInvoices }}</span>
-        invoices
+        {{ 'Showing' | localize }} <span>{{ startItem }}</span> {{ 'to' | localize }}
+        <span>{{ endItem }}</span> {{ 'of' | localize }} <span>{{ totalInvoices }}</span>
+        {{ 'invoices' | localize }}
       </div>
     </div>
     <div
@@ -172,12 +172,12 @@
         (btnClick)="previousPage()"
       >
       <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"> <path fill-rule="evenodd" clip-rule="evenodd" d="M2.58203 9.99868C2.58174 10.1909 2.6549 10.3833 2.80152 10.53L7.79818 15.5301C8.09097 15.8231 8.56584 15.8233 8.85883 15.5305C9.15183 15.2377 9.152 14.7629 8.85921 14.4699L5.13911 10.7472L16.6665 10.7472C17.0807 10.7472 17.4165 10.4114 17.4165 9.99715C17.4165 9.58294 17.0807 9.24715 16.6665 9.24715L5.14456 9.24715L8.85919 5.53016C9.15199 5.23717 9.15184 4.7623 8.85885 4.4695C8.56587 4.1767 8.09099 4.17685 7.79819 4.46984L2.84069 9.43049C2.68224 9.568 2.58203 9.77087 2.58203 9.99715C2.58203 9.99766 2.58203 9.99817 2.58203 9.99868Z"/> </svg>
-        <span class="hidden sm:inline">Previous</span>
+        <span class="hidden sm:inline">{{ 'Previous' | localize }}</span>
       </button>
       <span
         class="block text-sm font-medium text-gray-700 sm:hidden dark:text-gray-400"
       >
-        Page {{ currentPage }} of {{ totalPages }}
+        {{ 'Page' | localize }} {{ currentPage }} {{ 'of' | localize }} {{ totalPages }}
       </span>
       <ul class="hidden items-center gap-0.5 sm:flex">
         @for (page of visiblePages(); track page) {
@@ -207,7 +207,7 @@
         [disabled]="currentPage === totalPages"
         (btnClick)="nextPage()"
       >
-        <span class="hidden sm:inline">Next</span>
+        <span class="hidden sm:inline">{{ 'Next' | localize }}</span>
         <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none">
           <path
             fill-rule="evenodd"

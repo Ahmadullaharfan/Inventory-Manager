@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 import { Component } from '@angular/core';
 import { TextAreaComponent } from '../../input/text-area.component';
 
@@ -6,7 +7,7 @@ import { ComponentCardComponent } from '../../../common/component-card/component
 
 @Component({
   selector: 'app-text-area-input',
-  imports: [
+  imports: [LocalizePipe,
     TextAreaComponent,
     LabelComponent,
     ComponentCardComponent

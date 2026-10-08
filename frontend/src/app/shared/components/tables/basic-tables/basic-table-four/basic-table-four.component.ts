@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 
 import { Component } from '@angular/core';
 import { BadgeComponent } from '../../../ui/badge/badge.component';
@@ -5,7 +6,7 @@ import { TableDropdownComponent } from '../../../common/table-dropdown/table-dro
 
 @Component({
   selector: 'app-basic-table-four',
-  imports: [
+  imports: [LocalizePipe,
     BadgeComponent,
     TableDropdownComponent
 ],

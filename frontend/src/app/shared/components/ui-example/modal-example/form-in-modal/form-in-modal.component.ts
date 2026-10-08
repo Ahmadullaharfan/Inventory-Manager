@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ModalComponent } from '../../../ui/modal/modal.component';
@@ -8,7 +9,7 @@ import { InputFieldComponent } from '../../../form/input/input-field.component';
 
 @Component({
   selector: 'app-form-in-modal',
-  imports: [
+  imports: [LocalizePipe,
     CommonModule,
     ModalComponent,
     ComponentCardComponent,

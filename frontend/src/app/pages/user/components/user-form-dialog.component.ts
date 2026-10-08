@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../shared/pipe/localize.pipe';
 import { Component, inject, Inject, OnDestroy, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -7,7 +8,7 @@ import { ButtonComponent } from '../../../shared/components/ui/button/button.com
 import { AuthService } from '../../../shared/services/auth.service';
 import { UserService, apiError } from '../service/user.service';
 import { defaultPreferences, User, UserRole, userRoleDetails } from '../module/user.module';
-@Component({ selector: 'app-user-form-dialog', standalone: true, imports: [ReactiveFormsModule, MatDialogModule, InputFieldComponent, SelectComponent, ButtonComponent], templateUrl: './user-form-dialog.component.html' })
+@Component({ selector: 'app-user-form-dialog', standalone: true, imports: [LocalizePipe, ReactiveFormsModule, MatDialogModule, InputFieldComponent, SelectComponent, ButtonComponent], templateUrl: './user-form-dialog.component.html' })
 export class UserFormDialogComponent implements OnDestroy {
   readonly auth = inject(AuthService);
   private users = inject(UserService);

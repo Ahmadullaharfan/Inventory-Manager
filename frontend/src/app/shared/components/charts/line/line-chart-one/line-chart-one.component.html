@@ -1,7 +1,7 @@
 <div class="max-w-full overflow-x-auto custom-scrollbar">
   <div id="chartEight" class="min-w-[1000px] 2xl:min-w-full">
     <apx-chart
-      [series]="series"
+      [series]="localizedSeries()"
       [chart]="chart"
       [colors]="colors"
       [stroke]="stroke"
@@ -10,7 +10,7 @@
       [grid]="grid"
       [dataLabels]="dataLabels"
       [tooltip]="tooltip"
-      [xaxis]="xaxis"
+      [xaxis]="localizedXAxis()"
       [yaxis]="yaxis"
       [legend]="legend"
     ></apx-chart>

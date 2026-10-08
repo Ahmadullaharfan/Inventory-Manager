@@ -5,13 +5,13 @@
       <table class="min-w-full text-left text-sm text-gray-700 dark:border-gray-800">
         <thead class="bg-gray-50 dark:bg-gray-900">
           <tr class="border-b border-gray-100 whitespace-nowrap dark:border-gray-800">
-            <th class="px-5 py-4 text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-400">S. No.</th>
-            <th class="px-5 py-4 text-sm font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Products</th>
-            <th class="px-5 py-4 text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-400">Quantity</th>
-            <th class="px-5 py-4 text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-400">Unit Cost</th>
-            <th class="px-5 py-4 text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-400">Discount</th>
-            <th class="px-5 py-4 text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-400">Total</th>
-            <th class="px-5 py-4 text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-400"><span class="sr-only">Actions</span></th>
+            <th class="px-5 py-4 text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-400">{{ 'S. No.' | localize }}</th>
+            <th class="px-5 py-4 text-sm font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">{{ 'Products' | localize }}</th>
+            <th class="px-5 py-4 text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-400">{{ 'Quantity' | localize }}</th>
+            <th class="px-5 py-4 text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-400">{{ 'Unit Cost' | localize }}</th>
+            <th class="px-5 py-4 text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-400">{{ 'Discount' | localize }}</th>
+            <th class="px-5 py-4 text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-400">{{ 'Total' | localize }}</th>
+            <th class="px-5 py-4 text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-400"><span class="sr-only">{{ 'Actions' | localize }}</span></th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100 bg-white dark:divide-gray-800 dark:bg-white/[0.03]">
@@ -34,7 +34,7 @@
       </table>
       @if (products.length === 0) {
         <div class="px-5 py-4 text-center text-gray-400">
-          No products added.
+          {{ 'No products added.' | localize }}
         </div>
       }
     </div>
@@ -45,25 +45,25 @@
     <form (ngSubmit)="handleSubmit($event)">
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-12">
         <div class="w-full lg:col-span-3">
-          <app-label>Product Name</app-label>
+          <app-label>{{ 'Product Name' | localize }}</app-label>
           <app-input-field
             name="name"
             [(value)]="form.name"
-            placeholder="Enter product name"
+            [placeholder]="'Enter product name' | localize"
           />
         </div>
         <div class="w-full lg:col-span-3">
-          <app-label>Price</app-label>
+          <app-label>{{ 'Price' | localize }}</app-label>
           <app-input-field
             type="number"
             name="price"
             [(value)]="form.price"
             min="0"
-            placeholder="Enter product price"
+            [placeholder]="'Enter product price' | localize"
           />
         </div>
         <div class="w-full lg:col-span-2">
-          <app-label>Quantity</app-label>
+          <app-label>{{ 'Quantity' | localize }}</app-label>
           <div class="flex h-11 divide-x divide-gray-300 overflow-hidden rounded-lg border border-gray-300 dark:divide-gray-800 dark:border-gray-700">
             <button
               type="button"
@@ -119,7 +119,7 @@
           </div>
         </div>
         <div class="w-full lg:col-span-2">
-          <app-label>Discount</app-label>
+          <app-label>{{ 'Discount' | localize }}</app-label>
 
           <div class="relative">
             <select
@@ -151,11 +151,11 @@
           </div>
         </div>
         <div class="flex w-full items-end lg:col-span-2">
-          <button class="inline-flex items-center justify-center gap-2 rounded-lg transition w-full h-11 px-5 py-3.5 text-sm bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300 ">Save Product</button>
+          <button class="inline-flex items-center justify-center gap-2 rounded-lg transition w-full h-11 px-5 py-3.5 text-sm bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300 ">{{ 'Save Product' | localize }}</button>
         </div>
       </div>
     </form>
-    
+
     <div class="mt-5 flex max-w-2xl items-center gap-2">
       <svg class="text-gray-500 dark:text-gray-400" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 7.22485H10.0007" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path><path d="M10.0004 9.34575V12.8661M17.7087 10.0001C17.7087 14.2573 14.2575 17.7084 10.0003 17.7084C5.74313 17.7084 2.29199 14.2573 2.29199 10.0001C2.29199 5.74289 5.74313 2.29175 10.0003 2.29175C14.2575 2.29175 17.7087 5.74289 17.7087 10.0001Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
 
@@ -167,12 +167,12 @@
   <div class="flex flex-wrap justify-between sm:justify-end">
     <div class="w-full space-y-1 text-right sm:w-[220px]">
       <p class="mb-4 text-left text-sm font-medium text-gray-800 dark:text-white/90">
-        Order summary
+        {{ 'Order summary' | localize }}
       </p>
       <ul class="space-y-2">
         <li class="flex justify-between gap-5">
           <span class="text-sm text-gray-500 dark:text-gray-400">
-            Sub Total
+            {{ 'Sub Total' | localize }}
           </span>
           <span class="text-sm font-medium text-gray-700 dark:text-gray-400">
             ${{subtotal.toFixed(2)}}
@@ -180,7 +180,7 @@
         </li>
         <li class="flex items-center justify-between">
           <span class="text-sm text-gray-500 dark:text-gray-400">
-            Vat (10%):
+            {{ 'Vat (10%):' | localize }}
           </span>
           <span class="text-sm font-medium text-gray-700 dark:text-gray-400">
             ${{vat.toFixed(2)}}
@@ -188,7 +188,7 @@
         </li>
         <li class="flex items-center justify-between">
           <span class="font-medium text-gray-700 dark:text-gray-400">
-            Total
+            {{ 'Total' | localize }}
           </span>
           <span class="text-lg font-semibold text-gray-800 dark:text-white/90">
             ${{total.toFixed(2)}}

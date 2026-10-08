@@ -1,6 +1,7 @@
 <div class="relative p-6 bg-white z-1 dark:bg-gray-900 sm:p-0">
+  <div class="flex justify-end px-6 py-4"><app-language-selector /></div>
   <div
-    class="relative flex flex-col justify-center w-full h-screen lg:flex-row dark:bg-gray-900 sm:p-0"
+    class="relative flex flex-col justify-center w-full min-h-[calc(100vh-76px)] lg:flex-row dark:bg-gray-900 sm:p-0"
   >
     <ng-content></ng-content>
     <div
@@ -19,7 +20,7 @@
             />
           </a>
           <p class="text-center text-gray-400 dark:text-white/60">
-            Free and Open-Source Tailwind CSS Admin Dashboard Template
+            {{ 'Free and Open-Source Tailwind CSS Admin Dashboard Template' | localize }}
           </p>
         </div>
       </div>

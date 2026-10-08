@@ -62,7 +62,7 @@ class StoreUserRequest extends FormRequest
             if (is_array($addresses) && count($addresses) > 0) {
                 $primary = collect($addresses)->filter(fn ($address) => is_array($address) && in_array($address['is_primary'] ?? false, [true, 1, '1'], true))->count();
                 if ($primary !== 1) {
-                    $validator->errors()->add('addresses', 'Choose exactly one primary address.');
+                    $validator->errors()->add('addresses', __('Choose exactly one primary address.'));
                 }
             }
         }];

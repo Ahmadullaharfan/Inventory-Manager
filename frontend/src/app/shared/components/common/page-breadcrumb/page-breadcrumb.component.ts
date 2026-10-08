@@ -1,9 +1,10 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-page-breadcrumb',
-  imports: [
+  imports: [LocalizePipe,
     RouterModule,
   ],
   templateUrl: './page-breadcrumb.component.html',

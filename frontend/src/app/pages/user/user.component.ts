@@ -1,3 +1,5 @@
+import { LocalizationService } from '../../shared/services/localization.service';
+import { LocalizePipe } from '../../shared/pipe/localize.pipe';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,8 +16,9 @@ import { AuthService } from '../../shared/services/auth.service';
 import { UserService, apiError } from './service/user.service';
 import { User } from './module/user.module';
 import { UserFormDialogComponent } from './components/user-form-dialog.component';
-@Component({ selector: 'app-user', standalone: true, imports: [PageBreadcrumbComponent, ComponentCardComponent, BasicTableTwoComponent, InputFieldComponent, SelectComponent, ButtonComponent], templateUrl: './user.component.html', styleUrl: './user.component.css' })
+@Component({ selector: 'app-user', standalone: true, imports: [LocalizePipe, PageBreadcrumbComponent, ComponentCardComponent, BasicTableTwoComponent, InputFieldComponent, SelectComponent, ButtonComponent], templateUrl: './user.component.html', styleUrl: './user.component.css' })
 export class UserComponent {
+  readonly localization = inject(LocalizationService);
   readonly auth = inject(AuthService);
   private users = inject(UserService);
   private dialog = inject(MatDialog);
@@ -40,24 +43,24 @@ export class UserComponent {
   constructor() {
     effect(() => {
       const query = this.search().trim().toLowerCase();
-      this.dataSource.data = this.usersResource.value().filter(user => (!this.role() || user.role === this.role()) && (!this.status() || user.status === this.status()) && [user.id, user.first_name, user.last_name, user.email, user.phone_number].join(' ').toLowerCase().includes(query)).map(user => ({ ...user, display_id: 'USR-' + user.id, full_name: user.first_name + ' ' + user.last_name, last_login_label: user.last_login_at ? new Date(user.last_login_at).toLocaleString() : 'Never' }));
+      this.dataSource.data = this.usersResource.value().filter(user => (!this.role() || user.role === this.role()) && (!this.status() || user.status === this.status()) && [user.id, user.first_name, user.last_name, user.email, user.phone_number].join(' ').toLowerCase().includes(query)).map(user => ({ ...user, display_id: 'USR-' + user.id, full_name: user.first_name + ' ' + user.last_name, last_login_label: user.last_login_at ? this.localization.date(user.last_login_at) : this.localization.text('Never') }));
       this.dataSource.paginator?.firstPage();
     });
   }
   reload() { this.users.reloadUsers(); }
   handleAddUser() { this.openForm(); }
   onViewUser(user: User) { void this.router.navigate(['/users', user.id]); }
-  onEditUser(user: User) { this.users.get(user.id).subscribe({ next: detail => this.openForm(detail), error: error => this.notify(apiError(error)) }); }
+  onEditUser(user: User) { this.users.get(user.id).subscribe({ next: detail => this.openForm(detail), error: error => this.notify(apiError(error, this.localization)) }); }
   private openForm(user?: User) {
     this.dialog.open(UserFormDialogComponent, { width: '760px', maxWidth: '95vw', disableClose: true, data: { user } }).afterClosed().subscribe((saved?: User) => { if (saved) { this.auth.updateCurrent(saved); this.reload(); this.notify(user ? 'User updated.' : 'User created.'); } });
   }
   onDeleteUser(user: User) {
     if (!this.canDelete(user)) return;
-    this.dialog.open(ConfirmDialogComponent, { width: '420px', data: { title: 'Delete user', message: 'Delete ' + user.first_name + ' ' + user.last_name + '? Their sessions will be revoked.', confirmText: 'Delete', confirmColor: 'warn' } }).afterClosed().subscribe(confirmed => {
+    this.dialog.open(ConfirmDialogComponent, { width: '420px', data: { title: 'Delete user', message: this.localization.text('Delete {name}? Their sessions will be revoked.', { name: user.first_name + ' ' + user.last_name }), confirmText: 'Delete', confirmColor: 'warn' } }).afterClosed().subscribe(confirmed => {
       if (!confirmed) return;
       this.deleting.set(true);
-      this.users.delete(user.id).subscribe({ next: () => { this.deleting.set(false); this.reload(); this.notify('User deleted.'); }, error: error => { this.deleting.set(false); this.notify(apiError(error)); } });
+      this.users.delete(user.id).subscribe({ next: () => { this.deleting.set(false); this.reload(); this.notify('User deleted.'); }, error: error => { this.deleting.set(false); this.notify(apiError(error, this.localization)); } });
     });
   }
-  private notify(message: string) { this.snack.open(message, 'Close', { duration: 5000 }); }
+  private notify(message: string) { this.snack.open(this.localization.text(message), this.localization.text('Close'), { duration: 5000 }); }
 }

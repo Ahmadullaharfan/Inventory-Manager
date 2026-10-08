@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 
 import { Component } from '@angular/core';
 import { ComponentCardComponent } from '../../../common/component-card/component-card.component';
@@ -6,7 +7,7 @@ import { LabelComponent } from '../../label/label.component';
 
 @Component({
   selector: 'app-input-states',
-  imports: [
+  imports: [LocalizePipe,
     ComponentCardComponent,
     InputFieldComponent,
     LabelComponent
@@ -30,7 +31,7 @@ export class InputStatesComponent {
     this.email = value.toString();
     this.validateEmail(this.email);
   }
-  
+
   handleEmailTwoChange(value: string | number) {
     this.emailTwo = value.toString();
     this.validateEmail(this.emailTwo);

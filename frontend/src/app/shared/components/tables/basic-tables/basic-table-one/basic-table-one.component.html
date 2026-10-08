@@ -4,11 +4,11 @@
       <!-- Table Header -->
       <thead class="border-b border-gray-100 dark:border-white/[0.05]">
         <tr>
-          <th class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">User</th>
+          <th class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{{ 'User' | localize }}</th>
           <th class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Project Name</th>
           <th class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Team</th>
-          <th class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Status</th>
-          <th class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Budget</th>
+          <th class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{{ 'Status' | localize }}</th>
+          <th class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{{ 'Budget' | localize }}</th>
         </tr>
       </thead>
       <!-- Table Body -->
@@ -30,7 +30,7 @@
                   {{ order.user.name }}
                 </span>
                 <span class="block text-gray-500 text-theme-xs dark:text-gray-400">
-                  {{ order.user.role }}
+                  {{ order.user.role | localize }}
                 </span>
               </div>
             </div>
@@ -58,7 +58,7 @@
               size="sm"
               [color]="getBadgeColor(order.status)"
             >
-              {{ order.status }}
+              {{ order.status | localize }}
             </app-badge>
           </td>
           <td class="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">

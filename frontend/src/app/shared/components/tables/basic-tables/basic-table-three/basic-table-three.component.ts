@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ButtonComponent } from '../../../ui/button/button.component';
@@ -15,7 +16,7 @@ interface Transaction {
 
 @Component({
   selector: 'app-basic-table-three',
-  imports: [
+  imports: [LocalizePipe,
     CommonModule,
     ButtonComponent,
     TableDropdownComponent,

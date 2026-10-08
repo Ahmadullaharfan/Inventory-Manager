@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../../shared/pipe/localize.pipe';
 import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -18,7 +19,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-product-form',
   standalone: true,
-  imports: [
+  imports: [LocalizePipe,
     CommonModule,
     ReactiveFormsModule,
     InputComponent,

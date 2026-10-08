@@ -1,16 +1,17 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-input-field',
-  imports: [CommonModule],
+  imports: [LocalizePipe, CommonModule],
   template: `
     <div class="relative">
       <input
         [type]="type"
         [id]="id"
         [name]="name"
-        [placeholder]="placeholder"
+        [placeholder]="placeholder | localize"
         [value]="value"
         [min]="min"
         [max]="max"
@@ -27,7 +28,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
           'text-success-500': success,
           'text-gray-500': !error && !success
         }">
-        {{ hint }}
+        {{ hint | localize }}
       </p>
       }
     </div>

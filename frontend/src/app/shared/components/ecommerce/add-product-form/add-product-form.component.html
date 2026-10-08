@@ -3,50 +3,50 @@
       <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
           <h2 class="text-lg font-medium text-gray-800 dark:text-white">
-            Products Description
+            {{ 'Products Description' | localize }}
           </h2>
         </div>
         <div class="p-4 sm:p-6 dark:border-gray-800">
           <form>
             <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
               <div>
-                <app-label for="product-name">Product Name</app-label>
+                <app-label for="product-name">{{ 'Product Name' | localize }}</app-label>
                 <app-input-field
                   id="product-name"
-                  placeholder="Enter product name"
+                  [placeholder]="'Enter product name' | localize"
                 ></app-input-field>
               </div>
               <div>
-                <app-label for="category">Category</app-label>
+                <app-label for="category">{{ 'Category' | localize }}</app-label>
                 <app-select
                   id="category"
                   [options]="categories"
-                  placeholder="Select a category"
+                  [placeholder]="'Select a category' | localize"
                   (valueChange)="handleSelectChange($event)"
                 ></app-select>
               </div>
               <div>
-                <app-label for="brand">Brand</app-label>
+                <app-label for="brand">{{ 'Brand' | localize }}</app-label>
                 <app-select
                   id="brand"
                   [options]="brands"
-                  placeholder="Select brand"
+                  [placeholder]="'Select brand' | localize"
                   (valueChange)="handleSelectChange($event)"
                 ></app-select>
               </div>
               <div>
-                <app-label for="color">Color</app-label>
+                <app-label for="color">{{ 'Color' | localize }}</app-label>
                 <app-select
                   id="color"
                   [options]="colors"
-                  placeholder="Select color"
+                  [placeholder]="'Select color' | localize"
                   (valueChange)="handleSelectChange($event)"
                 ></app-select>
               </div>
               <div class="col-span-full">
                 <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
                   <div>
-                    <app-label for="weight">Weight(KG)</app-label>
+                    <app-label for="weight">{{ 'Weight(KG)' | localize }}</app-label>
                     <app-input-field
                       id="weight"
                       type="number"
@@ -54,7 +54,7 @@
                     ></app-input-field>
                   </div>
                   <div>
-                    <app-label for="length">Length(CM)</app-label>
+                    <app-label for="length">{{ 'Length(CM)' | localize }}</app-label>
                     <app-input-field
                       id="length"
                       type="number"
@@ -62,7 +62,7 @@
                     ></app-input-field>
                   </div>
                   <div>
-                    <app-label for="width">Width(CM)</app-label>
+                    <app-label for="width">{{ 'Width(CM)' | localize }}</app-label>
                     <app-input-field
                       id="width"
                       type="number"
@@ -70,11 +70,11 @@
                     ></app-input-field>
                   </div>
                   <div class="col-span-full">
-                    <app-label for="description">Description</app-label>
+                    <app-label for="description">{{ 'Description' | localize }}</app-label>
                     <app-text-area
                       id="description"
                       [rows]="6"
-                      placeholder="Receipt Info (optional)"
+                      [placeholder]="'Receipt Info (optional)' | localize"
                     ></app-text-area>
                   </div>
                 </div>
@@ -88,13 +88,13 @@
       <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
           <h2 class="text-lg font-medium text-gray-800 dark:text-white">
-            Pricing & Availability
+            {{ 'Pricing & Availability' | localize }}
           </h2>
         </div>
         <div class="space-y-5 p-4 sm:p-6">
           <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
             <div>
-              <app-label for="price">Price</app-label>
+              <app-label for="price">{{ 'Price' | localize }}</app-label>
               <app-input-field
                 id="price"
                 type="number"
@@ -102,7 +102,7 @@
               ></app-input-field>
             </div>
             <div>
-              <app-label for="length2">Length(CM)</app-label>
+              <app-label for="length2">{{ 'Length(CM)' | localize }}</app-label>
               <app-input-field
                 id="length2"
                 type="number"
@@ -110,7 +110,7 @@
               ></app-input-field>
             </div>
             <div>
-              <app-label for="width2">Width(CM)</app-label>
+              <app-label for="width2">{{ 'Width(CM)' | localize }}</app-label>
               <app-input-field
                 id="width2"
                 type="number"
@@ -123,7 +123,7 @@
               <label
                 class="mb-1 inline-block text-sm font-semibold text-gray-700 dark:text-gray-400"
               >
-                Stock Quantity
+                {{ 'Stock Quantity' | localize }}
               </label>
               <div
                 class="flex h-11 divide-x divide-gray-300 overflow-hidden rounded-lg border border-gray-300 dark:divide-gray-800 dark:border-gray-700"
@@ -179,11 +179,11 @@
               </div>
             </div>
             <div>
-              <app-label for="availability">Availability Status</app-label>
+              <app-label for="availability">{{ 'Availability Status' | localize }}</app-label>
               <app-select
                 id="availability"
                 [options]="availability"
-                placeholder="Select a Availability"
+                [placeholder]="'Select a Availability' | localize"
                 (valueChange)="handleSelectChange($event)"
               ></app-select>
             </div>
@@ -195,7 +195,7 @@
       <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
           <h2 class="text-lg font-medium text-gray-800 dark:text-white">
-            Products Images
+            {{ 'Products Images' | localize }}
           </h2>
         </div>
         <div class="p-4 sm:p-6">
@@ -239,7 +239,7 @@
 
       <!-- Action Buttons -->
       <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
-        <app-button variant="outline" (btnClick)="onDraft()">Draft</app-button>
-        <app-button variant="primary" (btnClick)="onPublish()">Publish Product</app-button>
+        <app-button variant="outline" (btnClick)="onDraft()">{{ 'Draft' | localize }}</app-button>
+        <app-button variant="primary" (btnClick)="onPublish()">{{ 'Publish Product' | localize }}</app-button>
       </div>
     </div>

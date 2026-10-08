@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 
 import { Component } from '@angular/core';
 import { LabelComponent } from '../../label/label.component';
@@ -9,7 +10,7 @@ import { TimePickerComponent } from '../../time-picker/time-picker.component';
 
 @Component({
   selector: 'app-default-inputs',
-  imports: [
+  imports: [LocalizePipe,
     ComponentCardComponent,
     LabelComponent,
     InputFieldComponent,

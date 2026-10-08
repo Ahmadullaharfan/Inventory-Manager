@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -7,7 +8,7 @@ import { DropdownItemComponent } from '../../ui/dropdown/dropdown-item/dropdown-
 @Component({
   selector: 'app-notification-dropdown',
   templateUrl: './notification-dropdown.component.html',
-  imports:[CommonModule,RouterModule,DropdownComponent,DropdownItemComponent]
+  imports:[LocalizePipe, CommonModule,RouterModule,DropdownComponent,DropdownItemComponent]
 })
 export class NotificationDropdownComponent {
   isOpen = false;

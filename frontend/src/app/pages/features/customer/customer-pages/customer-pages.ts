@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../shared/pipe/localize.pipe';
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -7,7 +8,7 @@ import { CustomerService } from '../customer-services/customer.service';
 
 @Component({
     selector: 'app-customer-pages',
-    imports: [CommonModule, DataTableComponent],
+    imports: [LocalizePipe, CommonModule, DataTableComponent],
     templateUrl: './customer-pages.html',
     styleUrls: ['./customer-pages.css']
 })

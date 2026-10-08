@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../shared/pipe/localize.pipe';
 import { Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -17,7 +18,7 @@ export interface ProductRow extends Product {
 @Component({
   selector: 'app-index',
   standalone: true,
-  imports: [CommonModule, NgxDatatableModule],
+  imports: [LocalizePipe, CommonModule, NgxDatatableModule],
   templateUrl: './index.html',
   styleUrls: ['./index.css'],
 })

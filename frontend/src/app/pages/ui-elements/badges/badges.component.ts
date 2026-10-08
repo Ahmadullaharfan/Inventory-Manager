@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../shared/pipe/localize.pipe';
 import { Component } from '@angular/core';
 import { PageBreadcrumbComponent } from '../../../shared/components/common/page-breadcrumb/page-breadcrumb.component';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
@@ -5,7 +6,7 @@ import { BadgeComponent } from '../../../shared/components/ui/badge/badge.compon
 
 @Component({
   selector: 'app-badges',
-  imports: [
+  imports: [LocalizePipe,
     PageBreadcrumbComponent,
     ComponentCardComponent,
     BadgeComponent,

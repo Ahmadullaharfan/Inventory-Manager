@@ -1,19 +1,19 @@
 <div class="container mx-auto">
-  <h2 
+  <h2
     class="text-2xl text-gray-900 mb-6 flex justify-center items-center animate-field"
   >
-    {{ isEditMode ? 'Edit Supplier' : 'Add New Supplier' }}
+    {{ (isEditMode ? 'Edit Supplier' : 'Add New Supplier') | localize }}
   </h2>
-   
-  <form 
+
+  <form
     [formGroup]="supplierForm"
     (ngSubmit)="onSubmit()"
     class="space-y-4 max-w-lg max-h-full justify-center items-center mx-auto"
-  > 
+  >
     <div class="animate-field">
         <app-input
-            label="Name"
-            placeholder="Enter Supplier name"
+            [label]="'Name' | localize"
+            [placeholder]="'Enter Supplier name' | localize"
             formControlName="name"
       ></app-input>
 
@@ -26,7 +26,7 @@
                     <span>Name must be at least 3 characters</span>
                 }
                 @if (supplierForm.get('name')?.errors?.['serverError']) {
-                    <span>{{ supplierForm.get('name')?.errors?.['serverError'] }}</span>
+                    <span>{{ (supplierForm.get('name')?.errors?.['serverError']) | localize }}</span>
                 }
             </div>
         }
@@ -35,11 +35,11 @@
     <div class="animate-field">
       <app-input
         type="Name"
-        label="Contact Person"
-        placeholder="Enter Contact Person Name"
+        [label]="'Contact Person' | localize"
+        [placeholder]="'Enter Contact Person Name' | localize"
         formControlName="contact_person"
       ></app-input>
-      
+
       <!-- Remove [@errorMessage] binding -->
       @if (supplierForm.get('contact_person')?.errors && supplierForm.get('contact_person')?.touched) {
         <div class="text-red-500 text-sm font-medium mt-1">
@@ -58,11 +58,11 @@
 
     <div class="animate-field">
       <app-input
-        label="Phone"
-        placeholder="Enter supplier phone"
+        [label]="'Phone' | localize"
+        [placeholder]="'Enter supplier phone' | localize"
         formControlName="phone"
       ></app-input>
-      
+
       <!-- Remove [@errorMessage] binding -->
       @if (supplierForm.get('phone')?.errors && supplierForm.get('phone')?.touched) {
         <div class="text-red-500 text-sm font-medium mt-1">
@@ -73,7 +73,7 @@
             <span>Phone must be a valid phone number</span>
           }
           @if (supplierForm.get('phone')?.errors?.['serverError']) {
-            <span>{{ supplierForm.get('phone')?.errors?.['serverError'] }}</span>
+            <span>{{ (supplierForm.get('phone')?.errors?.['serverError']) | localize }}</span>
           }
         </div>
       }
@@ -82,11 +82,11 @@
     <div class="animate-field">
       <app-input
         type="email"
-        label="Email"
-        placeholder="Enter supplier email"
+        [label]="'Email' | localize"
+        [placeholder]="'Enter supplier email' | localize"
         formControlName="email"
       ></app-input>
-      
+
       <!-- Remove [@errorMessage] binding -->
       @if (supplierForm.get('email')?.errors && supplierForm.get('email')?.touched) {
         <div class="text-red-500 text-sm font-medium mt-1">
@@ -94,10 +94,10 @@
             <span>Email is required</span>
           }
           @if (supplierForm.get('email')?.errors?.['email']) {
-            <span>Please enter a valid email address</span>
+            <span>{{ 'Please enter a valid email address' | localize }}</span>
           }
           @if (supplierForm.get('email')?.errors?.['serverError']) {
-            <span>{{ supplierForm.get('email')?.errors?.['serverError'] }}</span>
+            <span>{{ (supplierForm.get('email')?.errors?.['serverError']) | localize }}</span>
           }
         </div>
       }
@@ -106,11 +106,11 @@
     <div class="animate-field">
       <app-input
         type="text"
-        label="Address"
-        placeholder="Enter supplier address"
+        [label]="'Address' | localize"
+        [placeholder]="'Enter supplier address' | localize"
         formControlName="address"
       ></app-input>
-      
+
       <!-- Remove [@errorMessage] binding -->
       @if (supplierForm.get('address')?.errors && supplierForm.get('address')?.touched) {
         <div class="text-red-500 text-sm font-medium mt-1">
@@ -121,7 +121,7 @@
             <span>Address is invalid</span>
           }
           @if (supplierForm.get('address')?.errors?.['serverError']) {
-            <span>{{ supplierForm.get('address')?.errors?.['serverError'] }}</span>
+            <span>{{ (supplierForm.get('address')?.errors?.['serverError']) | localize }}</span>
           }
         </div>
       }
@@ -130,11 +130,11 @@
     <div class="animate-field">
       <app-input
         type="text"
-        label="Country"
-        placeholder="Enter supplier country"
+        [label]="'Country' | localize"
+        [placeholder]="'Enter supplier country' | localize"
         formControlName="country"
       ></app-input>
-      
+
       <!-- Remove [@errorMessage] binding -->
       @if (supplierForm.get('country')?.errors && supplierForm.get('country')?.touched) {
         <div class="text-red-500 text-sm font-medium mt-1">
@@ -145,7 +145,7 @@
             <span>Country must be at least 3 characters</span>
           }
           @if (supplierForm.get('country')?.errors?.['serverError']) {
-            <span>{{ supplierForm.get('country')?.errors?.['serverError'] }}</span>
+            <span>{{ (supplierForm.get('country')?.errors?.['serverError']) | localize }}</span>
           }
         </div>
       }
@@ -160,15 +160,15 @@
         [class.opacity-50]="supplierForm.invalid"
         [class.cursor-not-allowed]="supplierForm.invalid"
       >
-        {{ isEditMode ? 'Update' : 'Save' }}
+        {{ (isEditMode ? 'Update' : 'Save') | localize }}
       </button>
-      
+
       <button
         type="button"
         class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-all duration-200 transform hover:scale-105 active:scale-95"
         (click)="cancel()"
       >
-        Cancel
+        {{ 'Cancel' | localize }}
       </button>
     </div>
   </form>

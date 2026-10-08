@@ -9,10 +9,10 @@
       <app-input-field type="text" id="inputTwo" placeholder="info@gmail.com" />
     </div>
     <div>
-      <app-label>Select Input</app-label>
+      <app-label>{{ 'Select Input' | localize }}</app-label>
       <app-select
         [options]="options"
-        placeholder="Select an option"
+        [placeholder]="'Select an option' | localize"
         [value]="selectedOption"
         (valueChange)="handleSelectChange($event)"
         className="dark:bg-dark-900"
@@ -70,15 +70,15 @@
       <app-date-picker
         id="date-picker"
         label="Date Picker Input"
-        placeholder="Select a date"
+        [placeholder]="'Select a date' | localize"
         (dateChange)="handleDateChange($event)"
       />
     </div>
     <div>
       <app-time-picker
-        id="time-picker"  
+        id="time-picker"
         label="Time Select Input"
-        placeholder="Select time"
+        [placeholder]="'Select time' | localize"
         (timeChange)="onTimeSelected($event)"
       />
     </div>

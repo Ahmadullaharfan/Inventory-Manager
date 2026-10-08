@@ -1,13 +1,13 @@
 <div class="max-w-full overflow-x-auto custom-scrollbar">
   <div id="chartOne" class="min-w-[1000px]">
     <apx-chart
-      [series]="series"
+      [series]="localizedSeries()"
       [chart]="chart"
       [colors]="colors"
       [plotOptions]="plotOptions"
       [dataLabels]="dataLabels"
       [stroke]="stroke"
-      [xaxis]="xaxis"
+      [xaxis]="localizedXAxis()"
       [yaxis]="yaxis"
       [legend]="legend"
       [grid]="grid"

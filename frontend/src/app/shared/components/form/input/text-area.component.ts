@@ -1,14 +1,15 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 
 @Component({
   selector: 'app-text-area',
-  imports: [CommonModule],
+  imports: [LocalizePipe, CommonModule],
   template: `
     <div class="relative">
       <textarea
-        [placeholder]="placeholder"
+        [placeholder]="placeholder | localize"
         [rows]="rows"
         [value]="value"
         (input)="onInput($event)"
@@ -19,7 +20,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
       <p
         class="mt-2 text-sm"
         [ngClass]="error ? 'text-error-500' : 'text-gray-500 dark:text-gray-400'">
-        {{ hint }}
+        {{ hint | localize }}
       </p>
       }
     </div>

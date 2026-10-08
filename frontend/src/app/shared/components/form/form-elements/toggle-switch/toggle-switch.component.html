@@ -1,7 +1,7 @@
 <app-component-card title="Toggle switch input">
   <div class="flex gap-4">
     <app-switch
-      label="Default"
+      [label]="'Default' | localize"
       [defaultChecked]="true"
       (valueChange)="handleSwitchChange($event)"
     ></app-switch>
@@ -17,7 +17,7 @@
   </div>
   <div class="flex gap-4 mt-4">
     <app-switch
-      label="Default"
+      [label]="'Default' | localize"
       [defaultChecked]="true"
       color="gray"
       (valueChange)="handleSwitchChange($event)"

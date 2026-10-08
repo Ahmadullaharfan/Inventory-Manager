@@ -21,7 +21,7 @@
         stroke-linejoin="round"
       />
     </svg>
-    Preview Invoice
+    {{ 'Preview Invoice' | localize }}
  </app-button>
  <!-- modal -->
   <app-modal
@@ -38,7 +38,7 @@
       <div class="mb-9 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <span class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-400">
-            From
+            {{ 'From' | localize }}
           </span>
 
           <h5 class="mb-2 text-base font-semibold text-gray-800 dark:text-white/90">
@@ -51,7 +51,7 @@
           </p>
 
           <span class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-            Issued On:
+            {{ 'Issued On:' | localize }}
           </span>
 
           <span class="block text-sm text-gray-500 dark:text-gray-400">
@@ -63,7 +63,7 @@
 
         <div class="sm:text-right">
           <span class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-400">
-            To
+            {{ 'To' | localize }}
           </span>
 
           <h5 class="mb-2 text-base font-semibold text-gray-800 dark:text-white/90">
@@ -76,7 +76,7 @@
           </p>
 
           <span class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-            Due On:
+            {{ 'Due On:' | localize }}
           </span>
 
           <span class="block text-sm text-gray-500 dark:text-gray-400">
@@ -91,22 +91,22 @@
           <thead class="bg-gray-50 dark:bg-gray-900">
             <tr class="border-b border-gray-100 dark:border-gray-800">
               <th class="px-5 py-3 text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-400">
-                S.No.#
+                {{ 'S.No.#' | localize }}
               </th>
               <th class="px-5 py-3 text-xs font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">
-                Products
+                {{ 'Products' | localize }}
               </th>
               <th class="px-5 py-3 text-center text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-400">
-                Quantity
+                {{ 'Quantity' | localize }}
               </th>
               <th class="px-5 py-3 text-center text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-400">
-                Unit Cost
+                {{ 'Unit Cost' | localize }}
               </th>
               <th class="px-5 py-3 text-center text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-400">
-                Discount
+                {{ 'Discount' | localize }}
               </th>
               <th class="px-5 py-3 text-right text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-400">
-                Total
+                {{ 'Total' | localize }}
               </th>
             </tr>
           </thead>
@@ -199,12 +199,12 @@
       <div class="my-6 flex justify-end pb-6 text-right">
         <div class="w-[220px]">
           <p class="mb-4 text-left text-sm font-medium text-gray-800 dark:text-white/90">
-            Order summary
+            {{ 'Order summary' | localize }}
           </p>
           <ul class="space-y-2">
             <li class="flex justify-between gap-5">
               <span class="text-sm text-gray-500 dark:text-gray-400">
-                Sub Total
+                {{ 'Sub Total' | localize }}
               </span>
               <span class="text-sm font-medium text-gray-700 dark:text-gray-400">
                 $3,850
@@ -212,7 +212,7 @@
             </li>
             <li class="flex items-center justify-between">
               <span class="text-sm text-gray-500 dark:text-gray-400">
-                Vat (10%):
+                {{ 'Vat (10%):' | localize }}
               </span>
               <span class="text-sm font-medium text-gray-700 dark:text-gray-400">
                 $385
@@ -220,7 +220,7 @@
             </li>
             <li class="flex items-center justify-between">
               <span class="font-medium text-gray-700 dark:text-gray-400">
-                Total
+                {{ 'Total' | localize }}
               </span>
               <span class="text-lg font-semibold text-gray-800 dark:text-white/90">
                 $4,235

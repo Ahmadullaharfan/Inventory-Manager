@@ -1,24 +1,24 @@
 
   <div class="px-6 py-5">
     <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
-      Plan Details
+      {{ 'Plan Details' | localize }}
     </h3>
   </div>
   <div class="grid grid-cols-1 gap-6 border-t border-gray-200 p-4 sm:p-6 lg:grid-cols-1 xl:grid-cols-2 dark:border-gray-800">
-    <!-- List --> 
+    <!-- List -->
     <div>
       <ul class="divide-y divide-gray-100 rounded-t-xl border border-gray-200 p-5 dark:divide-gray-800 dark:border-gray-800">
         <li class="py-3 first:pt-0">
           <span class="block space-y-1.5 text-sm font-normal text-gray-500 dark:text-gray-400">
-            Current Plan
+            {{ 'Current Plan' | localize }}
           </span>
           <span class="block text-sm font-medium text-gray-700 dark:text-gray-400">
-            Professional
+            {{ 'Professional' | localize }}
           </span>
         </li>
         <li class="py-3">
           <span class="block space-y-1.5 text-sm font-normal text-gray-500 dark:text-gray-400">
-            Monthly Limits
+            {{ 'Monthly Limits' | localize }}
           </span>
           <span class="block text-sm font-medium text-gray-700 dark:text-gray-400">
             25,000 Orders
@@ -26,7 +26,7 @@
         </li>
         <li class="py-3">
           <span class="block space-y-1.5 text-sm font-normal text-gray-500 dark:text-gray-400">
-            Cost
+            {{ 'Cost' | localize }}
           </span>
           <span class="block text-sm font-medium text-gray-700 dark:text-gray-400">
             $199.00
@@ -37,7 +37,7 @@
         </li>
         <li class="py-3">
           <span class="block space-y-1.5 text-sm font-normal text-gray-500 dark:text-gray-400">
-            Renewal Date
+            {{ 'Renewal Date' | localize }}
           </span>
           <span class="block text-sm font-medium text-gray-700 dark:text-gray-400">
             Mar 22, 2028
@@ -47,7 +47,7 @@
       <div class="rounded-b-xl border border-t-0 border-gray-200 p-5 dark:border-gray-800">
         <div class="mb-5 flex items-center justify-between">
           <span class="text-sm font-medium text-gray-700 dark:text-gray-400">
-            Orders
+            {{ 'Orders' | localize }}
           </span>
           <span class="text-sm text-gray-700 dark:text-gray-400">
             15,299 of 25,500 orders used
@@ -62,7 +62,7 @@
     <!-- Benefits -->
     <div>
       <h3 class="mb-6 text-base font-medium text-gray-800 dark:text-white/90">
-        Plan Benefits
+        {{ 'Plan Benefits' | localize }}
       </h3>
       <ul class="space-y-3.5">
         <li class="flex items-center gap-2.5">
@@ -206,13 +206,13 @@
             variant="outline"
             className="w-full h-11"
           >
-            Cancel Subscription
+            {{ 'Cancel Subscription' | localize }}
           </app-button>
           <app-button
             variant="primary"
             className="w-full h-11"
           >
-            Upgrade to Pro
+            {{ 'Upgrade to Pro' | localize }}
           </app-button>
         </div>
       </div>

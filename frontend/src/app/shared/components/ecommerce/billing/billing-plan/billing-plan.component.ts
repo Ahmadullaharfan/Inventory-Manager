@@ -1,9 +1,10 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 import { Component } from '@angular/core';
 import { ButtonComponent } from '../../../ui/button/button.component';
 
 @Component({
   selector: 'app-billing-plan',
-  imports: [
+  imports: [LocalizePipe,
     ButtonComponent,
   ],
   templateUrl: './billing-plan.component.html',

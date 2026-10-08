@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../shared/pipe/localize.pipe';
 
 import { Component } from '@angular/core';
 import { BarChartOneComponent } from '../../../shared/components/charts/bar/bar-chart-one/bar-chart-one.component';
@@ -6,7 +7,7 @@ import { ComponentCardComponent } from '../../../shared/components/common/compon
 
 @Component({
   selector: 'app-bar-chart',
-  imports: [
+  imports: [LocalizePipe,
     ComponentCardComponent,
     PageBreadcrumbComponent,
     BarChartOneComponent

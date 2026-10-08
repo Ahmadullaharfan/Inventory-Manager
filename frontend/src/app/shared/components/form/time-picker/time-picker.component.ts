@@ -1,10 +1,11 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 
 import { Component, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import flatpickr from 'flatpickr';
 
 @Component({
   selector: 'app-time-picker',
-  imports: [],
+  imports: [LocalizePipe],
   templateUrl: './time-picker.component.html',
   styles: ``
 })

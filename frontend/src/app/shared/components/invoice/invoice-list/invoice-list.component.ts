@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -19,7 +20,7 @@ interface SortState {
 
 @Component({
   selector: 'app-invoice-list',
-  imports: [
+  imports: [LocalizePipe,
     CommonModule,
     FormsModule,
     TableDropdownComponent,

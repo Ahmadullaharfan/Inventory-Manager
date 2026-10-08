@@ -1,5 +1,7 @@
+import { LocalizationService } from '../../shared/services/localization.service';
+import { LocalizePipe } from '../../shared/pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { inject, Component, ElementRef, HostListener, OnInit, ViewChild, effect } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions, DateSelectInfo, EventClickInfo, EventInput } from 'fullcalendar';
@@ -19,7 +21,7 @@ export interface CalendarEvent extends EventInput {
 @Component({
   selector: 'app-calender',
   standalone: true,
-  imports: [
+  imports: [LocalizePipe,
     CommonModule,
     FormsModule,
     FullCalendarModule,
@@ -29,6 +31,7 @@ export interface CalendarEvent extends EventInput {
   styles: ``
 })
 export class CalenderComponent implements OnInit {
+  readonly localization = inject(LocalizationService);
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
 
   events: CalendarEvent[] = [];
@@ -58,7 +61,12 @@ export class CalenderComponent implements OnInit {
 
   calendarOptions!: CalendarOptions;
 
-  constructor(private elRef: ElementRef) {}
+  constructor(private elRef: ElementRef) {
+    effect(() => {
+      this.localization.language();
+      if (this.calendarOptions) this.initCalendarOptions();
+    });
+  }
 
   ngOnInit() {
     this.checkMobile();
@@ -105,7 +113,7 @@ export class CalenderComponent implements OnInit {
 
   initCalendarOptions() {
     const isRtl = typeof document !== 'undefined' && document.documentElement.dir === 'rtl';
-    const locale = (typeof document !== 'undefined' && document.documentElement.lang) || 'en';
+    const locale = this.localization.locale() + '-u-ca-gregory';
 
     this.calendarOptions = {
       plugins: [
@@ -117,6 +125,15 @@ export class CalenderComponent implements OnInit {
       ],
       initialView: this.currentView || 'dayGridMonth',
       direction: isRtl ? 'rtl' : 'ltr',
+      locale: { code: locale },
+      todayText: this.localization.text('Today'),
+      monthText: this.localization.text('Month'),
+      yearText: this.localization.text('Year'),
+      dayText: this.localization.text('Day'),
+      weekTextLong: this.localization.text('Week'),
+      prevHint: this.localization.text('Previous'),
+      nextHint: this.localization.text('Next'),
+      allDayText: this.localization.text('All day'),
 
       // Toolbar Header configuration
       headerToolbar: {
@@ -142,6 +159,7 @@ export class CalenderComponent implements OnInit {
       buttonGroupClass: 'gap-2',
 
       buttons: {
+        today: { text: this.localization.text('Today') },
         prev: {
           iconContent: {
             html: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="size-5 sm:size-6 bg-transparent text-gray-700 rtl:rotate-180 dark:text-gray-400"><path d="M15 18l-6-6 6-6" /></svg>`,
@@ -157,7 +175,7 @@ export class CalenderComponent implements OnInit {
             'flex size-9! sm:size-10! p-0! items-center justify-center! rounded-lg! border! bg-transparent! border-gray-200! text-gray-700 hover:border-gray-200 hover:bg-gray-50! focus:shadow-none active:border-gray-200! active:bg-transparent! active:shadow-none! dark:border-gray-800! dark:text-gray-400 dark:hover:border-gray-800 dark:hover:bg-gray-900! dark:active:border-gray-800!',
         },
         addEventButton: {
-          text: 'Add Event +',
+          text: this.localization.text('Add Event') + ' +',
           click: () => this.handleOpenAddModal(),
           className:
             'rounded-lg! border-0! bg-brand-500! px-3! sm:px-4! py-2! sm:py-2.5! text-xs! sm:text-sm! font-medium! text-white hover:bg-brand-600! focus:shadow-none! w-auto!',
@@ -252,7 +270,7 @@ export class CalenderComponent implements OnInit {
               };
             }
             return {
-              html: `<span class="fc-more-link-badge inline-flex items-center rounded-sm bg-brand-50 px-1 py-0.5 sm:px-1.5 text-[10px] sm:text-xs font-medium text-brand-600 transition-colors hover:bg-brand-100 dark:bg-brand-500/15 dark:text-brand-400 dark:hover:bg-brand-500/25">+${args.num} more</span>`,
+              html: `<span class="fc-more-link-badge inline-flex items-center rounded-sm bg-brand-50 px-1 py-0.5 sm:px-1.5 text-[10px] sm:text-xs font-medium text-brand-600 transition-colors hover:bg-brand-100 dark:bg-brand-500/15 dark:text-brand-400 dark:hover:bg-brand-500/25">+${args.num} ${this.localization.text('more')}</span>`,
             };
           },
         },
@@ -428,7 +446,7 @@ export class CalenderComponent implements OnInit {
           aria-expanded="false"
           aria-haspopup="listbox"
         >
-          <span class="calendar-view-label">${activeOption.label}</span>
+          <span class="calendar-view-label">${this.localization.text(activeOption.label)}</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="calendar-view-chevron h-4 w-4 transition-transform duration-200 sm:h-4.5 sm:w-4.5">
             <path d="m6 9 6 6 6-6"/>
           </svg>
@@ -446,7 +464,7 @@ export class CalenderComponent implements OnInit {
                   : 'font-normal'
               }"
             >
-              ${view.label}
+              ${this.localization.text(view.label)}
             </button>
           `
             )
@@ -657,7 +675,7 @@ export class CalenderComponent implements OnInit {
     if (isTimeGridView) {
       return {
         html: `
-          <div dir="ltr" class="event-fc-color flex h-full w-full flex-col justify-start overflow-hidden rounded-md p-1 transition-colors sm:rounded-lg sm:p-1.5 ${colors.bg}">
+          <div dir="${this.localization.direction()}" class="event-fc-color flex h-full w-full flex-col justify-start overflow-hidden rounded-md p-1 transition-colors sm:rounded-lg sm:p-1.5 ${colors.bg}">
             <div class="flex items-center gap-1 sm:gap-1.5">
               <div class="size-1.5 shrink-0 rounded-full sm:size-2 ${colors.dot}"></div>
               <div class="truncate text-[11px] font-semibold leading-tight sm:text-xs ${colors.title}">${eventInfo.event.title || ''}</div>
@@ -674,7 +692,7 @@ export class CalenderComponent implements OnInit {
 
     return {
       html: `
-        <div dir="ltr" class="event-fc-color flex items-center rounded-md py-1 ps-1.5 pe-2 transition-colors sm:rounded-lg sm:py-1.5 sm:ps-2.5 sm:pe-3 ${colors.bg}">
+        <div dir="${this.localization.direction()}" class="event-fc-color flex items-center rounded-md py-1 ps-1.5 pe-2 transition-colors sm:rounded-lg sm:py-1.5 sm:ps-2.5 sm:pe-3 ${colors.bg}">
           <div class="fc-daygrid-event-dot ms-0 me-1 h-2.5 w-1 shrink-0 rounded-full border-none sm:me-2 sm:h-3.5 ${colors.dot}"></div>
           ${
             eventInfo.timeText

@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "test:users": "ng test --configuration users --watch=false --browsers=ChromeHeadless --include=\"src/app/pages/user/**/*.spec.ts\" --include=\"src/app/shared/services/auth*.spec.ts\" --include=\"src/app/shared/components/tables/basic-tables/basic-table-two/*.spec.ts\""
+    "test:users": "ng test --configuration users --watch=false --browsers=ChromeHeadless --include=\"src/app/pages/user/**/*.spec.ts\" --include=\"src/app/shared/services/auth*.spec.ts\" --include=\"src/app/shared/components/tables/basic-tables/basic-table-two/*.spec.ts\" --include=\"src/app/shared/services/localization*.spec.ts\""
   },
   "private": true,
   "engines": {

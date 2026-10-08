@@ -1,5 +1,6 @@
+import { LocalizationService } from '../../../../services/localization.service';
 
-import { Component } from '@angular/core';
+import { computed, inject, Component } from '@angular/core';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -25,6 +26,9 @@ import {
   styles: ``
 })
 export class LineChartOneComponent {
+  readonly localizedSeries = computed(() => this.series.map(series => ({ ...series, name: this.localization.text(series.name) })));
+  readonly localizedXAxis = computed(() => ({ ...this.xaxis, categories: (this.xaxis.categories ?? []).map((label: string | number | (string | number)[]) => Array.isArray(label) ? label.map(value => typeof value === 'string' ? this.localization.text(value) : value) : typeof label === 'string' ? this.localization.text(label) : label) as ApexXAxis['categories'] }));
+  readonly localization = inject(LocalizationService);
 
   public series: ApexAxisChartSeries = [
     {

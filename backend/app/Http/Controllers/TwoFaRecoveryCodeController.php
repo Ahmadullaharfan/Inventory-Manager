@@ -36,7 +36,7 @@ class TwoFaRecoveryCodeController extends Controller
         $this->authorizeOwner($request, $user);
         $setup = $request->session()->get('two_fa_setup');
         if (! $setup || $setup['user_id'] !== $user->id || $setup['expires_at'] < now()->timestamp || $this->totp->verify(decrypt($setup['secret']), $request->string('code')->toString()) === null) {
-            throw ValidationException::withMessages(['code' => 'The code is invalid or setup expired. Start setup again.']);
+            throw ValidationException::withMessages(['code' => __('The code is invalid or setup expired. Start setup again.')]);
         }
         $codes = DB::transaction(function () use ($user, $setup, $request): array {
             $user = User::whereKey($user->id)->lockForUpdate()->firstOrFail();
@@ -57,7 +57,7 @@ class TwoFaRecoveryCodeController extends Controller
     {
         $this->authorizeOwner($request, $user);
         if (! $user->two_fa_enabled || ! $this->users->verifySecondFactor($user, $request->string('code')->toString(), $request, $this->totp)) {
-            throw ValidationException::withMessages(['code' => 'Enter a valid authenticator or unused recovery code.']);
+            throw ValidationException::withMessages(['code' => __('Enter a valid authenticator or unused recovery code.')]);
         }
     }
 

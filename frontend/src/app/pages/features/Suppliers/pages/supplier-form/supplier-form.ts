@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../../shared/pipe/localize.pipe';
 
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -8,7 +9,7 @@ import { InputComponent } from '../../../../shared/components/ui/input/input';
 
 @Component({
   selector: 'app-supplier-form',
-  imports: [CommonModule, ReactiveFormsModule, InputComponent],
+  imports: [LocalizePipe, CommonModule, ReactiveFormsModule, InputComponent],
   templateUrl: './supplier-form.html',
   styleUrls: ['./supplier-form.css'],
 })
@@ -22,7 +23,7 @@ export class SupplierForm implements OnInit {
   supplierForm!: FormGroup;
   isEditMode = false;
   supplierId: number | null= null;
-  
+
   phoneRegex = /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
 
   ngOnInit() {
@@ -31,7 +32,7 @@ export class SupplierForm implements OnInit {
       contact_person: ['', [Validators.required, Validators.minLength(3)]],
       phone: ['', [Validators.required, Validators.pattern(this.phoneRegex)]],
       email: ['', [Validators.required,Validators.email ] ],
-      address:[''], 
+      address:[''],
       country: []
     })
 
@@ -43,9 +44,9 @@ export class SupplierForm implements OnInit {
       }
     });
 
-  } 
+  }
 
-  
+
   loadSupplier() {
     this.supplierService.getSupplier(this.supplierId!).subscribe(supplier => {
       this.supplierForm.patchValue(supplier);

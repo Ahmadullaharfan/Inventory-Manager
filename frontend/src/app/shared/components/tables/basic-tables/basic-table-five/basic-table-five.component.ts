@@ -1,9 +1,10 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-basic-table-five',
-  imports: [],
+  imports: [LocalizePipe],
   templateUrl: './basic-table-five.component.html',
   styles: ``
 })

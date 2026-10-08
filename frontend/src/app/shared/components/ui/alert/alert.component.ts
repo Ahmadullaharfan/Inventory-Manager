@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { SafeHtmlPipe } from '../../../pipe/safe-html.pipe';
@@ -5,7 +6,7 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-alert',
-  imports: [
+  imports: [LocalizePipe,
     CommonModule,
     SafeHtmlPipe,
     RouterModule,

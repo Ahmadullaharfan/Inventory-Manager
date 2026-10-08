@@ -14,8 +14,8 @@
         <i class="fa fa-spinner text-sky-600 text-sm"></i>
       </div>
       <div class="space-y-0.5 text-left">
-        <p class="text-sm font-semibold text-slate-800">{{ loadingLabel }}</p>
-        <p class="text-xs text-slate-500">Please wait…</p>
+        <p class="text-sm font-semibold text-slate-800">{{ loadingLabel | localize }}</p>
+        <p class="text-xs text-slate-500">{{ 'Please wait…' | localize }}</p>
       </div>
     </div>
   </div>
@@ -36,7 +36,7 @@
               scope="col"
               class="px-4 py-3 text-center text-[11px] font-semibold uppercase tracking-wider text-slate-600 whitespace-nowrap"
             >
-              {{ column.label }}
+              {{ column.label | localize }}
             </th>
           </tr>
         </thead>
@@ -59,7 +59,7 @@
             >
               <ng-container *ngIf="column.key !== 'actions'; else actionsTpl">
                 <span *ngIf="row[column.key] !== null && row[column.key] !== undefined && row[column.key] !== ''; else dashTpl">
-                  {{ column.key === 'price' ? formatPrice(row[column.key]) : row[column.key] }}
+                  {{ (column.key === 'price' ? formatPrice(row[column.key]) : row[column.key]) | localize }}
                 </span>
                 <ng-template #dashTpl>
                   <span class="text-slate-400">—</span>
@@ -72,7 +72,7 @@
                     (click)="onEdit(row)"
                     type="button"
                     aria-label="Edit row"
-                    title="Edit"
+                    [title]="'Edit' | localize"
                     class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-sky-600 transition-all hover:bg-sky-100 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
                   >
                     <i class="fa fa-pencil-square-o"></i>
@@ -81,7 +81,7 @@
                     (click)="onDelete(row.id)"
                     type="button"
                     aria-label="Delete row"
-                    title="Delete"
+                    [title]="'Delete' | localize"
                     class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-rose-600 transition-all hover:bg-rose-100 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
                   >
                     <i class="fa fa-trash-o"></i>
@@ -101,8 +101,8 @@
       <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-slate-100">
         <i class="fa fa-inbox text-xl text-slate-400"></i>
       </div>
-      <p class="text-base font-medium text-slate-700">No data found</p>
-      <p class="mt-1 text-sm text-slate-500">There's nothing to display right now.</p>
+      <p class="text-base font-medium text-slate-700">{{ 'No data found' | localize }}</p>
+      <p class="mt-1 text-sm text-slate-500">{{ 'There\'s nothing to display right now.' | localize }}</p>
     </div>
   </ng-template>
 

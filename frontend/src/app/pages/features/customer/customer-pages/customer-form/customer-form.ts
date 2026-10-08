@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../../shared/pipe/localize.pipe';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,7 +8,7 @@ import { InputComponent } from '../../../../shared/components/ui/input/input';
 
 @Component({
   selector: 'app-customer-form',
-  imports: [CommonModule, ReactiveFormsModule, InputComponent],
+  imports: [LocalizePipe, CommonModule, ReactiveFormsModule, InputComponent],
   templateUrl: './customer-form.html',
   styleUrls: ['./customer-form.css']
 })
@@ -35,7 +36,7 @@ export class CustomerFormComponent implements OnInit {
       phone_number: ['', [Validators.required, Validators.pattern(/^\+?[1-9]\d{6,14}$/)]],
       email: ['', [Validators.required, Validators.email]],
       location: ['', Validators.required],
-      attachment: [null] 
+      attachment: [null]
     });
   }
 
@@ -82,7 +83,7 @@ export class CustomerFormComponent implements OnInit {
     formData.append('phone_number', this.customerForm.get('phone_number')?.value);
     formData.append('email', this.customerForm.get('email')?.value);
     formData.append('location', this.customerForm.get('location')?.value);
-    
+
     if (this.selectedFile) {
       formData.append('attachment', this.selectedFile, this.selectedFile.name);
     }
@@ -99,7 +100,7 @@ export class CustomerFormComponent implements OnInit {
     request$.subscribe({
       next: () => {
         this.router.navigate(['/customers']),
-        this.cancel(); 
+        this.cancel();
       },
       error: (err) => {
         if (err.error?.errors) {

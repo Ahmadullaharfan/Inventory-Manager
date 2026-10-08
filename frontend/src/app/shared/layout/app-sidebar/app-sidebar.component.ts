@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../pipe/localize.pipe';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, QueryList, ViewChildren, ChangeDetectorRef, inject } from '@angular/core';
@@ -16,7 +17,7 @@ type NavItem = {
 
 @Component({
   selector: 'app-sidebar',
-  imports: [
+  imports: [LocalizePipe,
     CommonModule,
     RouterModule,
     SafeHtmlPipe,
@@ -229,7 +230,7 @@ export class AppSidebarComponent {
         this.sidebarService.setMobileOpen(false);
       }
     }).unsubscribe();
-  }  
+  }
 
-  
+
 }

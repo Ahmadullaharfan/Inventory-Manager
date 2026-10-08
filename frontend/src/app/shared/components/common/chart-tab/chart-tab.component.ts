@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
@@ -6,7 +7,7 @@ type TabOption = 'optionOne' | 'optionTwo' | 'optionThree';
 
 @Component({
   selector: 'app-chart-tab',
-  imports: [CommonModule],
+  imports: [LocalizePipe, CommonModule],
   templateUrl: './chart-tab.component.html'
 })
 export class ChartTabComponent {

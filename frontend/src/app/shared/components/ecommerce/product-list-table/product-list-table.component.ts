@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { TableDropdownComponent } from '../../common/table-dropdown/table-dropdown.component';
@@ -21,7 +22,7 @@ interface Sort {
 
 @Component({
   selector: 'app-product-list-table',
-  imports: [
+  imports: [LocalizePipe,
     CommonModule,
     TableDropdownComponent,
     ButtonComponent,

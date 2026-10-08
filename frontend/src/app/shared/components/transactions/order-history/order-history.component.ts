@@ -1,8 +1,9 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-order-history',
-  imports: [],
+  imports: [LocalizePipe],
   templateUrl: './order-history.component.html',
   styles: ``
 })

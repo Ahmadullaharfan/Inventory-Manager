@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
@@ -8,7 +9,7 @@ export interface Option {
 
 @Component({
   selector: 'app-multi-select',
-  imports: [
+  imports: [LocalizePipe,
     CommonModule,
   ],
   templateUrl: './multi-select.component.html',

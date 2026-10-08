@@ -3,11 +3,13 @@ import { HttpClient, HttpErrorResponse, httpResource } from '@angular/common/htt
 import { map } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { AuthService } from '../../../shared/services/auth.service';
+import { LocalizationService } from '../../../shared/services/localization.service';
 import { ApiResponse, AuditPage, NotificationPreferences, User, UserDevice } from '../module/user.module';
 
-export function apiError(error: HttpErrorResponse): string {
+export function apiError(error: HttpErrorResponse, localization?: LocalizationService): string {
   const errors = error.error?.errors as Record<string, string[]> | undefined;
-  return errors ? Object.values(errors).flat().join(' ') : error.error?.message || (error.status === 0 ? 'Cannot reach the server. Please try again.' : 'The request failed. Please try again.');
+  const translate = (message: string) => localization?.text(message) ?? message;
+  return errors ? Object.values(errors).flat().map(translate).join(' ') : translate(error.error?.message || (error.status === 0 ? 'Cannot reach the server. Please try again.' : 'The request failed. Please try again.'));
 }
 @Injectable({ providedIn: 'root' })
 export class UserService {

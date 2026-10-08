@@ -72,7 +72,7 @@ class UserController extends Controller
                 $this->users->ensureAnotherAdmin($user);
             }
             if ($user->two_fa_enabled && ! $this->users->verifySecondFactor($user, $request->validated('code'), $request, $totp)) {
-                throw ValidationException::withMessages(['code' => 'Enter a valid authenticator or unused recovery code.']);
+                throw ValidationException::withMessages(['code' => __('Enter a valid authenticator or unused recovery code.')]);
             }
             $this->users->revokeDevices($user, $request);
             $this->users->audit($user, 'account_deleted', $request);

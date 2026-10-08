@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../pipe/localize.pipe';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { SidebarService } from '../../services/sidebar.service';
 import { CommonModule } from '@angular/common';
@@ -8,7 +9,7 @@ import { UserDropdownComponent } from '../../components/header/user-dropdown/use
 
 @Component({
   selector: 'app-header',
-  imports: [
+  imports: [LocalizePipe,
     CommonModule,
     RouterModule,
     ThemeToggleButtonComponent,

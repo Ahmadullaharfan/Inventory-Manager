@@ -1,10 +1,11 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 
 import { Component } from '@angular/core';
 import { BadgeComponent } from '../../../ui/badge/badge.component';
 
 @Component({
   selector: 'app-basic-table-one',
-  imports: [
+  imports: [LocalizePipe,
     BadgeComponent
 ],
   templateUrl: './basic-table-one.component.html',

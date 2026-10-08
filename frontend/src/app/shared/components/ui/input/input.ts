@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { Component, forwardRef, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -11,7 +12,7 @@ type InputType = 'text' | 'number' | 'email' | 'password' | 'tel' | 'url';
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [LocalizePipe, CommonModule, ReactiveFormsModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -26,7 +27,7 @@ type InputType = 'text' | 'number' | 'email' | 'password' | 'tel' | 'url';
           [for]="id"
           class="text-sm font-medium text-gray-700"
         >
-          {{ label }}
+          {{ (label) | localize }}
           @if (required) {
             <span class="text-red-500">*</span>
           }

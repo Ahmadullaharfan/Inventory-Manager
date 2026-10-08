@@ -2,7 +2,7 @@
   <div class="space-y-6">
     <!-- Default TextArea -->
     <div>
-      <app-label>Description</app-label>
+      <app-label>{{ 'Description' | localize }}</app-label>
       <app-text-area
         [value]="message"
         (valueChange)="message = $event"
@@ -12,13 +12,13 @@
 
     <!-- Disabled TextArea -->
     <div>
-      <app-label>Description</app-label>
+      <app-label>{{ 'Description' | localize }}</app-label>
       <app-text-area [rows]="6" [disabled]="true"></app-text-area>
     </div>
 
     <!-- Error TextArea -->
     <div>
-      <app-label>Description</app-label>
+      <app-label>{{ 'Description' | localize }}</app-label>
       <app-text-area
         [rows]="6"
         [value]="messageTwo"

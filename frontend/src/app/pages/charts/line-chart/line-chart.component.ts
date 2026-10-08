@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../shared/pipe/localize.pipe';
 
 import { Component } from '@angular/core';
 import { PageBreadcrumbComponent } from '../../../shared/components/common/page-breadcrumb/page-breadcrumb.component';
@@ -7,7 +8,7 @@ import { LineChartOneComponent } from '../../../shared/components/charts/line/li
 
 @Component({
   selector: 'app-line-chart',
-  imports: [
+  imports: [LocalizePipe,
     PageBreadcrumbComponent,
     ComponentCardComponent,
     LineChartOneComponent

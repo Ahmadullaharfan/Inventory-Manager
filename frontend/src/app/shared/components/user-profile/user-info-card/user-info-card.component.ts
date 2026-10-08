@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { Component } from '@angular/core';
 import { ModalService } from '../../../services/modal.service';
 
@@ -8,7 +9,7 @@ import { ModalComponent } from '../../ui/modal/modal.component';
 
 @Component({
   selector: 'app-user-info-card',
-  imports: [
+  imports: [LocalizePipe,
     InputFieldComponent,
     ButtonComponent,
     LabelComponent,

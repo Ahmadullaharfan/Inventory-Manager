@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ComponentCardComponent } from '../../../common/component-card/component-card.component';
@@ -6,7 +7,7 @@ import { CheckboxComponent } from '../../input/checkbox.component';
 
 @Component({
   selector: 'app-checkbox-components',
-  imports: [ComponentCardComponent, CheckboxComponent],
+  imports: [LocalizePipe, ComponentCardComponent, CheckboxComponent],
   templateUrl: './checkbox-components.component.html',
   styles: ``
 })

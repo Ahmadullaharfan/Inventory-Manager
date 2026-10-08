@@ -1,9 +1,10 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 // import { CommonModule } from '@angular/common';
 // import { Component } from '@angular/core';
 
 // @Component({
 //   selector: 'app-recent-orders',
-//   imports: [CommonModule],
+//   imports: [LocalizePipe, CommonModule],
 //   templateUrl: './recent-orders.component.html',
 //   styleUrl: './recent-orders.component.css'
 // })
@@ -33,7 +34,7 @@ interface Product {
 
 @Component({
   selector: 'app-recent-orders',
-  imports: [
+  imports: [LocalizePipe,
     BadgeComponent
 ],
   templateUrl: './recent-orders.component.html'

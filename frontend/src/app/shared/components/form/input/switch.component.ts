@@ -1,9 +1,10 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-switch',
-  imports: [
+  imports: [LocalizePipe,
     CommonModule
   ],
   template: `
@@ -26,7 +27,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
           [ngClass]="switchColors.knob"
         ></div>
       </div>
-      {{ label }}
+      {{ (label) | localize }}
     </label>
   `
 })

@@ -1,9 +1,10 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-countdown-timer',
-  imports: [
+  imports: [LocalizePipe,
     CommonModule,
   ],
   templateUrl: './countdown-timer.component.html',

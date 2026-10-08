@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LabelComponent } from '../../form/label/label.component';
@@ -8,7 +9,7 @@ import { ButtonComponent } from '../../ui/button/button.component';
 
 @Component({
   selector: 'app-add-product-form',
-  imports: [
+  imports: [LocalizePipe,
     CommonModule,
     LabelComponent,
     InputFieldComponent,

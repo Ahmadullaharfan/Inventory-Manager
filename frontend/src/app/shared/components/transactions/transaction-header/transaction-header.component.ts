@@ -1,8 +1,9 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-transaction-header',
-  imports: [],
+  imports: [LocalizePipe],
   templateUrl: './transaction-header.component.html',
   styles: ``
 })

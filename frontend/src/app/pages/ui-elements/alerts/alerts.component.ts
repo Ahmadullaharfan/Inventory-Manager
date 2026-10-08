@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../shared/pipe/localize.pipe';
 import { Component } from '@angular/core';
 import { AlertComponent } from '../../../shared/components/ui/alert/alert.component';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
@@ -5,7 +6,7 @@ import { PageBreadcrumbComponent } from '../../../shared/components/common/page-
 
 @Component({
   selector: 'app-alerts',
-  imports: [
+  imports: [LocalizePipe,
     AlertComponent,
     ComponentCardComponent,
     PageBreadcrumbComponent,

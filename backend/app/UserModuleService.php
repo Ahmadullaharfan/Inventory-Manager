@@ -98,7 +98,7 @@ class UserModuleService
     public function ensureAnotherAdmin(User $user): void
     {
         if (! User::where('role', 'admin')->where('status', 'active')->whereKeyNot($user->id)->exists()) {
-            throw ValidationException::withMessages(['role' => 'Keep at least one active administrator.']);
+            throw ValidationException::withMessages(['role' => __('Keep at least one active administrator.')]);
         }
     }
 

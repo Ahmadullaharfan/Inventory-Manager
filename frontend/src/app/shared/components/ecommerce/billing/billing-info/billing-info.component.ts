@@ -1,10 +1,11 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 import { Component } from '@angular/core';
 import { ModalComponent } from '../../../ui/modal/modal.component';
 import { ButtonComponent } from '../../../ui/button/button.component';
 
 @Component({
   selector: 'app-billing-info',
-  imports: [
+  imports: [LocalizePipe,
     ModalComponent,
     ButtonComponent,
   ],

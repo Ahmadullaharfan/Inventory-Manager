@@ -4,7 +4,7 @@
     <!-- Page heading -->
     <div class="mb-8 text-center">
       <h2 class="text-3xl font-semibold tracking-tight text-gray-900">
-        {{ isEditMode ? 'Edit Product' : 'Add New Product' }}
+        {{ (isEditMode ? 'Edit Product' : 'Add New Product') | localize }}
       </h2>
       <p class="text-sm text-gray-500 mt-1">
         {{ isEditMode
@@ -30,40 +30,40 @@
       <!-- ================= Section: Basic Info ================= -->
       <section class="space-y-5">
         <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500">
-          Basic Information
+          {{ 'Basic Information' | localize }}
         </h3>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
           <div>
             <app-input
-              label="Product Name"
-              placeholder="Enter product name"
+              [label]="'Product Name' | localize"
+              [placeholder]="'Enter product name' | localize"
               formControlName="name"
               [required]="true"
             />
             <app-field-error
               [control]="f.name"
-              label="Product Name"
+              [label]="'Product Name' | localize"
             />
           </div>
 
           <div>
             <app-input
-              label="Brand"
-              placeholder="Enter brand name"
+              [label]="'Brand' | localize"
+              [placeholder]="'Enter brand name' | localize"
               formControlName="brand"
             />
-            <app-field-error [control]="f.brand" label="Brand" />
+            <app-field-error [control]="f.brand" [label]="'Brand' | localize" />
           </div>
 
           <div class="md:col-span-2">
             <app-input
-              label="Description"
-              placeholder="Enter product description"
+              [label]="'Description' | localize"
+              [placeholder]="'Enter product description' | localize"
               formControlName="description"
             />
-            <app-field-error [control]="f.description" label="Description" />
+            <app-field-error [control]="f.description" [label]="'Description' | localize" />
           </div>
 
         </div>
@@ -74,7 +74,7 @@
       <!-- ================= Section: Pricing & Inventory ================= -->
       <section class="space-y-5">
         <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500">
-          Pricing & Inventory
+          {{ 'Pricing & Inventory' | localize }}
         </h3>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -82,51 +82,51 @@
           <div>
             <app-input
               type="number"
-              label="Cost Price"
+              [label]="'Cost Price' | localize"
               placeholder="0.00"
               formControlName="cost_price"
               [required]="true"
             />
             <app-field-error
               [control]="f.cost_price"
-              label="Cost Price"
+              [label]="'Cost Price' | localize"
             />
           </div>
 
           <div>
             <app-input
-              label="Unit of Measure"
-              placeholder="e.g. Piece, Kg, Liter"
+              [label]="'Unit of Measure' | localize"
+              [placeholder]="'e.g. Piece, Kg, Liter' | localize"
               formControlName="unit_of_measure"
               [required]="true"
             />
             <app-field-error
               [control]="f.unit_of_measure"
-              label="Unit of Measure"
+              [label]="'Unit of Measure' | localize"
             />
           </div>
 
           <div>
             <app-input
               type="number"
-              label="Units Per Package"
+              [label]="'Units Per Package' | localize"
               placeholder="1"
               formControlName="units_per_package"
               [required]="true"
             />
             <app-field-error
               [control]="f.units_per_package"
-              label="Units Per Package"
+              [label]="'Units Per Package' | localize"
             />
           </div>
 
           <div>
             <app-input
-              label="Location"
-              placeholder="e.g. Aisle 3, Shelf 2"
+              [label]="'Location' | localize"
+              [placeholder]="'e.g. Aisle 3, Shelf 2' | localize"
               formControlName="location"
             />
-            <app-field-error [control]="f.location" label="Location" />
+            <app-field-error [control]="f.location" [label]="'Location' | localize" />
           </div>
 
         </div>
@@ -137,7 +137,7 @@
       <!-- ================= Section: Media & Status ================= -->
       <section class="space-y-5">
         <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500">
-          Media & Status
+          {{ 'Media & Status' | localize }}
         </h3>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
@@ -166,10 +166,10 @@
               />
               <div class="flex flex-col">
                 <span class="text-sm font-medium text-gray-800">
-                  Active Product
+                  {{ 'Active Product' | localize }}
                 </span>
                 <span class="text-xs text-gray-500">
-                  Make this product available for sale
+                  {{ 'Make this product available for sale' | localize }}
                 </span>
               </div>
             </label>
@@ -192,7 +192,7 @@
                  transition-all duration-150
                  active:scale-[0.98]"
         >
-          Cancel
+          {{ 'Cancel' | localize }}
         </button>
 
        <button
@@ -212,7 +212,7 @@
                     d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
             </svg>
           }
-          {{ isEditMode ? 'Update Product' : 'Save Product' }}
+          {{ (isEditMode ? 'Update Product' : 'Save Product') | localize }}
         </button>
       </div>
 

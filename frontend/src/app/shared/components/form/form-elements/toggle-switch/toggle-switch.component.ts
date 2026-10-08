@@ -1,10 +1,11 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 import { Component } from '@angular/core';
 import { SwitchComponent } from '../../input/switch.component';
 import { ComponentCardComponent } from '../../../common/component-card/component-card.component';
 
 @Component({
   selector: 'app-toggle-switch',
-  imports: [
+  imports: [LocalizePipe,
     SwitchComponent,
     ComponentCardComponent,
   ],

@@ -1,20 +1,20 @@
 <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-  @if (title) { <h3 class="px-6 py-4 text-lg font-semibold text-gray-800 dark:text-white/90">{{ title }}</h3> }
+  @if (title) { <h3 class="px-6 py-4 text-lg font-semibold text-gray-800 dark:text-white/90">{{ (title) | localize }}</h3> }
   <div class="max-w-full overflow-x-auto">
     <table class="min-w-full" mat-table [dataSource]="dataSource" matSort>
       @for (key of effectiveColumns; track key) {
         <ng-container [matColumnDef]="key">
           @if (key === 'actions') {
-            <th mat-header-cell *matHeaderCellDef class="px-4 py-4 text-start text-theme-sm text-gray-800 dark:text-white/90">{{ columnHeaders[key] || 'Actions' }}</th>
+            <th mat-header-cell *matHeaderCellDef class="px-4 py-4 text-start text-theme-sm text-gray-800 dark:text-white/90">{{ (columnHeaders[key] || 'Actions') | localize }}</th>
             <td mat-cell *matCellDef="let row" class="px-4 py-4">
               <div class="flex items-center gap-2">
-                @if (actions.view) { <button type="button" (click)="viewRow.emit(row)" class="rounded-lg px-2 py-1 text-theme-xs text-brand-500 hover:bg-brand-50 dark:text-brand-400 dark:hover:bg-brand-500/10" [attr.aria-label]="'View ' + (row.full_name || 'record')">View</button> }
-                @if (actions.edit && canEditRow(row)) { <button type="button" (click)="editRow.emit(row)" class="rounded-lg px-2 py-1 text-theme-xs text-brand-500 hover:bg-brand-50 dark:text-brand-400 dark:hover:bg-brand-500/10" [attr.aria-label]="'Edit ' + (row.full_name || 'record')">Edit</button> }
-                @if (actions.delete && canDeleteRow(row)) { <button type="button" (click)="deleteRow.emit(row)" class="rounded-lg px-2 py-1 text-theme-xs text-error-500 hover:bg-error-50 dark:text-error-400 dark:hover:bg-error-500/10" [attr.aria-label]="'Delete ' + (row.full_name || 'record')">Delete</button> }
+                @if (actions.view) { <button type="button" (click)="viewRow.emit(row)" class="rounded-lg px-2 py-1 text-theme-xs text-brand-500 hover:bg-brand-50 dark:text-brand-400 dark:hover:bg-brand-500/10" [attr.aria-label]="'View {name}' | localize: { name: row.full_name || '' }">{{ 'View' | localize }}</button> }
+                @if (actions.edit && canEditRow(row)) { <button type="button" (click)="editRow.emit(row)" class="rounded-lg px-2 py-1 text-theme-xs text-brand-500 hover:bg-brand-50 dark:text-brand-400 dark:hover:bg-brand-500/10" [attr.aria-label]="'Edit {name}' | localize: { name: row.full_name || '' }">{{ 'Edit' | localize }}</button> }
+                @if (actions.delete && canDeleteRow(row)) { <button type="button" (click)="deleteRow.emit(row)" class="rounded-lg px-2 py-1 text-theme-xs text-error-500 hover:bg-error-50 dark:text-error-400 dark:hover:bg-error-500/10" [attr.aria-label]="'Delete {name}' | localize: { name: row.full_name || '' }">{{ 'Delete' | localize }}</button> }
               </div>
             </td>
           } @else {
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="px-4 py-4 text-start text-theme-sm text-gray-800 dark:text-white/90">{{ columnHeaders[key] || key }}</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="px-4 py-4 text-start text-theme-sm text-gray-800 dark:text-white/90">{{ (columnHeaders[key] || key) | localize }}</th>
             <td mat-cell *matCellDef="let row" class="px-4 py-4 text-theme-sm text-gray-500 dark:text-gray-400">
               @if (column(key)?.type === 'avatar') {
                 <div class="flex items-center gap-3">
@@ -22,7 +22,7 @@
                   @else { <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-50 font-medium text-brand-500 dark:bg-brand-500/15 dark:text-brand-400">{{ (row[column(key)?.nameKey || key] || '?').slice(0, 1) }}</span> }
                   <span class="font-medium text-gray-800 dark:text-white/90">{{ row[column(key)?.nameKey || key] }}</span>
                 </div>
-              } @else if (column(key)?.type === 'badge') { <app-badge size="sm" [color]="badgeColor(row[key])">{{ row[key] }}</app-badge> }
+              } @else if (column(key)?.type === 'badge') { <app-badge size="sm" [color]="badgeColor(row[key])">{{ row[key] | localize }}</app-badge> }
               @else { {{ row[key] ?? '—' }} }
             </td>
           }
@@ -30,8 +30,8 @@
       }
       <tr mat-header-row *matHeaderRowDef="effectiveColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: effectiveColumns"></tr>
-      <tr *matNoDataRow><td [attr.colspan]="effectiveColumns.length || 1" class="px-6 py-12 text-center text-sm text-gray-500 dark:text-gray-400">{{ emptyMessage }}</td></tr>
+      <tr *matNoDataRow><td [attr.colspan]="effectiveColumns.length || 1" class="px-6 py-12 text-center text-sm text-gray-500 dark:text-gray-400">{{ (emptyMessage) | localize }}</td></tr>
     </table>
   </div>
-  <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons aria-label="Select page of records" />
+  <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons [attr.aria-label]="'Select page of records' | localize" />
 </div>

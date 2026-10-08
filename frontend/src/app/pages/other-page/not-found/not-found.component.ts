@@ -1,10 +1,11 @@
+import { LocalizePipe } from '../../../shared/pipe/localize.pipe';
 import { Component } from '@angular/core';
 import { GridShapeComponent } from '../../../shared/components/common/grid-shape/grid-shape.component';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-not-found',
-  imports: [
+  imports: [LocalizePipe,
     GridShapeComponent,
     RouterModule,
   ],

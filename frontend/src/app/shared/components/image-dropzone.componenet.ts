@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../pipe/localize.pipe';
 import {
   Component,
   EventEmitter,
@@ -10,7 +11,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-image-dropzone',
   standalone: true,
-  imports: [CommonModule],
+  imports: [LocalizePipe, CommonModule],
   template: `
     <div class="flex flex-col gap-1.5 w-full">
       <label class="text-sm font-medium text-gray-700">
@@ -32,7 +33,7 @@ import { CommonModule } from '@angular/common';
         @if (previewUrl()) {
           <img
             [src]="previewUrl()!"
-            alt="Preview"
+            [alt]="'Preview' | localize"
             class="absolute inset-0 w-full h-full object-contain p-2"
           />
 

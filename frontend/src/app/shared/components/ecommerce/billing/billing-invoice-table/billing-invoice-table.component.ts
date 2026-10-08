@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ButtonComponent } from '../../../ui/button/button.component';
@@ -13,7 +14,7 @@ interface Invoice {
 
 @Component({
   selector: 'app-billing-invoice-table',
-  imports: [
+  imports: [LocalizePipe,
     CommonModule,
   ],
   templateUrl: './billing-invoice-table.component.html',

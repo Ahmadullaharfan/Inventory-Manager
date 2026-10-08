@@ -2,11 +2,11 @@
   <!-- Card Header -->
   <div class="px-6 py-5 flex justify-between">
     <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
-      {{ title }}
+      {{ (title) | localize }}
     </h3>
 
     @if(addbutton){
-    <app-button size="sm" (btnClick)="onButtonClick()">{{ buttonTitle }}</app-button>
+    <app-button size="sm" (btnClick)="onButtonClick()">{{ (buttonTitle) | localize }}</app-button>
     }
 
   </div>

@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 
 import { Component } from '@angular/core';
 import { MultiSelectComponent } from '../../multi-select/multi-select.component';
@@ -18,7 +19,7 @@ interface MultiOption {
 
 @Component({
   selector: 'app-select-inputs',
-  imports: [
+  imports: [LocalizePipe,
     MultiSelectComponent,
     ComponentCardComponent,
     SelectComponent,

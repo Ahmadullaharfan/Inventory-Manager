@@ -1226,3 +1226,6 @@ pre[class*="language-"].line-numbers {
   direction: ltr !important;
   unicode-bidi: embed;
 }
+/* System fonts cover the Pashto and Dari alphabets without a network request. */
+html[lang="ps-AF"], html[lang="fa-AF"] { --font-outfit: Tahoma, Arial, sans-serif; }
+input[type="email"], input[type="url"], input[type="tel"], pre, code { direction: ltr; unicode-bidi: isolate; }

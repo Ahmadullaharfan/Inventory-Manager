@@ -1,9 +1,10 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-radio-sm',
-  imports: [CommonModule],
+  imports: [LocalizePipe, CommonModule],
   template: `
     <label
       [attr.for]="id"
@@ -38,7 +39,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
           ></span>
         </span>
       </span>
-      {{ label }}
+      {{ (label) | localize }}
     </label>
   `,
   styles: ``

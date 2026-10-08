@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 
 import { Component } from '@angular/core';
 import { LabelComponent } from '../../label/label.component';
@@ -7,7 +8,7 @@ import { ComponentCardComponent } from '../../../common/component-card/component
 
 @Component({
   selector: 'app-input-group',
-  imports: [
+  imports: [LocalizePipe,
     LabelComponent,
     InputFieldComponent,
     PhoneInputComponent,

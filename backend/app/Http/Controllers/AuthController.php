@@ -33,10 +33,10 @@ class AuthController extends Controller
         $user = DB::transaction(function () use ($request): User {
             $user = User::where('email', $request->validated('email'))->lockForUpdate()->first();
             if (! $user || ! Hash::check($request->validated('password'), $user->password) || $user->status !== 'active') {
-                throw ValidationException::withMessages(['email' => 'The credentials are incorrect or the account is inactive.']);
+                throw ValidationException::withMessages(['email' => __('The credentials are incorrect or the account is inactive.')]);
             }
             if ($user->two_fa_enabled && ! $this->users->verifySecondFactor($user, $request->validated('code') ?? '', $request, $this->totp)) {
-                throw ValidationException::withMessages(['code' => 'Enter a valid authenticator or unused recovery code.']);
+                throw ValidationException::withMessages(['code' => __('Enter a valid authenticator or unused recovery code.')]);
             }
 
             return $user;

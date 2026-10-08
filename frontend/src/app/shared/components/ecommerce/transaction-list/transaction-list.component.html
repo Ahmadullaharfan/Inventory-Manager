@@ -2,10 +2,10 @@
       <div class="flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800">
         <div>
           <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
-            Transactions
+            {{ 'Transactions' | localize }}
           </h3>
           <p class="text-sm text-gray-500 dark:text-gray-400">
-            Your most recent transactions list
+            {{ 'Your most recent transactions list' | localize }}
           </p>
         </div>
         <div class="flex gap-3.5">
@@ -30,7 +30,7 @@
               </span>
               <input
                 type="text"
-                placeholder="Search..."
+                [placeholder]="'Search...' | localize"
                 class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden xl:w-[300px] dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                 [(ngModel)]="search"
                 (ngModelChange)="onSearchChange()"
@@ -81,7 +81,7 @@
                     stroke-linejoin="round"
                   />
                 </svg>
-                Export CSV
+                {{ 'Export CSV' | localize }}
               </button>
             </div>
           </div>
@@ -129,7 +129,7 @@
                      </span>
                     </label>
                     <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
-                      Order ID
+                      {{ 'Order ID' | localize }}
                     </p>
                   </div>
                 </th>
@@ -139,7 +139,7 @@
                     (click)="sortBy('customer')"
                   >
                     <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
-                      Customer
+                      {{ 'Customer' | localize }}
                     </p>
                     <span class="flex flex-col gap-0.5">
                       <svg
@@ -185,7 +185,7 @@
                     (click)="sortBy('email')"
                   >
                     <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
-                      Email
+                      {{ 'Email' | localize }}
                     </p>
                     <span class="flex flex-col gap-0.5">
                       <svg
@@ -231,7 +231,7 @@
                     (click)="sortBy('amount')"
                   >
                     <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
-                      Total Amount
+                      {{ 'Total Amount' | localize }}
                     </p>
                     <span class="flex flex-col gap-0.5">
                       <svg
@@ -272,14 +272,14 @@
                   </div>
                 </th>
                 <th class="p-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400">
-                  Due Date
+                  {{ 'Due Date' | localize }}
                 </th>
                 <th class="p-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400">
-                  Status
+                  {{ 'Status' | localize }}
                 </th>
                 <th class="p-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400">
                   <div class="relative">
-                    <span class="sr-only">Action</span>
+                    <span class="sr-only">{{ 'Action' | localize }}</span>
                   </div>
                 </th>
             </tr>
@@ -363,7 +363,7 @@
                         'bg-red-50 text-red-700 dark:bg-red-500/15 dark:text-red-500': row.status === 'Failed'
                       }"
                     >
-                      {{ row.status }}
+                      {{ row.status | localize }}
                     </span>
                   </td>
                   <td class="p-4 whitespace-nowrap">
@@ -393,13 +393,13 @@
                             (click)="handleViewMore()"
                             class="flex w-full font-normal text-start text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300 p-2"
                           >
-                            View More
+                            {{ 'View More' | localize }}
                           </button>
                           <button
                             (click)="handleDelete()"
                             class="flex w-full font-normal text-start text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300 p-2"
                           >
-                            Delete
+                            {{ 'Delete' | localize }}
                           </button>
                         </div>
                       </app-table-dropdown>
@@ -413,22 +413,22 @@
         <div class="border-t border-gray-200 px-5 py-4 dark:border-gray-800">
           <div class="flex justify-center pb-4 sm:hidden">
             <span class="block text-sm font-medium text-gray-500 dark:text-gray-400">
-              Showing
+              {{ 'Showing' | localize }}
               <span class="text-gray-800 dark:text-white/90">{{ startEntry }}</span>
-              to
+              {{ 'to' | localize }}
               <span class="text-gray-800 dark:text-white/90">{{ endEntry }}</span>
-              of
+              {{ 'of' | localize }}
               <span class="text-gray-800 dark:text-white/90">{{ filteredRows.length }}</span>
             </span>
           </div>
           <div class="flex items-center justify-between">
             <div class="hidden sm:block">
               <span class="block text-sm font-medium text-gray-500 dark:text-gray-400">
-                Showing
+                {{ 'Showing' | localize }}
                 <span class="text-gray-800 dark:text-white/90">{{ startEntry }}</span>
-                to
+                {{ 'to' | localize }}
                 <span class="text-gray-800 dark:text-white/90">{{ endEntry }}</span>
-                of
+                {{ 'of' | localize }}
                 <span class="text-gray-800 dark:text-white/90">{{ filteredRows.length }}</span>
               </span>
             </div>
@@ -456,7 +456,7 @@
                 </svg>
               </button>
               <span class="block text-sm font-medium text-gray-700 sm:hidden dark:text-gray-400">
-                Page {{ page }} of {{ totalPages }}
+                {{ 'Page' | localize }} {{ page }} {{ 'of' | localize }} {{ totalPages }}
               </span>
               <ul class="hidden items-center gap-0.5 sm:flex">
                 @for (n of totalPagesArray; track $index) {

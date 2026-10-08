@@ -1,17 +1,18 @@
+import { LocalizePipe } from '../../../../shared/pipe/localize.pipe';
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router'; 
+import { Router } from '@angular/router';
 import { DataTableComponent } from '../../../shared/components/data-table/data-table.component';
 import type { ColumnConfig } from '../../../shared/components/data-table/data-table.types';
 import { SupplierService } from '../../Suppliers/services/suppliers.service';
 import { ProductSuppliers } from '../models/product-supplier.model';
 
 @Component({
-    selector: 'app-supplier-index', 
+    selector: 'app-supplier-index',
     standalone: true,
-    imports: [CommonModule, DataTableComponent],
+    imports: [LocalizePipe, CommonModule, DataTableComponent],
     templateUrl: './index.html',
-    styleUrls: ['./index.css'], 
+    styleUrls: ['./index.css'],
 })
 
 export class SupplersList implements OnInit {
@@ -34,8 +35,8 @@ export class SupplersList implements OnInit {
         { key: 'country', label: 'Country' },
         { key: 'actions', label: 'Actions' }
     ];
-    
-    
+
+
     ngOnInit(){
         this.LoadSuppliers();
     }
@@ -43,16 +44,16 @@ export class SupplersList implements OnInit {
     LoadSuppliers(){
         this.isLoading = true;
         this.supplierService.getSuppliers().subscribe({
-            next: (suppliers: ProductSuppliers[])=> { 
+            next: (suppliers: ProductSuppliers[])=> {
                 this.suppliers = suppliers;
                 this.isLoading = false;
 
                 setTimeout(()=> {
                     if(this.dataTable){
                         this.dataTable.triggerRefreshAnimation();
-                    }   
+                    }
                 }, 100);
-            }, 
+            },
             error: (err: any) => {
                 console.error('Error loading suppliers', err);
                 this.isLoading = false;
@@ -63,7 +64,7 @@ export class SupplersList implements OnInit {
 
     onRowEdit(supplier: ProductSuppliers){
         this.router.navigate([`/suppliers/edit/${supplier.id}`]);
-    } 
+    }
 
     onRowDelete(supplierId: number){
         if(confirm('Are you sure you want to delete this supplier?')){
@@ -80,10 +81,10 @@ export class SupplersList implements OnInit {
             })
         }
 
-    } 
-     
+    }
+
     navigateToCreate(){
-        this.router.navigate(['/suppliers/create']); 
+        this.router.navigate(['/suppliers/create']);
     }
 
 

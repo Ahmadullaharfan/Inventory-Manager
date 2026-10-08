@@ -1,18 +1,18 @@
-<app-page-breadcrumb pageTitle="Users" />
+<app-page-breadcrumb [pageTitle]="'Users' | localize" />
 <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
   @for (metric of [{ label: 'Total users', value: total() }, { label: 'Active users', value: active() }, { label: 'Administrators', value: admins() }]; track metric.label) {
-    <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]"><p class="text-sm text-gray-500 dark:text-gray-400">{{ metric.label }}</p><p class="mt-2 text-2xl font-semibold text-gray-800 dark:text-white/90">{{ metric.value }}</p></div>
+    <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]"><p class="text-sm text-gray-500 dark:text-gray-400">{{ (metric.label) | localize }}</p><p class="mt-2 text-2xl font-semibold text-gray-800 dark:text-white/90">{{ metric.value }}</p></div>
   }
 </div>
-<app-component-card title="All users" buttonTitle="Add User" [addbutton]="auth.isAdmin()" (buttonClick)="handleAddUser()">
-  <p class="text-sm text-gray-500 dark:text-gray-400">@if (auth.isAdmin()) { Use Add User to create an account, or Edit on a user to change their role and status in the Personal tab. Permissions are determined by the selected role. } @else { You have Manager access. You can browse users and edit your own profile. An administrator manages roles and account status. }</p>
+<app-component-card [title]="'All users' | localize" [buttonTitle]="'Add User' | localize" [addbutton]="auth.isAdmin()" (buttonClick)="handleAddUser()">
+  <p class="text-sm text-gray-500 dark:text-gray-400">@if (auth.isAdmin()) { {{ 'Use Add User to create an account, or Edit on a user to change their role and status in the Personal tab. Permissions are determined by the selected role.' | localize }} } @else { {{ 'You have Manager access. You can browse users and edit your own profile. An administrator manages roles and account status.' | localize }} }</p>
   <div class="grid grid-cols-1 items-end gap-3 sm:grid-cols-2 lg:grid-cols-4">
-    <div><label for="user-search" class="mb-2 block text-sm text-gray-700 dark:text-gray-400">Search users</label><app-input-field id="user-search" placeholder="Name, email, phone or ID" [value]="search()" (valueChange)="search.set($event.toString())" /></div>
-    <div><label class="mb-2 block text-sm text-gray-700 dark:text-gray-400">Role</label><app-select [options]="roles" placeholder="All roles" [value]="role()" (valueChange)="role.set($event)" /></div>
-    <div><label class="mb-2 block text-sm text-gray-700 dark:text-gray-400">Status</label><app-select [options]="statuses" placeholder="All statuses" [value]="status()" (valueChange)="status.set($event)" /></div>
-    <app-button variant="outline" [disabled]="usersResource.isLoading()" (btnClick)="reload()">Refresh</app-button>
+    <div><label for="user-search" class="mb-2 block text-sm text-gray-700 dark:text-gray-400">{{ 'Search users' | localize }}</label><app-input-field id="user-search" [placeholder]="'Name, email, phone or ID' | localize" [value]="search()" (valueChange)="search.set($event.toString())" /></div>
+    <div><label class="mb-2 block text-sm text-gray-700 dark:text-gray-400">{{ 'Role' | localize }}</label><app-select [options]="roles" [localizeOptions]="true" [placeholder]="'All roles' | localize" [value]="role()" (valueChange)="role.set($event)" /></div>
+    <div><label class="mb-2 block text-sm text-gray-700 dark:text-gray-400">{{ 'Status' | localize }}</label><app-select [options]="statuses" [localizeOptions]="true" [placeholder]="'All statuses' | localize" [value]="status()" (valueChange)="status.set($event)" /></div>
+    <app-button variant="outline" [disabled]="usersResource.isLoading()" (btnClick)="reload()">{{ 'Refresh' | localize }}</app-button>
   </div>
-  @if (usersResource.isLoading()) { <p role="status" class="text-sm text-gray-500 dark:text-gray-400">Loading users…</p> }
-  @if (usersResource.error()) { <div role="alert" class="rounded-lg bg-error-50 p-4 text-sm text-error-600 dark:bg-error-500/10 dark:text-error-400">Unable to load users. Use Refresh to try again.</div> }
-  <app-basic-table-two [dataSource]="dataSource" [displayedColumns]="displayedColumns" [columnHeaders]="columnHeaders" [columns]="columns" [actions]="{ view: true, edit: true, delete: auth.isAdmin() }" [actionsColumn]="true" [canEditRow]="canEdit" [canDeleteRow]="canDelete" emptyMessage="No users match your filters." (viewRow)="onViewUser($event)" (editRow)="onEditUser($event)" (deleteRow)="onDeleteUser($event)" />
+  @if (usersResource.isLoading()) { <p role="status" class="text-sm text-gray-500 dark:text-gray-400">{{ 'Loading users…' | localize }}</p> }
+  @if (usersResource.error()) { <div role="alert" class="rounded-lg bg-error-50 p-4 text-sm text-error-600 dark:bg-error-500/10 dark:text-error-400">{{ 'Unable to load users. Use Refresh to try again.' | localize }}</div> }
+  <app-basic-table-two [dataSource]="dataSource" [displayedColumns]="displayedColumns" [columnHeaders]="columnHeaders" [columns]="columns" [actions]="{ view: true, edit: true, delete: auth.isAdmin() }" [actionsColumn]="true" [canEditRow]="canEdit" [canDeleteRow]="canDelete" [emptyMessage]="'No users match your filters.' | localize" (viewRow)="onViewUser($event)" (editRow)="onEditUser($event)" (deleteRow)="onDeleteUser($event)" />
 </app-component-card>

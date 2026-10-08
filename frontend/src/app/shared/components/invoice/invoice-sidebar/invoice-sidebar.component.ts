@@ -1,9 +1,10 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-invoice-sidebar',
-  imports: [
+  imports: [LocalizePipe,
     CommonModule,
   ],
   templateUrl: './invoice-sidebar.component.html',

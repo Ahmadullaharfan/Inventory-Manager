@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { Component } from '@angular/core';
 import {
   ApexNonAxisChartSeries,
@@ -13,7 +14,7 @@ import { DropdownItemComponent } from '../../ui/dropdown/dropdown-item/dropdown-
 
 @Component({
   selector: 'app-monthly-target',
-  imports: [
+  imports: [LocalizePipe,
     NgApexchartsModule,
     DropdownComponent,
     DropdownItemComponent

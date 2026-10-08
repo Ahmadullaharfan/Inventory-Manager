@@ -24,13 +24,13 @@
             (click)="handleViewMore()"
             class="flex w-full font-normal text-start text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300 p-2"
           >
-            View More
+            {{ 'View More' | localize }}
           </button>
           <button
             (click)="handleDelete()"
             class="flex w-full font-normal text-start text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300 p-2"
           >
-            Delete
+            {{ 'Delete' | localize }}
           </button>
         </div>
       </app-table-dropdown>
@@ -42,13 +42,13 @@
       <thead class="border-gray-100 border-y dark:border-white/[0.05]">
         <tr>
           <th scope="col" class="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-            Products
+            {{ 'Products' | localize }}
           </th>
           <th scope="col" class="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
             Campaign
           </th>
           <th scope="col" class="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-            Status
+            {{ 'Status' | localize }}
           </th>
         </tr>
       </thead>
@@ -63,7 +63,7 @@
                   height="40"
                   class="w-full size-10"
                   [src]="item.creator.image"
-                  alt="user"
+                  [alt]="'user' | localize"
                 />
               </div>
               <div>
@@ -81,7 +81,7 @@
                   height="32"
                   class="w-full size-8"
                   [src]="item.campaign.image"
-                  alt="brand"
+                  [alt]="'brand' | localize"
                 />
               </div>
               <div class="truncate">
@@ -99,7 +99,7 @@
               size="sm"
               [color]="item.status === 'Success' ? 'success' : item.status === 'Pending' ? 'warning' : 'error'"
             >
-              {{item.status}}
+              {{ item.status | localize }}
             </app-badge>
           </td>
         </tr>

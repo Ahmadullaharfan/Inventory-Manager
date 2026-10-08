@@ -1,9 +1,10 @@
+import { LocalizePipe } from '../../../pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-checkbox',
-  imports: [CommonModule],
+  imports: [LocalizePipe, CommonModule],
   template: `
   <label
   class="flex items-center space-x-3 group cursor-pointer"
@@ -64,7 +65,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   <span
     class="text-sm font-medium text-gray-800 dark:text-gray-200"
     >
-      {{ label }}
+      {{ (label) | localize }}
   </span>
   }
 </label>

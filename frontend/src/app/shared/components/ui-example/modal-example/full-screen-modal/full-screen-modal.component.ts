@@ -1,3 +1,4 @@
+import { LocalizePipe } from '../../../../pipe/localize.pipe';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ModalComponent } from '../../../ui/modal/modal.component';
@@ -6,7 +7,7 @@ import { ButtonComponent } from '../../../ui/button/button.component';
 
 @Component({
   selector: 'app-full-screen-modal',
-  imports: [
+  imports: [LocalizePipe,
     CommonModule,
     ModalComponent,
     ComponentCardComponent,
